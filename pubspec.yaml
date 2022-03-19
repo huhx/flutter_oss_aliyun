@@ -1,7 +1,7 @@
 name: flutter_oss_aliyun
 description: A package for oss aliyun
 version: 0.0.1
-homepage:
+repository: https://github.com/huhx/flutter_oss_aliyun
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  crypto: ^3.0.1
+  dio: ^4.0.4
+  mime_type: ^1.0.0
 
 dev_dependencies:
   flutter_test:
