@@ -79,6 +79,7 @@ class Client {
     final url = "https://$bucketName.$endpoint/$fileKey";
     HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
     auth.sign(request, bucketName, fileKey);
+
     return Dio().request(
       request.url,
       data: MultipartFile.fromBytes(fileData).finalize(),

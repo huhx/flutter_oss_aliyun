@@ -1,5 +1,5 @@
 name: flutter_oss_aliyun
-description: A package for oss aliyun
+description: oss aliyun plugin for flutter and upport STS to access OSS temporarily
 version: 0.0.5
 repository: https://github.com/huhx/flutter_oss_aliyun
 
