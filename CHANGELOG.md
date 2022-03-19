@@ -17,3 +17,6 @@
 
 ## 0.0.6
 * Add example and comments in code
+
+## 0.0.7
+* Change the LICENSE to use BSD 3-Clause
