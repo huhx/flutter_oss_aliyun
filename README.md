@@ -1,6 +1,16 @@
 # flutter_oss_aliyun
 
-oss aliyun plugin for flutter. Use sts policy to authenticate the user.
+Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
+
+## Feature has Supported
+- [x] upload object 
+- [x] get object 
+- [x] save object in files
+
+## Feature ready to Support
+- [ ] List buckets
+- [ ] callback when upload object
+- [ ] upload multiple objects at once
 
 ## Usage
 First, add `flutter_native_splash` as a dependency in your `pubspec.yaml` file.
