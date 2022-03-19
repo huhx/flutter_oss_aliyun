@@ -14,3 +14,6 @@
 
 ## 0.0.5
 * Enable download object from oss
+
+## 0.0.6
+* Add example and comments in code

@@ -6,7 +6,7 @@ oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_native_splash` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^0.0.4
+  flutter_oss_aliyun: ^0.0.6
 ```
 Don't forget to `flutter pub get`.
 
