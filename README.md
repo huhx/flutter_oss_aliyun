@@ -2,6 +2,8 @@
 
 Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 
+**flutter pub**: [https://pub.dev/packages/flutter_oss_aliyun](https://pub.dev/packages/flutter_oss_aliyun)
+
 ## Feature has Supported
 - [x] upload object 
 - [x] get object 
