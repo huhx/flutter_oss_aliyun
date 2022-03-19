@@ -57,6 +57,17 @@ class Client {
     );
   }
 
+  Future<Response> downloadObject(String fileKey, String savePath, {String? bucketName}) async {
+    bucketName ??= this.bucketName;
+    final auth = await _getAuth();
+
+    final url = "https://$bucketName.$endpoint/$fileKey";
+    var request = HttpRequest(url, 'GET', {}, {});
+    auth.sign(request, bucketName, fileKey);
+
+    return await Dio().download(request.url, savePath, options: Options(headers: request.headers));
+  }
+
   Future<Response<dynamic>> putObject(List<int> fileData, String fileKey, {String? bucketName}) async {
     bucketName ??= this.bucketName;
     final auth = await _getAuth();

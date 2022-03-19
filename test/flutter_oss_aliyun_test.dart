@@ -27,4 +27,16 @@ void main() {
 
     expect(200, resp.statusCode);
   });
+
+  test("test the download object in Client", () async {
+    Client.init(
+      stsUrl: "**",
+      ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+      bucketName: "**",
+    );
+
+    final resp = await Client().downloadObject("test.txt", "result.txt");
+
+    expect(200, resp.statusCode);
+  });
 }

@@ -30,4 +30,8 @@ await Client().putObject(bytes, "test.txt");
 await Client().getObject("test.txt");
 ```
 
+### 4. download the object from oss
+```dart
+await Client().downloadObject("test.txt", "./example/test.txt");
+```
 

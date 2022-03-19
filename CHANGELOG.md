@@ -11,3 +11,6 @@
 
 ## 0.0.4
 * format the README files
+
+## 0.0.5
+* Enable download object from oss
