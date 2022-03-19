@@ -33,7 +33,7 @@ class Client {
   Auth? _auth;
   String? _expire;
 
-  Future<Auth> getAuth() async {
+  Future<Auth> _getAuth() async {
     if (_isNotAuthenticated()) {
       final resp = await tokenGetter(stsRequestUrl);
       final respMap = jsonDecode(resp);
@@ -45,7 +45,7 @@ class Client {
 
   Future<Response<dynamic>> getObject(String fileKey, {String? bucketName}) async {
     bucketName ??= this.bucketName;
-    final auth = await getAuth();
+    final auth = await _getAuth();
 
     final url = "https://$bucketName.$endpoint/$fileKey";
     var request = HttpRequest(url, 'GET', {}, {});
@@ -53,14 +53,13 @@ class Client {
 
     return Dio().request(
       request.url,
-      data: MultipartFile.fromBytes(request.fileData).finalize(),
       options: Options(headers: request.headers, method: request.method),
     );
   }
 
   Future<Response<dynamic>> putObject(List<int> fileData, String fileKey, {String? bucketName}) async {
     bucketName ??= this.bucketName;
-    final auth = await getAuth();
+    final auth = await _getAuth();
 
     final headers = {
       'content-md5': EncryptUtil.md5File(fileData),
@@ -72,19 +71,6 @@ class Client {
     return Dio().request(
       request.url,
       data: MultipartFile.fromBytes(fileData).finalize(),
-      options: Options(headers: request.headers, method: request.method),
-    );
-  }
-
-  Future<Response<dynamic>> deleteObject(String fileKey, {String? bucketName}) async {
-    bucketName ??= this.bucketName;
-    final auth = await getAuth();
-
-    final url = "https://$bucketName.$endpoint/$fileKey";
-    final request = HttpRequest(url, 'DELETE', {}, {});
-    auth.sign(request, bucketName, fileKey);
-    return Dio().request(
-      request.url,
       options: Options(headers: request.headers, method: request.method),
     );
   }

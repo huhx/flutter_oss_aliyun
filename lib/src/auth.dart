@@ -1,4 +1,4 @@
-import 'dart:_http';
+import 'dart:io';
 
 import 'package:flutter_oss_aliyun/src/request.dart';
 
