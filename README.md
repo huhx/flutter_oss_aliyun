@@ -11,6 +11,8 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [ ] List buckets
 - [ ] callback when upload object
 - [ ] upload multiple objects at once
+- [ ] delete object
+- [ ] delete multiple objects at once
 
 ## Usage
 First, add `flutter_native_splash` as a dependency in your `pubspec.yaml` file.

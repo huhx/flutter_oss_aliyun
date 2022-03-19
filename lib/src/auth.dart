@@ -36,12 +36,21 @@ class Auth {
     final date = req.headers['date'] ?? '';
     final headerString = _getHeaderString(req) ?? '';
     final resourceString = _getResourceString(bucket, key);
-    return [req.method, contentMd5, contentType, date, headerString, resourceString].join("\n");
+    return [
+      req.method,
+      contentMd5,
+      contentType,
+      date,
+      headerString,
+      resourceString
+    ].join("\n");
   }
 
   /// sign the header information
   String? _getHeaderString(HttpRequest req) {
-    final ossHeaders = req.headers.keys.where((key) => key.toLowerCase().startsWith('x-oss-')).toList();
+    final ossHeaders = req.headers.keys
+        .where((key) => key.toLowerCase().startsWith('x-oss-'))
+        .toList();
     if (ossHeaders.isEmpty) return '';
     ossHeaders.sort((s1, s2) => s1.compareTo(s2));
     return ossHeaders.map((key) => "$key:${req.headers[key]}").join("\n");

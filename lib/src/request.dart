@@ -7,7 +7,8 @@ class HttpRequest {
   HttpRequest(this._url, this.method, this.param, this.headers);
 
   String get url {
-    final urlString = param.entries.map((entry) => "${entry.key}=${entry.value}").join("&");
+    final urlString =
+        param.entries.map((entry) => "${entry.key}=${entry.value}").join("&");
     return urlString.isEmpty ? _url : "$_url?$urlString";
   }
 }

@@ -17,7 +17,12 @@ class Client {
   final String bucketName;
   final Function(String) tokenGetter;
 
-  Client._(this.stsRequestUrl, this.endpoint, this.bucketName, this.tokenGetter);
+  Client._(
+    this.stsRequestUrl,
+    this.endpoint,
+    this.bucketName,
+    this.tokenGetter,
+  );
 
   static void init({
     required String stsUrl,
@@ -38,7 +43,8 @@ class Client {
     if (_isNotAuthenticated()) {
       final resp = await tokenGetter(stsRequestUrl);
       final respMap = jsonDecode(resp);
-      _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'], respMap['SecurityToken']);
+      _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'],
+          respMap['SecurityToken']);
       _expire = respMap['Expiration'];
     }
     return _auth!;
@@ -47,7 +53,8 @@ class Client {
   /// get object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> getObject(String fileKey, {String? bucketName}) async {
+  Future<Response<dynamic>> getObject(String fileKey,
+      {String? bucketName}) async {
     bucketName ??= this.bucketName;
     final auth = await _getAuth();
 
@@ -65,7 +72,8 @@ class Client {
   /// [fileKey] is the object name from oss
   /// [savePath] is where we save the object(file) that download from oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response> downloadObject(String fileKey, String savePath, {String? bucketName}) async {
+  Future<Response> downloadObject(String fileKey, String savePath,
+      {String? bucketName}) async {
     bucketName ??= this.bucketName;
     final auth = await _getAuth();
 
@@ -73,13 +81,15 @@ class Client {
     var request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucketName, fileKey);
 
-    return await Dio().download(request.url, savePath, options: Options(headers: request.headers));
+    return await Dio().download(request.url, savePath,
+        options: Options(headers: request.headers));
   }
 
   /// upload object(file) to oss server
   /// [fileData] is the binary data that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> putObject(List<int> fileData, String fileKey, {String? bucketName}) async {
+  Future<Response<dynamic>> putObject(List<int> fileData, String fileKey,
+      {String? bucketName}) async {
     bucketName ??= this.bucketName;
     final auth = await _getAuth();
 
