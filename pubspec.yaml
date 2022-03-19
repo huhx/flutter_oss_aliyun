@@ -1,6 +1,6 @@
 name: flutter_oss_aliyun
 description: A package for oss aliyun
-version: 0.0.2
+version: 0.0.4
 repository: https://github.com/huhx/flutter_oss_aliyun
 
 environment:

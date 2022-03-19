@@ -1,39 +1,33 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# flutter_oss_aliyun
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 
 ## Usage
+First, add `flutter_native_splash` as a dependency in your `pubspec.yaml` file.
+```yaml
+dependencies:
+  flutter_oss_aliyun: ^0.0.4
+```
+Don't forget to `flutter pub get`.
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
+### 1. init the client
 ```dart
-const like = 'sample';
+Client.init(
+    stsUrl: "server url get sts token",
+    ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+    bucketName: "bucket name",
+);
 ```
 
-## Additional information
+### 2. put the object to oss
+```dart
+final bytes = "file bytes".codeUnits;
+await Client().putObject(bytes, "test.txt");
+```
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+### 3. get the object from oss
+```dart
+await Client().getObject("test.txt");
+```
+
+
