@@ -23,3 +23,6 @@
 
 ## 0.0.8
 * Code format and documentation
+
+## 0.0.9
+* Enable delete object fromm oss

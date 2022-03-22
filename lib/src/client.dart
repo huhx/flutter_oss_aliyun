@@ -44,7 +44,8 @@ class Client {
     if (_isNotAuthenticated()) {
       final resp = await tokenGetter(stsRequestUrl);
       final respMap = jsonDecode(resp);
-      _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'], respMap['SecurityToken']);
+      _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'],
+          respMap['SecurityToken']);
       _expire = respMap['Expiration'];
     }
     return _auth!;
@@ -53,7 +54,8 @@ class Client {
   /// get object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> getObject(String fileKey, {String? bucketName}) async {
+  Future<Response<dynamic>> getObject(String fileKey,
+      {String? bucketName}) async {
     bucketName ??= this.bucketName;
     final auth = await _getAuth();
 
@@ -61,14 +63,16 @@ class Client {
     var request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucketName, fileKey);
 
-    return RestClient.getInstance().get(request.url, options: Options(headers: request.headers));
+    return RestClient.getInstance()
+        .get(request.url, options: Options(headers: request.headers));
   }
 
   /// download object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [savePath] is where we save the object(file) that download from oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response> downloadObject(String fileKey, String savePath, {String? bucketName}) async {
+  Future<Response> downloadObject(String fileKey, String savePath,
+      {String? bucketName}) async {
     bucketName ??= this.bucketName;
     final auth = await _getAuth();
 
@@ -76,13 +80,15 @@ class Client {
     var request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucketName, fileKey);
 
-    return await RestClient.getInstance().download(request.url, savePath, options: Options(headers: request.headers));
+    return await RestClient.getInstance().download(request.url, savePath,
+        options: Options(headers: request.headers));
   }
 
   /// upload object(file) to oss server
   /// [fileData] is the binary data that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> putObject(List<int> fileData, String fileKey, {String? bucketName}) async {
+  Future<Response<dynamic>> putObject(List<int> fileData, String fileKey,
+      {String? bucketName}) async {
     bucketName ??= this.bucketName;
     final auth = await _getAuth();
 
@@ -102,15 +108,18 @@ class Client {
   }
 
   /// delete object from oss
-  Future<Response<dynamic>> deleteObject(String fileKey, {String? bucketName}) async {
+  Future<Response<dynamic>> deleteObject(String fileKey,
+      {String? bucketName}) async {
     bucketName ??= this.bucketName;
     final auth = await _getAuth();
 
     final url = "https://$bucketName.$endpoint/$fileKey";
-    final request = HttpRequest(url, 'DELETE', {}, {'content-type': 'application/json; charset=utf-8'});
+    final request = HttpRequest(
+        url, 'DELETE', {}, {'content-type': 'application/json; charset=utf-8'});
     auth.sign(request, bucketName, fileKey);
 
-    return RestClient.getInstance().delete(request.url, options: Options(headers: request.headers));
+    return RestClient.getInstance()
+        .delete(request.url, options: Options(headers: request.headers));
   }
 
   /// whether auth is valid or not
