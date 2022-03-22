@@ -6,9 +6,9 @@ import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
 void main() {
   test("test the put object in Client", () async {
     Client.init(
-      stsUrl: "server url",
+      stsUrl: "**",
       ossEndpoint: "oss-cn-beijing.aliyuncs.com",
-      bucketName: "***",
+      bucketName: "**",
     );
 
     final resp = await Client().putObject("Hello World".codeUnits, "test.txt");
@@ -18,10 +18,14 @@ void main() {
 
   test("test the get object in Client", () async {
     Client.init(
-      stsUrl: "server url",
-      ossEndpoint: "oss-cn-beijing.aliyuncs.com",
-      bucketName: "***",
-    );
+        ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+        bucketName: "back_name",
+        tokenGetter: () => '''{
+        "AccessKeyId": "access id",
+        "AccessKeySecret": "AccessKeySecret",
+        "SecurityToken": "security token",
+        "Expiration": "2022-03-22T11:33:06Z"
+       }''');
 
     final resp = await Client().getObject("test.txt");
 

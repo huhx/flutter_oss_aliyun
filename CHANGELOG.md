@@ -32,3 +32,6 @@
 
 ## 0.1.1
 * Enable Log output in the dio
+
+## 1.0.0
+* Add customize way to get sts information

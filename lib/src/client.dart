@@ -13,27 +13,28 @@ class Client {
 
   factory Client() => _instance!;
 
-  final String stsRequestUrl;
   final String endpoint;
   final String bucketName;
-  final Function(String) tokenGetter;
+  final Function? tokenGetter;
 
   Client._(
-    this.stsRequestUrl,
     this.endpoint,
     this.bucketName,
     this.tokenGetter,
   );
 
-  static void init({
-    required String stsUrl,
-    required String ossEndpoint,
-    required String bucketName,
-  }) {
-    _instance = Client._(stsUrl, ossEndpoint, bucketName, (url) async {
-      final response = await RestClient.getInstance().get<String>(url);
-      return response.data!;
-    });
+  static void init(
+      {String? stsUrl,
+      required String ossEndpoint,
+      required String bucketName,
+      String Function()? tokenGetter}) {
+    assert(stsUrl != null || tokenGetter != null);
+    final tokenGet = tokenGetter ??
+        () async {
+          final response = await RestClient.getInstance().get<String>(stsUrl!);
+          return response.data!;
+        };
+    _instance = Client._(ossEndpoint, bucketName, tokenGet);
   }
 
   Auth? _auth;
@@ -42,7 +43,7 @@ class Client {
   /// get auth information from sts server
   Future<Auth> _getAuth() async {
     if (_isNotAuthenticated()) {
-      final resp = await tokenGetter(stsRequestUrl);
+      final resp = await tokenGetter!();
       final respMap = jsonDecode(resp);
       _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'],
           respMap['SecurityToken']);

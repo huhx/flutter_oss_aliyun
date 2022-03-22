@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Flutter aliyun oss exa"),
+        title: const Text("Flutter aliyun oss example"),
       ),
       body: Container(
         alignment: Alignment.center,
@@ -50,6 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 await Client().downloadObject("filename.txt", "savePath.txt");
               },
               child: const Text("Download object"),
+            ),
+            TextButton(
+              onPressed: () async {
+                await Client().deleteObject("filename.txt");
+              },
+              child: const Text("Delete object"),
             ),
           ],
         ),
