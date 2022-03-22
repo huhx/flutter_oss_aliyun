@@ -39,4 +39,16 @@ void main() {
 
     expect(200, resp.statusCode);
   });
+
+  test("test the delete object in Client", () async {
+    Client.init(
+      stsUrl: "**",
+      ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+      bucketName: "**",
+    );
+
+    final resp = await Client().deleteObject("test.txt");
+
+    expect(204, resp.statusCode);
+  });
 }

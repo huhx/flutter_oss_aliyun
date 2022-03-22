@@ -17,7 +17,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [ ] delete multiple objects at once
 
 ## Usage
-First, add `flutter_native_splash` as a dependency in your `pubspec.yaml` file.
+First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
   flutter_oss_aliyun: ^0.0.8
