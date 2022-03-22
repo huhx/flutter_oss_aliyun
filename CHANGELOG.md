@@ -29,3 +29,6 @@
 
 ## 0.1.0
 * Correct the document
+
+## 0.1.1
+* Enable Log output in the dio

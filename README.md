@@ -3,6 +3,7 @@
 Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 
 **flutter pub**: [https://pub.dev/packages/flutter_oss_aliyun](https://pub.dev/packages/flutter_oss_aliyun)
+
 **oss sts document**: [https://help.aliyun.com/document_detail/100624.html](https://help.aliyun.com/document_detail/100624.html)
 
 ## Feature has Supported
@@ -21,7 +22,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^0.1.0
+  flutter_oss_aliyun: ^0.1.1
 ```
 Don't forget to `flutter pub get`.
 
