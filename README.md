@@ -22,7 +22,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^1.0.0
+  flutter_oss_aliyun: ^1.0.1
 ```
 Don't forget to `flutter pub get`.
 
@@ -50,14 +50,18 @@ This sts url api at least return the data:
 ```dart
 Client.init(
     ossEndpoint: "oss-cn-beijing.aliyuncs.com",
-    bucketName: "back_name",
-    tokenGetter: () => '''{
+    bucketName: "bucketName",
+    tokenGetter: _tokenGetterMethod
+);
+
+String _tokenGetterMethod() {
+  return '''{
         "AccessKeyId": "access id",
         "AccessKeySecret": "AccessKeySecret",
         "SecurityToken": "security token",
         "Expiration": "2022-03-22T11:33:06Z"
-    }'''
-);
+    }''';
+}
 ```
 
 ### 2. put the object to oss

@@ -47,7 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TextButton(
               onPressed: () async {
-                await Client().downloadObject("filename.txt", "savePath.txt");
+                await Client()
+                    .downloadObject("filename.txt", "./example/savePath.txt");
               },
               child: const Text("Download object"),
             ),
