@@ -26,3 +26,6 @@
 
 ## 0.0.9
 * Enable delete object fromm oss
+
+## 0.1.0
+* Correct the document

@@ -3,6 +3,7 @@
 Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 
 **flutter pub**: [https://pub.dev/packages/flutter_oss_aliyun](https://pub.dev/packages/flutter_oss_aliyun)
+**oss sts document**: [https://help.aliyun.com/document_detail/100624.html](https://help.aliyun.com/document_detail/100624.html)
 
 ## Feature has Supported
 - [x] upload object 
@@ -20,7 +21,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^0.0.9
+  flutter_oss_aliyun: ^0.1.0
 ```
 Don't forget to `flutter pub get`.
 
@@ -50,7 +51,7 @@ await Client().downloadObject("test.txt", "./example/test.txt");
 ```
 
 
-### 5. download the object from oss
+### 5. delete the object from oss
 ```dart
 await Client().deleteObject("test.txt");
 ```

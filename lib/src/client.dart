@@ -100,10 +100,10 @@ class Client {
     final request = HttpRequest(url, 'PUT', {}, headers);
     auth.sign(request, bucketName, fileKey);
 
-    return RestClient.getInstance().request(
+    return RestClient.getInstance().put(
       request.url,
       data: MultipartFile.fromBytes(fileData).finalize(),
-      options: Options(headers: request.headers, method: request.method),
+      options: Options(headers: request.headers),
     );
   }
 

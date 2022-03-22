@@ -1,6 +1,6 @@
 name: flutter_oss_aliyun
 description: oss aliyun plugin for flutter and upport STS to access OSS temporarily
-version: 0.0.9
+version: 0.1.0
 repository: https://github.com/huhx/flutter_oss_aliyun
 
 environment:
