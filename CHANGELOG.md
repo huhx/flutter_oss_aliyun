@@ -1,3 +1,6 @@
+## 1.0.3
+* update the license to MIT
+
 ## 1.0.2
 * upgrade flutter_lint version
 * add specified type instead of var
