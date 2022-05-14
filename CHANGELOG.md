@@ -1,3 +1,7 @@
+## 1.0.2
+* upgrade flutter_lint version
+* add specified type instead of var
+
 ## 1.0.1
 * documentation of the changelog and readme
 
@@ -36,4 +40,4 @@
 * Enable get object from oss
 
 ## 0.0.1
-* TODO: Describe initial release.
+* First release.

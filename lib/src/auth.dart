@@ -19,23 +19,23 @@ class Auth {
   void sign(HttpRequest req, String bucket, String key) {
     req.headers['date'] = HttpDate.format(DateTime.now());
     req.headers['x-oss-security-token'] = secureToken;
-    final signature = _makeSignature(req, bucket, key);
+    final String signature = _makeSignature(req, bucket, key);
     req.headers['Authorization'] = "OSS $accessKey:$signature";
   }
 
   /// sign the string use hmac
   String _makeSignature(HttpRequest req, String bucket, String key) {
-    final stringToSign = _getStringToSign(req, bucket, key);
+    final String stringToSign = _getStringToSign(req, bucket, key);
     return EncryptUtil.hmacSign(accessSecret, stringToSign);
   }
 
   /// string returned by this method is the original value ready to hmac sign
   String _getStringToSign(HttpRequest req, String bucket, String key) {
-    final contentMd5 = req.headers['content-md5'] ?? '';
-    final contentType = req.headers['content-type'] ?? '';
-    final date = req.headers['date'] ?? '';
-    final headerString = _getHeaderString(req) ?? '';
-    final resourceString = _getResourceString(bucket, key);
+    final String contentMd5 = req.headers['content-md5'] ?? '';
+    final String contentType = req.headers['content-type'] ?? '';
+    final String date = req.headers['date'] ?? '';
+    final String headerString = _getHeaderString(req) ?? '';
+    final String resourceString = _getResourceString(bucket, key);
     return [
       req.method,
       contentMd5,
@@ -48,7 +48,7 @@ class Auth {
 
   /// sign the header information
   String? _getHeaderString(HttpRequest req) {
-    final ossHeaders = req.headers.keys
+    final List<String> ossHeaders = req.headers.keys
         .where((key) => key.toLowerCase().startsWith('x-oss-'))
         .toList();
     if (ossHeaders.isEmpty) return '';

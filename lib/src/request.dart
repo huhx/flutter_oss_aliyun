@@ -2,7 +2,7 @@ class HttpRequest {
   final String _url;
   final String method;
   final Map<String, dynamic> param;
-  final Map<String, dynamic> headers;
+  final Map<String, String> headers;
 
   HttpRequest(this._url, this.method, this.param, this.headers);
 

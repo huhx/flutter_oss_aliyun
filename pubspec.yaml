@@ -1,6 +1,6 @@
 name: flutter_oss_aliyun
 description: oss aliyun plugin for flutter and upport STS to access OSS temporarily
-version: 1.0.1
+version: 1.0.2
 repository: https://github.com/huhx/flutter_oss_aliyun
 
 environment:
@@ -17,7 +17,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

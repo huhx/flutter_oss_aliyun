@@ -57,11 +57,11 @@ class Client {
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> getObject(String fileKey,
       {String? bucketName}) async {
-    final bucket = bucketName ?? this.bucketName;
-    final auth = await _getAuth();
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
 
-    final url = "https://$bucket.$endpoint/$fileKey";
-    var request = HttpRequest(url, 'GET', {}, {});
+    final String url = "https://$bucket.$endpoint/$fileKey";
+    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, fileKey);
 
     return RestClient.getInstance()
@@ -74,11 +74,11 @@ class Client {
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response> downloadObject(String fileKey, String savePath,
       {String? bucketName}) async {
-    final bucket = bucketName ?? this.bucketName;
-    final auth = await _getAuth();
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
 
-    final url = "https://$bucket.$endpoint/$fileKey";
-    var request = HttpRequest(url, 'GET', {}, {});
+    final String url = "https://$bucket.$endpoint/$fileKey";
+    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, fileKey);
 
     return await RestClient.getInstance().download(request.url, savePath,
@@ -90,15 +90,15 @@ class Client {
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> putObject(List<int> fileData, String fileKey,
       {String? bucketName}) async {
-    final bucket = bucketName ?? this.bucketName;
-    final auth = await _getAuth();
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
 
-    final headers = {
+    final Map<String, String> headers = {
       'content-md5': EncryptUtil.md5File(fileData),
-      'content-type': mime(fileKey),
+      'content-type': mime(fileKey) ?? "image/png",
     };
-    final url = "https://$bucket.$endpoint/$fileKey";
-    final request = HttpRequest(url, 'PUT', {}, headers);
+    final String url = "https://$bucket.$endpoint/$fileKey";
+    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
     auth.sign(request, bucket, fileKey);
 
     return RestClient.getInstance().put(
@@ -111,11 +111,11 @@ class Client {
   /// delete object from oss
   Future<Response<dynamic>> deleteObject(String fileKey,
       {String? bucketName}) async {
-    final bucket = bucketName ?? this.bucketName;
-    final auth = await _getAuth();
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
 
-    final url = "https://$bucket.$endpoint/$fileKey";
-    final request = HttpRequest(
+    final String url = "https://$bucket.$endpoint/$fileKey";
+    final HttpRequest request = HttpRequest(
         url, 'DELETE', {}, {'content-type': 'application/json; charset=utf-8'});
     auth.sign(request, bucket, fileKey);
 

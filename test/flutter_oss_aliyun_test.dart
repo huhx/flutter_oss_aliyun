@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +12,7 @@ void main() {
       bucketName: "**",
     );
 
-    final resp = await Client().putObject("Hello World".codeUnits, "test.txt");
+    final Response<dynamic> resp = await Client().putObject("Hello World".codeUnits, "test.txt");
 
     expect(200, resp.statusCode);
   });
@@ -27,7 +28,7 @@ void main() {
         "Expiration": "2022-03-22T11:33:06Z"
        }''');
 
-    final resp = await Client().getObject("test.txt");
+    final Response<dynamic> resp = await Client().getObject("test.txt");
 
     expect(200, resp.statusCode);
   });
@@ -39,7 +40,7 @@ void main() {
       bucketName: "**",
     );
 
-    final resp = await Client().downloadObject("test.txt", "result.txt");
+    final Response resp = await Client().downloadObject("test.txt", "result.txt");
 
     expect(200, resp.statusCode);
   });
@@ -51,7 +52,7 @@ void main() {
       bucketName: "**",
     );
 
-    final resp = await Client().deleteObject("test.txt");
+    final Response<dynamic> resp = await Client().deleteObject("test.txt");
 
     expect(204, resp.statusCode);
   });
