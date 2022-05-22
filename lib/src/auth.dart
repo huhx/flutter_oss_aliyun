@@ -34,7 +34,7 @@ class Auth {
     final String contentMd5 = req.headers['content-md5'] ?? '';
     final String contentType = req.headers['content-type'] ?? '';
     final String date = req.headers['date'] ?? '';
-    final String headerString = _getHeaderString(req) ?? '';
+    final String headerString = _getHeaderString(req);
     final String resourceString = _getResourceString(bucket, key);
     return [
       req.method,
@@ -47,7 +47,7 @@ class Auth {
   }
 
   /// sign the header information
-  String? _getHeaderString(HttpRequest req) {
+  String _getHeaderString(HttpRequest req) {
     final List<String> ossHeaders = req.headers.keys
         .where((key) => key.toLowerCase().startsWith('x-oss-'))
         .toList();
