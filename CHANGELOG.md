@@ -1,3 +1,6 @@
+## 1.0.5 - 2022-08-06
+* add README_ZH.md
+
 ## 1.0.4 - 2022-05-22
 * code improvement for the nullable type
 

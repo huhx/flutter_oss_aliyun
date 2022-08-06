@@ -2,34 +2,33 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 
 # flutter_oss_aliyun
 
-Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
+一个访问阿里云oss并且支持STS临时访问凭证访问OSS的flutter库
 
 **flutter pub**: [https://pub.dev/packages/flutter_oss_aliyun](https://pub.dev/packages/flutter_oss_aliyun)
 
 **oss sts document**: [https://help.aliyun.com/document_detail/100624.html](https://help.aliyun.com/document_detail/100624.html)
 
-## Feature has Supported
-- [x] upload object 
-- [x] get object 
-- [x] save object in files
-- [x] delete object
+## 功能
+- [x] 上传文件
+- [x] 下载文件
+- [x] 下载并保存文件
+- [x] 删除文件
 
-## Feature ready to Support
-- [ ] List buckets
-- [ ] callback when upload object
-- [ ] upload multiple objects at once
-- [ ] delete multiple objects at once
+## 待开发
+- [ ] buckets列表
+- [ ] 上传文件的回调
+- [ ] 多文件上传
+- [ ] 多文件删除
 
-## Usage
-First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
+## 使用
+添加依赖
 ```yaml
 dependencies:
   flutter_oss_aliyun: ^1.0.5
 ```
-Don't forget to `flutter pub get`.
 
-### 1. init the client, we provide two ways to do it.
-#### use sts server, just provide the sts url from our backend server:
+### 1. 初始化oss client, 这里我们提供两种方式
+#### 提供sts server地址，需要后端添加这个api
 ```dart
 Client.init(
     stsUrl: "server url get sts token",
@@ -38,7 +37,7 @@ Client.init(
 );
 ```
 
-This sts url api at least return the data:
+后端api至少需要返回以下数据:
 ```json
 {
   "AccessKeyId": "AccessKeyId",
@@ -48,7 +47,7 @@ This sts url api at least return the data:
 }
 ```
 
-#### you can also customize the way to get sts json response.
+#### 当然你可以自定义使用其他的方式返回以下的json数据.
 ```dart
 Client.init(
     ossEndpoint: "oss-cn-beijing.aliyuncs.com",
@@ -66,23 +65,23 @@ String _tokenGetterMethod() {
 }
 ```
 
-### 2. put the object to oss
+### 2. 上传文件
 ```dart
 final bytes = "file bytes".codeUnits;
 await Client().putObject(bytes, "test.txt");
 ```
 
-### 3. get the object from oss
+### 3. 下载文件
 ```dart
 await Client().getObject("test.txt");
 ```
 
-### 4. download the object from oss
+### 4. 下载并保存文件
 ```dart
 await Client().downloadObject("test.txt", "./example/test.txt");
 ```
 
-### 5. delete the object from oss
+### 5. 删除文件
 ```dart
 await Client().deleteObject("test.txt");
 ```
