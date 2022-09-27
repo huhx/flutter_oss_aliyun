@@ -133,6 +133,13 @@ class Client {
         .delete(request.url, options: Options(headers: request.headers));
   }
 
+  /// delete objects from oss
+  Future<List<Response<dynamic>>> deleteObjects(List<String> keys,
+      {String? bucketName}) async {
+    final deletes = keys.map((fileKey) async => await deleteObject(fileKey)).toList();
+    return await Future.wait(deletes);
+  }
+
   /// whether auth is valid or not
   bool _isNotAuthenticated() {
     return _auth == null || _isExpired();

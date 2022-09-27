@@ -74,4 +74,18 @@ void main() {
     expect(200, resp[0].statusCode);
     expect(200, resp[1].statusCode);
   });
+
+  test("test the delete objects in Client", () async {
+    Client.init(
+      stsUrl: "**",
+      ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+      bucketName: "**",
+    );
+
+    final List<Response<dynamic>> resp = await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
+
+    expect(2, resp.length);
+    expect(200, resp[0].statusCode);
+    expect(200, resp[1].statusCode);
+  });
 }

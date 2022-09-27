@@ -67,6 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: const Text("Batch upload object"),
             ),
+            TextButton(
+              onPressed: () async {
+                await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
+              },
+              child: const Text("Batch delete object"),
+            ),
           ],
         ),
       ),
