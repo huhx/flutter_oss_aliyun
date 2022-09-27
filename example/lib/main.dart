@@ -48,7 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TextButton(
               onPressed: () async {
-                await Client().downloadObject("filename.txt", "./example/savePath.txt");
+                await Client()
+                    .downloadObject("filename.txt", "./example/savePath.txt");
               },
               child: const Text("Download object"),
             ),
@@ -61,15 +62,18 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               onPressed: () async {
                 await Client().putObjects([
-                  AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
-                  AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
+                  AssetEntity(
+                      filename: "filename1.txt", bytes: "files1".codeUnits),
+                  AssetEntity(
+                      filename: "filename2.txt", bytes: "files2".codeUnits),
                 ]);
               },
               child: const Text("Batch upload object"),
             ),
             TextButton(
               onPressed: () async {
-                await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
+                await Client()
+                    .deleteObjects(["filename1.txt", "filename2.txt"]);
               },
               child: const Text("Batch delete object"),
             ),

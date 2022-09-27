@@ -13,7 +13,8 @@ void main() {
       bucketName: "**",
     );
 
-    final Response<dynamic> resp = await Client().putObject("Hello World".codeUnits, "test.txt");
+    final Response<dynamic> resp =
+        await Client().putObject("Hello World".codeUnits, "test.txt");
 
     expect(200, resp.statusCode);
   });
@@ -41,7 +42,8 @@ void main() {
       bucketName: "**",
     );
 
-    final Response resp = await Client().downloadObject("test.txt", "result.txt");
+    final Response resp =
+        await Client().downloadObject("test.txt", "result.txt");
 
     expect(200, resp.statusCode);
   });
@@ -82,7 +84,8 @@ void main() {
       bucketName: "**",
     );
 
-    final List<Response<dynamic>> resp = await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
+    final List<Response<dynamic>> resp =
+        await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 
     expect(2, resp.length);
     expect(200, resp[0].statusCode);
