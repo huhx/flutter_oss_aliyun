@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_oss_aliyun/src/asset_entity.dart';
 import 'package:flutter_oss_aliyun/src/client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -55,5 +56,22 @@ void main() {
     final Response<dynamic> resp = await Client().deleteObject("test.txt");
 
     expect(204, resp.statusCode);
+  });
+
+  test("test the put objects in Client", () async {
+    Client.init(
+      stsUrl: "**",
+      ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+      bucketName: "**",
+    );
+
+    final List<Response<dynamic>> resp = await Client().putObjects([
+      AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
+      AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
+    ]);
+
+    expect(2, resp.length);
+    expect(200, resp[0].statusCode);
+    expect(200, resp[1].statusCode);
   });
 }

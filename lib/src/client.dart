@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 import 'package:mime_type/mime_type.dart';
 
+import 'asset_entity.dart';
 import 'auth.dart';
 import 'dio_client.dart';
 import 'encrypt.dart';
@@ -108,6 +109,15 @@ class Client {
     );
   }
 
+  /// upload object(files) to oss server
+  /// [assetEntities] is list of files need to be uploaded to oss
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  Future<List<Response<dynamic>>> putObjects(List<AssetEntity> assetEntities,
+      {String? bucketName}) async {
+    final uploads = assetEntities.map((file) async => await putObject(file.bytes, file.filename)).toList();
+    return await Future.wait(uploads);
+  }
+
   /// delete object from oss
   Future<Response<dynamic>> deleteObject(String fileKey,
       {String? bucketName}) async {
@@ -116,7 +126,7 @@ class Client {
 
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(
-        url, 'DELETE', {}, {'content-type': 'application/json; charset=utf-8'});
+        url, 'DELETE', {}, {'content-type': Headers.jsonContentType});
     auth.sign(request, bucket, fileKey);
 
     return RestClient.getInstance()
