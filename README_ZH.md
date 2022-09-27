@@ -17,14 +17,14 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 ## 待开发
 - [ ] buckets列表
 - [ ] 上传文件的回调
-- [ ] 多文件上传
-- [ ] 多文件删除
+- [x] 多文件上传
+- [x] 多文件删除
 
 ## 使用
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^1.0.5
+  flutter_oss_aliyun: ^2.0.0
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -86,3 +86,15 @@ await Client().downloadObject("test.txt", "./example/test.txt");
 await Client().deleteObject("test.txt");
 ```
 
+### 6. 批量上传文件
+```dart
+await Client().putObjects([
+  AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
+  AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
+]);
+```
+
+### 6. 批量删除文件
+```dart
+await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
+```

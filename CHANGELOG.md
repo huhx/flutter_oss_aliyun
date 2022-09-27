@@ -1,3 +1,7 @@
+## 2.0.0 - 2022-09-27
+* add batch upload object
+* add batch delete object
+
 ## 1.0.5 - 2022-08-06
 * add README_ZH.md
 
