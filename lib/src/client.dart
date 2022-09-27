@@ -114,7 +114,7 @@ class Client {
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<List<Response<dynamic>>> putObjects(List<AssetEntity> assetEntities,
       {String? bucketName}) async {
-    final uploads = assetEntities.map((file) async => await putObject(file.bytes, file.filename)).toList();
+    final uploads = assetEntities.map((file) async => await putObject(file.bytes, file.filename, bucketName: bucketName)).toList();
     return await Future.wait(uploads);
   }
 
@@ -136,7 +136,7 @@ class Client {
   /// delete objects from oss
   Future<List<Response<dynamic>>> deleteObjects(List<String> keys,
       {String? bucketName}) async {
-    final deletes = keys.map((fileKey) async => await deleteObject(fileKey)).toList();
+    final deletes = keys.map((fileKey) async => await deleteObject(fileKey, bucketName: bucketName)).toList();
     return await Future.wait(deletes);
   }
 
