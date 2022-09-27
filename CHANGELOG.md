@@ -1,3 +1,6 @@
+## 2.0.1 - 2022-09-27
+* update the document
+
 ## 2.0.0 - 2022-09-27
 * add batch upload object
 * add batch delete object
