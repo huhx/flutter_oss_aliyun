@@ -1,3 +1,6 @@
+## 2.0.3 - 2022-10-10
+* change return type of tokenGetter to Future
+
 ## 2.0.2 - 2022-10-10
 * update the document
 

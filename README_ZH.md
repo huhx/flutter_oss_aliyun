@@ -21,7 +21,7 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^2.0.1
+  flutter_oss_aliyun: ^2.0.3
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -52,7 +52,7 @@ Client.init(
     tokenGetter: _tokenGetterMethod
 );
 
-String _tokenGetterMethod() {
+String _tokenGetterMethod() async {
   return '''{
         "AccessKeyId": "access id",
         "AccessKeySecret": "AccessKeySecret",

@@ -23,7 +23,7 @@ void main() {
     Client.init(
         ossEndpoint: "oss-cn-beijing.aliyuncs.com",
         bucketName: "back_name",
-        tokenGetter: () => '''{
+        tokenGetter: () async => '''{
         "AccessKeyId": "access id",
         "AccessKeySecret": "AccessKeySecret",
         "SecurityToken": "security token",
