@@ -16,7 +16,7 @@ class Client {
 
   final String endpoint;
   final String bucketName;
-  final Function? tokenGetter;
+  final Future<String> Function() tokenGetter;
 
   Client._(
     this.endpoint,
@@ -28,7 +28,7 @@ class Client {
       {String? stsUrl,
       required String ossEndpoint,
       required String bucketName,
-      String Function()? tokenGetter}) {
+      Future<String> Function()? tokenGetter}) {
     assert(stsUrl != null || tokenGetter != null);
     final tokenGet = tokenGetter ??
         () async {
@@ -44,7 +44,7 @@ class Client {
   /// get auth information from sts server
   Future<Auth> _getAuth() async {
     if (_isNotAuthenticated()) {
-      final resp = await tokenGetter!();
+      final resp = await tokenGetter();
       final respMap = jsonDecode(resp);
       _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'],
           respMap['SecurityToken']);
