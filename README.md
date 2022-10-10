@@ -8,7 +8,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 
 **oss sts document**: [https://help.aliyun.com/document_detail/100624.html](https://help.aliyun.com/document_detail/100624.html)
 
-## Feature has Supported
+## Feature
 - [x] upload object 
 - [x] get object 
 - [x] save object in files
@@ -16,15 +16,12 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [x] upload multiple objects at once
 - [x] delete multiple objects at once
 
-## Feature ready to Support
-- [ ] List buckets
-- [ ] callback when upload object
 
 ## Usage
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^2.0.0
+  flutter_oss_aliyun: ^2.0.2
 ```
 Don't forget to `flutter pub get`.
 

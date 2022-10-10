@@ -16,10 +16,6 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 - [x] 多文件上传
 - [x] 多文件删除
 
-## 待开发
-- [ ] buckets列表
-- [ ] 上传文件的回调
-
 
 ## 使用
 添加依赖
