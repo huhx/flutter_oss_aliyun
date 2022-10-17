@@ -74,7 +74,7 @@ class Client {
   /// [savePath] is where we save the object(file) that download from oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response> downloadObject(String fileKey, String savePath,
-      {String? bucketName}) async {
+      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -83,6 +83,7 @@ class Client {
     auth.sign(request, bucket, fileKey);
 
     return await RestClient.getInstance().download(request.url, savePath,
+        onReceiveProgress: onReceiveProgress,
         options: Options(headers: request.headers));
   }
 
