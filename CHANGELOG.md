@@ -1,3 +1,6 @@
+## 3.0.1 - 2022-10-18
+* update the document
+
 ## 3.0.0 - 2022-10-18
 * add progress callback when upload files
 * add progress callback when download files

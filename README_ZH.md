@@ -15,13 +15,15 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 - [x] 删除文件
 - [x] 多文件上传
 - [x] 多文件删除
+- [x] 上传文件的进度回调函数
+- [x] 下载文件的进度回调函数
 
 
 ## 使用
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.0.0
+  flutter_oss_aliyun: ^3.0.1
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -67,7 +69,8 @@ String _tokenGetterMethod() async {
 final bytes = "file bytes".codeUnits;
 
 await Client().putObject(
-  bytes, "test.txt",
+  bytes,
+  "test.txt",
   onSendProgress: (count, total) {
     debugPrint("sent = $count, total = $total");
   },
@@ -105,10 +108,18 @@ await Client().deleteObject("test.txt");
 
 ### 6. 批量上传文件
 ```dart
-await Client().putObjects([
-  AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
-  AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
-]);
+await Client().putObjects(
+  [
+    AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
+    AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
+  ],
+  onSendProgress: (count, total) {
+    debugPrint("sent = $count, total = $total");
+  },
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
 ```
 
 ### 7. 批量删除文件

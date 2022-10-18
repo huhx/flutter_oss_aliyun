@@ -57,6 +57,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TextButton(
               onPressed: () async {
+                await Client().getObject(
+                  "filename.txt",
+                  onReceiveProgress: (count, total) {
+                    debugPrint("received = $count, total = $total");
+                  },
+                );
+              },
+              child: const Text("Get object"),
+            ),
+            TextButton(
+              onPressed: () async {
                 await Client().downloadObject(
                   "filename.txt",
                   "./example/savePath.txt",
@@ -75,12 +86,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TextButton(
               onPressed: () async {
-                await Client().putObjects([
-                  AssetEntity(
-                      filename: "filename1.txt", bytes: "files1".codeUnits),
-                  AssetEntity(
-                      filename: "filename2.txt", bytes: "files2".codeUnits),
-                ]);
+                await Client().putObjects(
+                  [
+                    AssetEntity(
+                        filename: "filename1.txt", bytes: "files1".codeUnits),
+                    AssetEntity(
+                        filename: "filename2.txt", bytes: "files2".codeUnits),
+                  ],
+                  onSendProgress: (count, total) {
+                    debugPrint("sent = $count, total = $total");
+                  },
+                  onReceiveProgress: (count, total) {
+                    debugPrint("received = $count, total = $total");
+                  },
+                );
               },
               child: const Text("Batch upload object"),
             ),

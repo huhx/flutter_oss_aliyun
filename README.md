@@ -15,13 +15,15 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [x] delete object
 - [x] upload multiple objects at once
 - [x] delete multiple objects at once
+- [x] progress callback for uploading files
+- [x] progress callback for downloading files
 
 
 ## Usage
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.0.0
+  flutter_oss_aliyun: ^3.0.1
 ```
 Don't forget to `flutter pub get`.
 
@@ -68,7 +70,8 @@ String _tokenGetterMethod() async {
 final bytes = "file bytes".codeUnits;
 
 await Client().putObject(
-  bytes, "test.txt",
+  bytes, 
+  "test.txt",
   onSendProgress: (count, total) {
     debugPrint("sent = $count, total = $total");
   },
@@ -106,10 +109,18 @@ await Client().deleteObject("test.txt");
 
 ### 6. batch put the object to oss
 ```dart
-await Client().putObjects([
-  AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
-  AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
-]);
+await Client().putObjects(
+  [
+    AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
+    AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
+  ],
+  onSendProgress: (count, total) {
+    debugPrint("sent = $count, total = $total");
+  },
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
 ```
 
 ### 7. batch delete the object from oss
