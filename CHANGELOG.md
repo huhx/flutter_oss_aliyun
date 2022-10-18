@@ -1,3 +1,7 @@
+## 3.0.0 - 2022-10-18
+* add progress callback when upload files
+* add progress callback when download files
+
 ## 2.0.3 - 2022-10-10
 * change return type of tokenGetter to Future
 

@@ -57,7 +57,7 @@ class Client {
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> getObject(String fileKey,
-      {String? bucketName}) async {
+      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -65,8 +65,11 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, fileKey);
 
-    return RestClient.getInstance()
-        .get(request.url, options: Options(headers: request.headers));
+    return RestClient.getInstance().get(
+      request.url,
+      options: Options(headers: request.headers),
+      onReceiveProgress: onReceiveProgress,
+    );
   }
 
   /// download object(file) from oss server
@@ -74,7 +77,7 @@ class Client {
   /// [savePath] is where we save the object(file) that download from oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response> downloadObject(String fileKey, String savePath,
-      {String? bucketName}) async {
+      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -82,15 +85,21 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, fileKey);
 
-    return await RestClient.getInstance().download(request.url, savePath,
-        options: Options(headers: request.headers));
+    return await RestClient.getInstance().download(
+      request.url,
+      savePath,
+      options: Options(headers: request.headers),
+      onReceiveProgress: onReceiveProgress,
+    );
   }
 
   /// upload object(file) to oss server
   /// [fileData] is the binary data that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> putObject(List<int> fileData, String fileKey,
-      {String? bucketName}) async {
+      {String? bucketName,
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -106,17 +115,28 @@ class Client {
       request.url,
       data: MultipartFile.fromBytes(fileData).finalize(),
       options: Options(headers: request.headers),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
     );
   }
 
   /// upload object(files) to oss server
   /// [assetEntities] is list of files need to be uploaded to oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<List<Response<dynamic>>> putObjects(List<AssetEntity> assetEntities,
-      {String? bucketName}) async {
+  Future<List<Response<dynamic>>> putObjects(
+    List<AssetEntity> assetEntities, {
+    String? bucketName,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     final uploads = assetEntities
-        .map((file) async =>
-            await putObject(file.bytes, file.filename, bucketName: bucketName))
+        .map((file) async => await putObject(
+              file.bytes,
+              file.filename,
+              bucketName: bucketName,
+              onSendProgress: onSendProgress,
+              onReceiveProgress: onReceiveProgress,
+            ))
         .toList();
     return await Future.wait(uploads);
   }
