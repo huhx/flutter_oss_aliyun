@@ -21,7 +21,7 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^2.0.3
+  flutter_oss_aliyun: ^3.0.0
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -62,20 +62,40 @@ String _tokenGetterMethod() async {
 }
 ```
 
-### 2. 上传文件
+### 2. 上传文件附带进度回调
 ```dart
 final bytes = "file bytes".codeUnits;
-await Client().putObject(bytes, "test.txt");
+
+await Client().putObject(
+  bytes, "test.txt",
+  onSendProgress: (count, total) {
+    debugPrint("sent = $count, total = $total");
+  },
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  }
+);
 ```
 
-### 3. 下载文件
+### 3. 下载文件附带进度回调
 ```dart
-await Client().getObject("test.txt");
+await Client().getObject(
+  "test.txt",
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
 ```
 
-### 4. 下载并保存文件
+### 4. 下载并保存文件附带进度回调
 ```dart
-await Client().downloadObject("test.txt", "./example/test.txt");
+await Client().downloadObject(
+  "test.txt",
+  "./example/test.txt",
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
 ```
 
 ### 5. 删除文件

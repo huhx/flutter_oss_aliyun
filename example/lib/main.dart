@@ -42,14 +42,28 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               onPressed: () async {
                 final bytes = "Hello World".codeUnits;
-                await Client().putObject(bytes, "filename.txt");
+                await Client().putObject(
+                  bytes,
+                  "filename.txt",
+                  onSendProgress: (count, total) {
+                    debugPrint("sent = $count, total = $total");
+                  },
+                  onReceiveProgress: (count, total) {
+                    debugPrint("received = $count, total = $total");
+                  },
+                );
               },
               child: const Text("Upload object"),
             ),
             TextButton(
               onPressed: () async {
-                await Client()
-                    .downloadObject("filename.txt", "./example/savePath.txt");
+                await Client().downloadObject(
+                  "filename.txt",
+                  "./example/savePath.txt",
+                  onReceiveProgress: (count, total) {
+                    debugPrint("received = $count, total = $total");
+                  },
+                );
               },
               child: const Text("Download object"),
             ),

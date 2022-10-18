@@ -21,7 +21,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^2.0.3
+  flutter_oss_aliyun: ^3.0.0
 ```
 Don't forget to `flutter pub get`.
 
@@ -63,20 +63,40 @@ String _tokenGetterMethod() async {
 }
 ```
 
-### 2. put the object to oss
+### 2. put the object to oss with progress callback
 ```dart
 final bytes = "file bytes".codeUnits;
-await Client().putObject(bytes, "test.txt");
+
+await Client().putObject(
+  bytes, "test.txt",
+  onSendProgress: (count, total) {
+    debugPrint("sent = $count, total = $total");
+  },
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  }
+);
 ```
 
-### 3. get the object from oss
+### 3. get the object from oss with progress callback
 ```dart
-await Client().getObject("test.txt");
+await Client().getObject(
+  "test.txt",
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
 ```
 
-### 4. download the object from oss
+### 4. download the object from oss with progress callback
 ```dart
-await Client().downloadObject("test.txt", "./example/test.txt");
+await Client().downloadObject(
+  "test.txt", 
+  "./example/test.txt",
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
 ```
 
 ### 5. delete the object from oss
