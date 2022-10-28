@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
-import 'package:flutter_oss_aliyun/src/asset_entity.dart';
 
 void main() {
   runApp(

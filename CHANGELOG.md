@@ -1,3 +1,6 @@
+## 3.0.2 - 2022-10-18
+* export the AssetEntity
+
 ## 3.0.1 - 2022-10-18
 * update the document
 
