@@ -101,4 +101,17 @@ void main() {
 
     expect(url, isNotNull);
   });
+
+  test("test the get object urls in Client", () async {
+    Client.init(
+      stsUrl: "**",
+      ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+      bucketName: "**",
+    );
+
+    final Map<String, String> result =
+        await Client().getSignedUrls(["test.txt", "filename1.txt"]);
+
+    expect(result.length, 2);
+  });
 }

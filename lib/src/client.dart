@@ -96,6 +96,21 @@ class Client {
     return "$url?$queryString";
   }
 
+  /// get signed url from oss server
+  /// [fileKeys] list of object name from oss
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  /// [expireSeconds] is optional, defulat expired time are 60 seconds
+  Future<Map<String, String>> getSignedUrls(List<String> fileKeys,
+      {String? bucketName, int expireSeconds = 60}) async {
+    Map<String, String> mapResult = {};
+    for (final String fileKey in fileKeys.toSet()) {
+      final String signedUrl = await getSignedUrl(fileKey,
+          bucketName: bucketName, expireSeconds: expireSeconds);
+      mapResult[fileKey] = signedUrl;
+    }
+    return mapResult;
+  }
+
   /// download object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [savePath] is where we save the object(file) that download from oss server
