@@ -89,4 +89,16 @@ void main() {
     expect(204, resp[0].statusCode);
     expect(204, resp[1].statusCode);
   });
+
+  test("test the get object url in Client", () async {
+    Client.init(
+      stsUrl: "**",
+      ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+      bucketName: "**",
+    );
+
+    final String url = await Client().getSignedUrl("filename1.txt");
+
+    expect(url, isNotNull);
+  });
 }

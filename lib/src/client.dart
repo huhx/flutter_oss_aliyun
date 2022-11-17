@@ -72,6 +72,29 @@ class Client {
     );
   }
 
+  /// get signed url from oss server
+  /// [fileKey] is the object name from oss
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  /// [expireSeconds] is optional, defulat expired time are 60 seconds
+  Future<String> getSignedUrl(String fileKey, {String? bucketName, int expireSeconds = 60}) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+    final int expires =
+        (DateTime.now().millisecondsSinceEpoch / 1000).floor() + expireSeconds;
+
+    final String url = "https://$bucket.$endpoint/$fileKey";
+    final Map<String, dynamic> params = {
+      "OSSAccessKeyId": auth.accessKey,
+      "Expires": expires,
+      "Signature": auth.getSignature(expires, bucket, fileKey),
+      "security-token": auth.secureToken.replaceAll("+", "%2B")
+    };
+    final String queryString =
+        params.entries.map((entry) => "${entry.key}=${entry.value}").join("&");
+
+    return "$url?$queryString";
+  }
+
   /// download object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [savePath] is where we save the object(file) that download from oss server

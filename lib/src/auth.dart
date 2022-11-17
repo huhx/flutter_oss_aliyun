@@ -29,6 +29,12 @@ class Auth {
     return EncryptUtil.hmacSign(accessSecret, stringToSign);
   }
 
+  /// get the signature to generate singed url
+  String getSignature(int expires, String bucket, String key) {
+    final String stringToSign = ["GET", "", "", expires, "${ _getResourceString(bucket, key)}?security-token=$secureToken"].join("\n");
+    return EncryptUtil.hmacSign(accessSecret, stringToSign);
+  }
+
   /// string returned by this method is the original value ready to hmac sign
   String _getStringToSign(HttpRequest req, String bucket, String key) {
     final String contentMd5 = req.headers['content-md5'] ?? '';
