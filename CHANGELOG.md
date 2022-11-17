@@ -1,3 +1,7 @@
+## 3.1.1 - 2022-11-17
+* add multiple signed urls feature
+
+
 ## 3.1.0 - 2022-11-17
 * add signed url feature
 

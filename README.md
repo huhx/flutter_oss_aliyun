@@ -18,13 +18,14 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [x] progress callback for uploading files
 - [x] progress callback for downloading files
 - [x] get signed url for file
+- [x] get multiple signed urls for files
 
 
 ## Usage
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.1.0
+  flutter_oss_aliyun: ^3.1.1
 ```
 Don't forget to `flutter pub get`.
 

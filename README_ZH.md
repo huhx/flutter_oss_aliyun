@@ -18,13 +18,14 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 - [x] 上传文件的进度回调函数
 - [x] 下载文件的进度回调函数
 - [x] 获取签名的文件url
+- [x] 获取多个签名的文件url
 
 
 ## 使用
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.1.0
+  flutter_oss_aliyun: ^3.1.1
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
