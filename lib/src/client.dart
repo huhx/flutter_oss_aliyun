@@ -76,7 +76,8 @@ class Client {
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   /// [expireSeconds] is optional, defulat expired time are 60 seconds
-  Future<String> getSignedUrl(String fileKey, {String? bucketName, int expireSeconds = 60}) async {
+  Future<String> getSignedUrl(String fileKey,
+      {String? bucketName, int expireSeconds = 60}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
     final int expires =

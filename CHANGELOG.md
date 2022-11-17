@@ -1,3 +1,7 @@
+## 3.1.0 - 2022-11-17
+* add signed url feature
+
+
 ## 3.0.2 - 2022-10-18
 * export the AssetEntity
 

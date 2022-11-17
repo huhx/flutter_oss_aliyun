@@ -31,7 +31,13 @@ class Auth {
 
   /// get the signature to generate singed url
   String getSignature(int expires, String bucket, String key) {
-    final String stringToSign = ["GET", "", "", expires, "${ _getResourceString(bucket, key)}?security-token=$secureToken"].join("\n");
+    final String stringToSign = [
+      "GET",
+      "",
+      "",
+      expires,
+      "${_getResourceString(bucket, key)}?security-token=$secureToken"
+    ].join("\n");
     return EncryptUtil.hmacSign(accessSecret, stringToSign);
   }
 
