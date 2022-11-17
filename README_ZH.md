@@ -25,7 +25,7 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.1.1
+  flutter_oss_aliyun: ^3.1.2
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -128,3 +128,18 @@ await Client().putObjects(
 ```dart
 await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 ```
+
+### 8. 获取已签名的文件url，这个url可以直接在浏览器访问
+需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
+
+```dart
+final String url = await Client().getSignedUrl("filename1.txt");
+```
+
+### 9. 获取多个已签名的文件url
+需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
+
+```dart
+final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
+```
+## Drop a ⭐ if it is help to you.

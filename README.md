@@ -25,7 +25,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.1.1
+  flutter_oss_aliyun: ^3.1.2
 ```
 Don't forget to `flutter pub get`.
 
@@ -129,3 +129,19 @@ await Client().putObjects(
 ```dart
 await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 ```
+
+### 8. get signed url that can be accessed in browser directly
+This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
+
+```dart
+final String url = await Client().getSignedUrl("filename1.txt");
+```
+
+### 9. get multiple signed urls 
+This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
+
+```dart
+final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
+```
+
+## Drop a ⭐ if it is help to you.

@@ -15,7 +15,6 @@ class Auth {
   /// [req] include the request headers information that use for auth.
   /// [bucket] is the name of bucket used in aliyun oss
   /// [key] is the object name in aliyun oss, alias the 'filepath/filename'
-  ///
   void sign(HttpRequest req, String bucket, String key) {
     req.headers['date'] = HttpDate.format(DateTime.now());
     req.headers['x-oss-security-token'] = secureToken;
@@ -23,13 +22,10 @@ class Auth {
     req.headers['Authorization'] = "OSS $accessKey:$signature";
   }
 
-  /// sign the string use hmac
-  String _makeSignature(HttpRequest req, String bucket, String key) {
-    final String stringToSign = _getStringToSign(req, bucket, key);
-    return EncryptUtil.hmacSign(accessSecret, stringToSign);
-  }
-
-  /// get the signature to generate singed url
+  /// the signature of file
+  /// [expires] expired time (seconds)
+  /// [bucket] is the name of bucket used in aliyun oss
+  /// [key] is the object name in aliyun oss, alias the 'filepath/filename'
   String getSignature(int expires, String bucket, String key) {
     final String stringToSign = [
       "GET",
@@ -41,14 +37,14 @@ class Auth {
     return EncryptUtil.hmacSign(accessSecret, stringToSign);
   }
 
-  /// string returned by this method is the original value ready to hmac sign
-  String _getStringToSign(HttpRequest req, String bucket, String key) {
+  /// sign the string use hmac
+  String _makeSignature(HttpRequest req, String bucket, String key) {
     final String contentMd5 = req.headers['content-md5'] ?? '';
     final String contentType = req.headers['content-type'] ?? '';
     final String date = req.headers['date'] ?? '';
     final String headerString = _getHeaderString(req);
     final String resourceString = _getResourceString(bucket, key);
-    return [
+    final String stringToSign = [
       req.method,
       contentMd5,
       contentType,
@@ -56,6 +52,7 @@ class Auth {
       headerString,
       resourceString
     ].join("\n");
+    return EncryptUtil.hmacSign(accessSecret, stringToSign);
   }
 
   /// sign the header information

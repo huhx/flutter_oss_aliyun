@@ -75,7 +75,7 @@ class Client {
   /// get signed url from oss server
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  /// [expireSeconds] is optional, defulat expired time are 60 seconds
+  /// [expireSeconds] is optional, default expired time are 60 seconds
   Future<String> getSignedUrl(String fileKey,
       {String? bucketName, int expireSeconds = 60}) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -99,7 +99,7 @@ class Client {
   /// get signed url from oss server
   /// [fileKeys] list of object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  /// [expireSeconds] is optional, defulat expired time are 60 seconds
+  /// [expireSeconds] is optional, default expired time are 60 seconds
   Future<Map<String, String>> getSignedUrls(List<String> fileKeys,
       {String? bucketName, int expireSeconds = 60}) async {
     Map<String, String> mapResult = {};
