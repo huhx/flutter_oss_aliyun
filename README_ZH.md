@@ -25,7 +25,7 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.1.2
+  flutter_oss_aliyun: ^3.1.3
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式

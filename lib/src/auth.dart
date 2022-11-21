@@ -34,7 +34,8 @@ class Auth {
       expires,
       "${_getResourceString(bucket, key)}?security-token=$secureToken"
     ].join("\n");
-    return EncryptUtil.hmacSign(accessSecret, stringToSign);
+    return Uri.encodeFull(EncryptUtil.hmacSign(accessSecret, stringToSign))
+        .replaceAll("+", "%2B");
   }
 
   /// sign the string use hmac

@@ -1,3 +1,6 @@
+## 3.1.3 - 2022-11-21
+* handle the special charactar +
+
 ## 3.1.2 - 2022-11-17
 * documentation
 
