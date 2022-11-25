@@ -19,13 +19,14 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [x] progress callback for downloading files
 - [x] get signed url for file
 - [x] get multiple signed urls for files
+- [x] list objects
 
 
 ## Usage
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.1.3
+  flutter_oss_aliyun: ^4.0.0
 ```
 Don't forget to `flutter pub get`.
 
@@ -142,6 +143,13 @@ This is `not safe` due to the url include the security-token information even it
 
 ```dart
 final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
+```
+
+### 10. list objects
+List the information of all files (Object) in the storage space (Bucket). The parameters and response, refer to: https://help.aliyun.com/document_detail/187544.html
+
+```dart
+final Response<dynamic> resp = await Client().listFiles({});
 ```
 
 ## Drop a ⭐ if it is help to you.

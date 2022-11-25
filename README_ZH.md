@@ -19,13 +19,14 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 - [x] 下载文件的进度回调函数
 - [x] 获取签名的文件url
 - [x] 获取多个签名的文件url
+- [x] 列举存储空间中所有文件
 
 
 ## 使用
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^3.1.3
+  flutter_oss_aliyun: ^4.0.0
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -142,4 +143,12 @@ final String url = await Client().getSignedUrl("filename1.txt");
 ```dart
 final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
 ```
+
+### 10. 列举存储空间中所有文件
+接口用于列举存储空间（Bucket）中所有文件（Object）的信息。请求参数和返回结果，请参考：https://help.aliyun.com/document_detail/187544.html
+
+```dart
+final Response<dynamic> resp = await Client().listFiles({});
+```
+
 ## Drop a ⭐ if it is help to you.
