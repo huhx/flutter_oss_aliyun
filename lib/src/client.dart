@@ -118,6 +118,40 @@ class Client {
     );
   }
 
+  /// get bucket info
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  Future<Response<dynamic>> getBucketInfo({String? bucketName, ProgressCallback? onReceiveProgress}) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$bucket.$endpoint?bucketInfo";
+    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    auth.sign(request, bucket, "?bucketInfo");
+
+    return RestClient.getInstance().get(
+      request.url,
+      options: Options(headers: request.headers),
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  /// get bucket stat
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  Future<Response<dynamic>> getBucketStat({String? bucketName, ProgressCallback? onReceiveProgress}) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$bucket.$endpoint?stat";
+    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    auth.sign(request, bucket, "?stat");
+
+    return RestClient.getInstance().get(
+      request.url,
+      options: Options(headers: request.headers),
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
   /// download object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [savePath] is where we save the object(file) that download from oss server
