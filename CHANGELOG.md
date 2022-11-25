@@ -1,3 +1,6 @@
+## 4.1.1 - 2022-11-25
+* fix the issue when pass parameters in listObjects
+
 ## 4.1.0 - 2022-11-25
 * get bucket info
 * get bucket stat

@@ -107,7 +107,8 @@ class Client {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
-    final String url = "https://$bucket.$endpoint?list-type=2";
+    final String url = "https://$bucket.$endpoint";
+    parameters["list-type"] = 2;
     final HttpRequest request = HttpRequest(url, 'GET', parameters, {});
     auth.sign(request, bucket, "");
 
