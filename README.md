@@ -1,39 +1,38 @@
-Language: [English](README.md) | [中文简体](README_ZH.md)
+Language: [中文简体](README.md) | [English](README_EN.md)
 
 # flutter_oss_aliyun
 
-Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
+一个访问阿里云oss并且支持STS临时访问凭证访问OSS的flutter库，基本上涵盖阿里云oss sdk的所有功能。⭐
 
 **flutter pub**: [https://pub.dev/packages/flutter_oss_aliyun](https://pub.dev/packages/flutter_oss_aliyun)
 
 **oss sts document**: [https://help.aliyun.com/document_detail/100624.html](https://help.aliyun.com/document_detail/100624.html)
 
-## Feature
-- [x] upload object 
-- [x] get object 
-- [x] save object in files
-- [x] delete object
-- [x] upload multiple objects at once
-- [x] delete multiple objects at once
-- [x] progress callback for uploading files
-- [x] progress callback for downloading files
-- [x] get signed url for file
-- [x] get multiple signed urls for files
-- [x] list objects
-- [x] get bucket info
-- [x] get bucket stat
+## 🐱&nbsp;功能
+- [x] 上传文件
+- [x] 下载文件
+- [x] 下载并保存文件
+- [x] 删除文件
+- [x] 多文件上传
+- [x] 多文件删除
+- [x] 上传文件的进度回调函数
+- [x] 下载文件的进度回调函数
+- [x] 获取签名的文件url
+- [x] 获取多个签名的文件url
+- [x] 列举存储空间中所有文件
+- [x] 获取bucket信息
+- [x] 获取bucket的储容量以及文件数量
 
 
-## Usage
-First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
+## 🎨&nbsp;使用
+添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.1.1
+  flutter_oss_aliyun: ^4.1.2
 ```
-Don't forget to `flutter pub get`.
 
-### 1. init the client, we provide two ways to do it.
-#### use sts server, just provide the sts url from our backend server:
+### 1. 初始化oss client, 这里我们提供两种方式
+#### 提供sts server地址，需要后端添加这个api
 ```dart
 Client.init(
     stsUrl: "server url get sts token",
@@ -42,7 +41,7 @@ Client.init(
 );
 ```
 
-This sts url api at least return the data:
+后端api至少需要返回以下数据:
 ```json
 {
   "AccessKeyId": "AccessKeyId",
@@ -52,7 +51,7 @@ This sts url api at least return the data:
 }
 ```
 
-#### you can also customize the way to get sts json response.
+#### 当然你可以自定义使用其他的方式返回以下的json数据.
 ```dart
 Client.init(
     ossEndpoint: "oss-cn-beijing.aliyuncs.com",
@@ -70,12 +69,12 @@ String _tokenGetterMethod() async {
 }
 ```
 
-### 2. put the object to oss with progress callback
+### 2. 上传文件附带进度回调
 ```dart
 final bytes = "file bytes".codeUnits;
 
 await Client().putObject(
-  bytes, 
+  bytes,
   "test.txt",
   onSendProgress: (count, total) {
     debugPrint("sent = $count, total = $total");
@@ -86,7 +85,7 @@ await Client().putObject(
 );
 ```
 
-### 3. get the object from oss with progress callback
+### 3. 下载文件附带进度回调
 ```dart
 await Client().getObject(
   "test.txt",
@@ -96,10 +95,10 @@ await Client().getObject(
 );
 ```
 
-### 4. download the object from oss with progress callback
+### 4. 下载并保存文件附带进度回调
 ```dart
 await Client().downloadObject(
-  "test.txt", 
+  "test.txt",
   "./example/test.txt",
   onReceiveProgress: (count, total) {
     debugPrint("received = $count, total = $total");
@@ -107,12 +106,12 @@ await Client().downloadObject(
 );
 ```
 
-### 5. delete the object from oss
+### 5. 删除文件
 ```dart
 await Client().deleteObject("test.txt");
 ```
 
-### 6. batch put the object to oss
+### 6. 批量上传文件
 ```dart
 await Client().putObjects(
   [
@@ -128,41 +127,41 @@ await Client().putObjects(
 );
 ```
 
-### 7. batch delete the object from oss
+### 7. 批量删除文件
 ```dart
 await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 ```
 
-### 8. get signed url that can be accessed in browser directly
-This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
+### 8. 获取已签名的文件url，这个url可以直接在浏览器访问
+需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
 
 ```dart
 final String url = await Client().getSignedUrl("filename1.txt");
 ```
 
-### 9. get multiple signed urls 
-This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
+### 9. 获取多个已签名的文件url
+需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
 
 ```dart
 final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
 ```
 
-### 10. list objects
-List the information of all files (Object) in the storage space (Bucket). The parameters and response, refer to: https://help.aliyun.com/document_detail/187544.html
+### 10. 列举存储空间中所有文件
+接口用于列举存储空间（Bucket）中所有文件（Object）的信息。请求参数和返回结果，请参考: https://help.aliyun.com/document_detail/187544.html
 
 ```dart
 final Response<dynamic> resp = await Client().listFiles({});
 ```
 
-### 11. get bucket info
-View bucket information, The response refer to：https://help.aliyun.com/document_detail/31968.html
+### 11. 获取bucket信息
+查看存储空间（Bucket）的相关信息。返回结果请参考: https://help.aliyun.com/document_detail/31968.html
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketInfo();
 ```
 
-### 12. get objects counts and bucket details
-Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to：https://help.aliyun.com/document_detail/426056.html
+### 12. 获取bucket的储容量以及文件数量
+获取指定存储空间（Bucket）的存储容量以及文件（Object）数量。返回结果请参考: https://help.aliyun.com/document_detail/426056.html
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketStat();

@@ -1,3 +1,6 @@
+## 4.1.2 - 2022-11-25
+* update the docs
+
 ## 4.1.1 - 2022-11-25
 * fix the issue when pass parameters in listObjects
 
