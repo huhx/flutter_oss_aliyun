@@ -120,7 +120,8 @@ class Client {
 
   /// get bucket info
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> getBucketInfo({String? bucketName, ProgressCallback? onReceiveProgress}) async {
+  Future<Response<dynamic>> getBucketInfo(
+      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -137,7 +138,8 @@ class Client {
 
   /// get bucket stat
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> getBucketStat({String? bucketName, ProgressCallback? onReceiveProgress}) async {
+  Future<Response<dynamic>> getBucketStat(
+      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 

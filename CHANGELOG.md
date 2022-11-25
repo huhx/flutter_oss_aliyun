@@ -1,3 +1,7 @@
+## 4.1.0 - 2022-11-25
+* get bucket info
+* get bucket stat
+
 ## 4.0.0 - 2022-11-25
 * list all objects from bucket
 

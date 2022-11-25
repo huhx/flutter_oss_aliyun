@@ -20,13 +20,15 @@ Language: [English](README.md) | [中文简体](README_ZH.md)
 - [x] 获取签名的文件url
 - [x] 获取多个签名的文件url
 - [x] 列举存储空间中所有文件
+- [x] 获取bucket信息
+- [x] 获取bucket的储容量以及文件数量
 
 
 ## 使用
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.0.0
+  flutter_oss_aliyun: ^4.1.0
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -149,6 +151,20 @@ final Map<String, String> result = await Client().getSignedUrls(["test.txt", "fi
 
 ```dart
 final Response<dynamic> resp = await Client().listFiles({});
+```
+
+### 11. 获取bucket信息
+查看存储空间（Bucket）的相关信息。返回结果请参考：https://help.aliyun.com/document_detail/31968.html
+
+```dart
+final Response<dynamic> resp = await Client().getBucketInfo();
+```
+
+### 12. 获取bucket的储容量以及文件数量
+获取指定存储空间（Bucket）的存储容量以及文件（Object）数量。返回结果请参考：https://help.aliyun.com/document_detail/426056.html
+
+```dart
+final Response<dynamic> resp = await Client().getBucketStat();
 ```
 
 ## Drop a ⭐ if it is help to you.
