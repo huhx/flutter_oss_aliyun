@@ -1,5 +1,8 @@
+## 4.0.0 - 2022-11-25
+* list all objects from bucket
+
 ## 3.1.3 - 2022-11-21
-* handle the special charactar +
+* handle the special character +
 
 ## 3.1.2 - 2022-11-17
 * documentation

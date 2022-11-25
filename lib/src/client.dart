@@ -41,18 +41,6 @@ class Client {
   Auth? _auth;
   String? _expire;
 
-  /// get auth information from sts server
-  Future<Auth> _getAuth() async {
-    if (_isNotAuthenticated()) {
-      final resp = await tokenGetter();
-      final respMap = jsonDecode(resp);
-      _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'],
-          respMap['SecurityToken']);
-      _expire = respMap['Expiration'];
-    }
-    return _auth!;
-  }
-
   /// get object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
@@ -109,6 +97,25 @@ class Client {
       mapResult[fileKey] = signedUrl;
     }
     return mapResult;
+  }
+
+  /// list objects from oss server
+  /// [parameters] parameters for filter, refer to: https://help.aliyun.com/document_detail/187544.html
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  Future<Response<dynamic>> listObjects(Map<String, dynamic> parameters,
+      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$bucket.$endpoint?list-type=2";
+    final HttpRequest request = HttpRequest(url, 'GET', parameters, {});
+    auth.sign(request, bucket, "");
+
+    return RestClient.getInstance().get(
+      request.url,
+      options: Options(headers: request.headers),
+      onReceiveProgress: onReceiveProgress,
+    );
   }
 
   /// download object(file) from oss server
@@ -203,6 +210,18 @@ class Client {
             await deleteObject(fileKey, bucketName: bucketName))
         .toList();
     return await Future.wait(deletes);
+  }
+
+  /// get auth information from sts server
+  Future<Auth> _getAuth() async {
+    if (_isNotAuthenticated()) {
+      final resp = await tokenGetter();
+      final respMap = jsonDecode(resp);
+      _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'],
+          respMap['SecurityToken']);
+      _expire = respMap['Expiration'];
+    }
+    return _auth!;
   }
 
   /// whether auth is valid or not
