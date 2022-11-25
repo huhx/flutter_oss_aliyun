@@ -100,6 +100,23 @@ class Client {
   }
 
   /// list objects from oss server
+  /// [parameters] parameters for filter, refer to: https://help.aliyun.com/document_detail/31957.html
+  Future<Response<dynamic>> listBuckets(Map<String, dynamic> parameters,
+      {ProgressCallback? onReceiveProgress}) async {
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$endpoint";
+    final HttpRequest request = HttpRequest(url, 'GET', parameters, {});
+    auth.sign(request, "", "");
+
+    return RestClient.getInstance().get(
+      request.url,
+      options: Options(headers: request.headers),
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  /// list objects from oss server
   /// [parameters] parameters for filter, refer to: https://help.aliyun.com/document_detail/187544.html
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> listObjects(Map<String, dynamic> parameters,
