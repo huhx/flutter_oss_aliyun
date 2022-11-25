@@ -20,13 +20,15 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [x] get signed url for file
 - [x] get multiple signed urls for files
 - [x] list objects
+- [x] get bucket info
+- [x] get bucket stat
 
 
 ## Usage
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.0.0
+  flutter_oss_aliyun: ^4.1.0
 ```
 Don't forget to `flutter pub get`.
 
@@ -150,6 +152,20 @@ List the information of all files (Object) in the storage space (Bucket). The pa
 
 ```dart
 final Response<dynamic> resp = await Client().listFiles({});
+```
+
+### 11. get bucket info
+View bucket information, The response refer to：https://help.aliyun.com/document_detail/31968.html
+
+```dart
+final Response<dynamic> resp = await Client().getBucketInfo();
+```
+
+### 12. get objects counts and bucket details
+Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to：https://help.aliyun.com/document_detail/426056.html
+
+```dart
+final Response<dynamic> resp = await Client().getBucketStat();
 ```
 
 ## Drop a ⭐ if it is help to you.
