@@ -22,7 +22,6 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 - [x] 列举所有的bucket
 - [x] 列举bucket中所有文件
 - [x] 获取bucket信息
-- [x] 获取bucket信息
 - [x] 获取bucket的储容量以及文件数量
 
 
@@ -149,7 +148,7 @@ final Map<String, String> result = await Client().getSignedUrls(["test.txt", "fi
 ```
 
 ### 10. 列举所有的存储空间
-列举请求者拥有的所有存储空间（Bucket）。您还可以通过设置prefix、marker或者max-keys参数列举满足指定条件的存储空间。
+列举请求者拥有的所有存储空间（Bucket）。您还可以通过设置prefix、marker或者max-keys参数列举满足指定条件的存储空间。参考：https://help.aliyun.com/document_detail/31957.html
 
 ```dart
 final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});

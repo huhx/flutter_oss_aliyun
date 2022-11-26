@@ -149,7 +149,7 @@ final Map<String, String> result = await Client().getSignedUrls(["test.txt", "fi
 ```
 
 ### 10. list buckets
-list all owned buckets, refer to: https://help.aliyun.com/document_detail/31957.html。
+list all owned buckets, refer to: https://help.aliyun.com/document_detail/31957.html
 
 ```dart
 final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
