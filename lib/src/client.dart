@@ -234,6 +234,7 @@ class Client {
     final Map<String, String> headers = {
       'content-md5': await EncryptUtil.md5FileStream(file.openRead()),
       'content-type': mime(fileKey) ?? "image/png",
+      'content-length': (await file.length()).toString(),
     };
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
