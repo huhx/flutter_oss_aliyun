@@ -14,4 +14,9 @@ class EncryptUtil {
     final Digest digest = md5.convert(bytes);
     return base64.encode(digest.bytes);
   }
+
+  /// use md5 to encrypt the file stream
+  static Future<String> md5FileStream(Stream<List<int>> stream) async {
+    return base64.encode((await md5.bind(stream).first).bytes);
+  }
 }

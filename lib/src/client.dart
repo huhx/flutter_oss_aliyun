@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
@@ -214,6 +215,33 @@ class Client {
     return RestClient.getInstance().put(
       request.url,
       data: MultipartFile.fromBytes(fileData).finalize(),
+      options: Options(headers: request.headers),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  /// upload object(file) to oss server
+  /// [file] is the file that will send to oss server
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  Future<Response<dynamic>> putObjectFile(File file, String fileKey,
+      {String? bucketName,
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress}) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+
+    final Map<String, String> headers = {
+      'content-md5': await EncryptUtil.md5FileStream(file.openRead()),
+      'content-type': mime(fileKey) ?? "image/png",
+    };
+    final String url = "https://$bucket.$endpoint/$fileKey";
+    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
+    auth.sign(request, bucket, fileKey);
+
+    return RestClient.getInstance().put(
+      request.url,
+      data: file.openRead(),
       options: Options(headers: request.headers),
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
