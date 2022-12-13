@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
@@ -205,6 +206,7 @@ class Client {
 
     final Map<String, String> headers = {
       'content-md5': EncryptUtil.md5File(fileData),
+      'content-length': "${fileData.length}",
       'content-type': mime(fileKey) ?? "image/png",
     };
     final String url = "https://$bucket.$endpoint/$fileKey";
@@ -213,7 +215,7 @@ class Client {
 
     return RestClient.getInstance().put(
       request.url,
-      data: MultipartFile.fromBytes(fileData).finalize(),
+      data: Stream.fromIterable(fileData.map((e) => [e])),
       options: Options(headers: request.headers),
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
