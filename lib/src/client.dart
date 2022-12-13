@@ -205,7 +205,7 @@ class Client {
     final Auth auth = await _getAuth();
 
     final Map<String, String> headers = {
-      'content-md5': EncryptUtil.md5File(fileData),
+      'content-md5': EncryptUtil.md5FromBytes(fileData),
       'content-length': "${fileData.length}",
       'content-type': mime(fileKey) ?? "image/png",
     };

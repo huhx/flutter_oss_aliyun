@@ -10,7 +10,7 @@ class EncryptUtil {
   }
 
   /// use md5 to encrypt the file content
-  static String md5File(List<int> bytes) {
+  static String md5FromBytes(List<int> bytes) {
     final Digest digest = md5.convert(bytes);
     return base64.encode(digest.bytes);
   }
