@@ -3,12 +3,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
-import 'package:mime_type/mime_type.dart';
 
 import 'asset_entity.dart';
 import 'auth.dart';
 import 'dio_client.dart';
-import 'encrypt.dart';
 
 class Client {
   static Client? _instance;
@@ -204,10 +202,11 @@ class Client {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
+    var multipartFile = MultipartFile.fromBytes(fileData, filename: fileKey);
+    var formData = FormData.fromMap({'file': multipartFile});
+
     final Map<String, String> headers = {
-      'content-md5': EncryptUtil.md5FromBytes(fileData),
-      'content-length': "${fileData.length}",
-      'content-type': mime(fileKey) ?? "image/png",
+      'content-type': "multipart/form-data; boundary=${formData.boundary}",
     };
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -215,7 +214,40 @@ class Client {
 
     return RestClient.getInstance().put(
       request.url,
-      data: Stream.fromIterable(fileData.map((e) => [e])),
+      data: formData,
+      options: Options(headers: request.headers),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  /// upload object(file) to oss server
+  /// [file] is the file that will send to oss server
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  Future<Response<dynamic>> putObjectFile(File file,
+      {String? bucketName,
+      String? fileKey,
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress}) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final String filename =
+        fileKey ?? file.path.split(Platform.pathSeparator).last;
+    final Auth auth = await _getAuth();
+
+    var multipartFile =
+        await MultipartFile.fromFile(file.path, filename: filename);
+    var formData = FormData.fromMap({'file': multipartFile});
+
+    final Map<String, String> headers = {
+      'content-type': "multipart/form-data; boundary=${formData.boundary}",
+    };
+    final String url = "https://$bucket.$endpoint/$filename";
+    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
+    auth.sign(request, bucket, filename);
+
+    return RestClient.getInstance().put(
+      request.url,
+      data: formData,
       options: Options(headers: request.headers),
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
