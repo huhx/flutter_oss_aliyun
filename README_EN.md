@@ -29,7 +29,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.1.4
+  flutter_oss_aliyun: ^4.1.5
 ```
 Don't forget to `flutter pub get`.
 
@@ -174,6 +174,12 @@ Gets the storage capacity of the specified storage space (Bucket) and the number
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketStat();
+```
+
+### 14. update object from local file
+
+```dart
+final Response<dynamic> resp = await Client().putObjectFile(File("/Users/aaa.pdf"));
 ```
 
 ## Drop a ⭐ if it is help to you.
