@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
+import 'package:mime_type/mime_type.dart';
 
 import 'asset_entity.dart';
 import 'auth.dart';
@@ -197,16 +198,16 @@ class Client {
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> putObject(List<int> fileData, String fileKey,
       {String? bucketName,
-      ProgressCallback? onSendProgress,
-      ProgressCallback? onReceiveProgress}) async {
+        ProgressCallback? onSendProgress,
+        ProgressCallback? onReceiveProgress}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
     var multipartFile = MultipartFile.fromBytes(fileData, filename: fileKey);
-    var formData = FormData.fromMap({'file': multipartFile});
 
     final Map<String, String> headers = {
-      'content-type': "multipart/form-data; boundary=${formData.boundary}",
+      'content-type': mime(fileKey) ?? "image/png",
+      'content-length': "${multipartFile.length}",
     };
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -214,7 +215,7 @@ class Client {
 
     return RestClient.getInstance().put(
       request.url,
-      data: formData,
+      data: multipartFile.finalize(),
       options: Options(headers: request.headers),
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
@@ -236,10 +237,10 @@ class Client {
 
     var multipartFile =
         await MultipartFile.fromFile(file.path, filename: filename);
-    var formData = FormData.fromMap({'file': multipartFile});
 
     final Map<String, String> headers = {
-      'content-type': "multipart/form-data; boundary=${formData.boundary}",
+      'content-length': "${multipartFile.length}",
+      'content-type': mime(fileKey) ?? "image/png",
     };
     final String url = "https://$bucket.$endpoint/$filename";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -247,7 +248,7 @@ class Client {
 
     return RestClient.getInstance().put(
       request.url,
-      data: formData,
+      data: multipartFile.finalize(),
       options: Options(headers: request.headers),
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
