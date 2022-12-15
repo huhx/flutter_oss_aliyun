@@ -88,16 +88,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 await Client().putObjects(
                   [
                     AssetEntity(
-                        filename: "filename1.txt", bytes: "files1".codeUnits),
+                      filename: "filename1.txt",
+                      bytes: "files1".codeUnits,
+                      onSendProgress: (count, total) {
+                        debugPrint("sent = $count, total = $total");
+                      },
+                      onReceiveProgress: (count, total) {
+                        debugPrint("received = $count, total = $total");
+                      },
+                    ),
                     AssetEntity(
                         filename: "filename2.txt", bytes: "files2".codeUnits),
                   ],
-                  onSendProgress: (count, total) {
-                    debugPrint("sent = $count, total = $total");
-                  },
-                  onReceiveProgress: (count, total) {
-                    debugPrint("received = $count, total = $total");
-                  },
                 );
               },
               child: const Text("Batch upload object"),

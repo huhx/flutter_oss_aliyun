@@ -203,7 +203,8 @@ class Client {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
-    var multipartFile = MultipartFile.fromBytes(fileData, filename: fileKey);
+    final MultipartFile multipartFile =
+        MultipartFile.fromBytes(fileData, filename: fileKey);
 
     final Map<String, String> headers = {
       'content-type': mime(fileKey) ?? "image/png",
@@ -235,12 +236,12 @@ class Client {
         fileKey ?? file.path.split(Platform.pathSeparator).last;
     final Auth auth = await _getAuth();
 
-    var multipartFile =
+    final MultipartFile multipartFile =
         await MultipartFile.fromFile(file.path, filename: filename);
 
     final Map<String, String> headers = {
       'content-length': "${multipartFile.length}",
-      'content-type': mime(fileKey) ?? "image/png",
+      'content-type': mime(filename) ?? "image/png",
     };
     final String url = "https://$bucket.$endpoint/$filename";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -258,19 +259,36 @@ class Client {
   /// upload object(files) to oss server
   /// [assetEntities] is list of files need to be uploaded to oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  Future<List<Response<dynamic>>> putObjectFiles(
+    List<AssetFileEntity> assetEntities, {
+    String? bucketName,
+  }) async {
+    final uploads = assetEntities
+        .map((fileEntity) async => await putObjectFile(
+              fileEntity.file,
+              fileKey: fileEntity.filename,
+              bucketName: bucketName,
+              onSendProgress: fileEntity.onSendProgress,
+              onReceiveProgress: fileEntity.onReceiveProgress,
+            ))
+        .toList();
+    return await Future.wait(uploads);
+  }
+
+  /// upload object(files) to oss server
+  /// [assetEntities] is list of files need to be uploaded to oss
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<List<Response<dynamic>>> putObjects(
     List<AssetEntity> assetEntities, {
     String? bucketName,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
   }) async {
     final uploads = assetEntities
         .map((file) async => await putObject(
               file.bytes,
               file.filename,
               bucketName: bucketName,
-              onSendProgress: onSendProgress,
-              onReceiveProgress: onReceiveProgress,
+              onSendProgress: file.onSendProgress,
+              onReceiveProgress: file.onReceiveProgress,
             ))
         .toList();
     return await Future.wait(uploads);

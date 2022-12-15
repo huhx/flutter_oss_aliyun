@@ -1,8 +1,11 @@
+## 4.1.7 - 2022-12-15
+* upload multiple local files
+
 ## 4.1.6 - 2022-12-15
 * fix the upload issue
 
 ## 4.1.5 - 2022-12-13
-* up;oad local file
+* upload local file
 
 ## 4.1.4 - 2022-12-13
 * change the upload data use stream

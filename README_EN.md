@@ -24,13 +24,14 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [x] get bucket info
 - [x] get bucket stat
 - [x] upload local file
+- [x] upload local files
 
 
 ## 🎨&nbsp;Usage
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.1.6
+  flutter_oss_aliyun: ^4.1.7
 ```
 Don't forget to `flutter pub get`.
 
@@ -181,6 +182,28 @@ final Response<dynamic> resp = await Client().getBucketStat();
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(File("/Users/aaa.pdf"));
+```
+
+### 15. batch upload local files to oss
+
+```dart
+final List<Response<dynamic>> resp = await Client().putObjectFiles(
+  [
+    AssetFileEntity(
+      file: File("//Users/private.txt"),
+      onSendProgress: (count, total) {
+        print("1: send: count = $count, and total = $total");
+      },
+    ),
+    AssetFileEntity(
+      file: File("//Users/splash.png"),
+      filename: "aaa.png",
+      onSendProgress: (count, total) {
+        print("2: send: count = $count, and total = $total");
+      },
+    ),
+  ],
+);
 ```
 
 ## Drop a ⭐ if it is help to you.

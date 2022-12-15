@@ -24,13 +24,14 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 - [x] 获取bucket信息
 - [x] 获取bucket的储容量以及文件数量
 - [x] 上传本地文件
+- [x] 批量上传本地文件
 
 
 ## 🎨&nbsp;使用
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.1.6
+  flutter_oss_aliyun: ^4.1.7
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -115,18 +116,19 @@ await Client().deleteObject("test.txt");
 
 ### 6. 批量上传文件
 ```dart
-await Client().putObjects(
-  [
-    AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
-    AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
-  ],
-  onSendProgress: (count, total) {
-    debugPrint("sent = $count, total = $total");
-  },
-  onReceiveProgress: (count, total) {
-    debugPrint("received = $count, total = $total");
-  },
-);
+await Client().putObjects([
+  AssetEntity(
+    filename: "filename1.txt",
+    bytes: "files1".codeUnits,
+    onSendProgress: (count, total) {
+      debugPrint("sent = $count, total = $total");
+    },
+    onReceiveProgress: (count, total) {
+      debugPrint("received = $count, total = $total");
+    },
+  ),
+  AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
+]);
 ```
 
 ### 7. 批量删除文件
@@ -180,6 +182,28 @@ final Response<dynamic> resp = await Client().getBucketStat();
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(File("/Users/aaa.pdf"));
+```
+
+### 15. 批量上传本地文件
+
+```dart
+final List<Response<dynamic>> resp = await Client().putObjectFiles(
+  [
+    AssetFileEntity(
+      file: File("//Users/private.txt"),
+      onSendProgress: (count, total) {
+        print("1: send: count = $count, and total = $total");
+      },
+    ),
+    AssetFileEntity(
+      file: File("//Users/splash.png"),
+      filename: "aaa.png",
+      onSendProgress: (count, total) {
+        print("2: send: count = $count, and total = $total");
+      },
+    ),
+  ],
+);
 ```
 
 ## Drop a ⭐ if it is help to you.
