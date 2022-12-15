@@ -23,13 +23,14 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [x] list objects in bucket
 - [x] get bucket info
 - [x] get bucket stat
+- [x] upload local file
 
 
 ## 🎨&nbsp;Usage
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.1.5
+  flutter_oss_aliyun: ^4.1.6
 ```
 Don't forget to `flutter pub get`.
 

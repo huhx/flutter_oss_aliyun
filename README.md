@@ -23,13 +23,14 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 - [x] 列举bucket中所有文件
 - [x] 获取bucket信息
 - [x] 获取bucket的储容量以及文件数量
+- [x] 上传本地文件
 
 
 ## 🎨&nbsp;使用
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.1.5
+  flutter_oss_aliyun: ^4.1.6
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式

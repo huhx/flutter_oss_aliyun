@@ -198,8 +198,8 @@ class Client {
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> putObject(List<int> fileData, String fileKey,
       {String? bucketName,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress}) async {
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress}) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 

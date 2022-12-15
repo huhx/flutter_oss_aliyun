@@ -1,8 +1,11 @@
+## 4.1.6 - 2022-12-15
+* fix the upload issue
+
 ## 4.1.5 - 2022-12-13
-* update local file
+* up;oad local file
 
 ## 4.1.4 - 2022-12-13
-* change the upload data to steam
+* change the upload data use stream
 
 ## 4.1.3 - 2022-11-25
 * list buckets
