@@ -340,6 +340,20 @@ class Client {
     );
   }
 
+  /// get all supported regions
+  Future<Response<dynamic>> getAllRegions() async {
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$endpoint/?regions";
+    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    auth.sign(request, "", "");
+
+    return RestClient.getInstance().get(
+      request.url,
+      options: Options(headers: request.headers),
+    );
+  }
+
   /// delete object from oss
   Future<Response<dynamic>> deleteObject(
     String fileKey, {
