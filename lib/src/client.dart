@@ -370,6 +370,23 @@ class Client {
       request.url,
       options: Options(headers: request.headers),
     );
+  } 
+  
+   /// get bucket policy
+  Future<Response<dynamic>> getBucketPolicy({
+    String? bucketName,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$bucket.$endpoint/?policy";
+    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    auth.sign(request, bucket, "?policy");
+
+    return RestClient.getInstance().get(
+      request.url,
+      options: Options(headers: request.headers),
+    );
   }
 
   /// put bucket acl
