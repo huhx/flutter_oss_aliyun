@@ -355,13 +355,29 @@ class Client {
     );
   }
 
+  /// get bucket acl
+  Future<Response<dynamic>> getBucketAcl({
+    String? bucketName,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$bucket.$endpoint/?acl";
+    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    auth.sign(request, bucket, "?acl");
+
+    return RestClient.getInstance().get(
+      request.url,
+      options: Options(headers: request.headers),
+    );
+  }
+
   /// put bucket acl
   Future<Response<dynamic>> putBucketAcl(
     AciMode aciMode, {
     String? bucketName,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-
     final Auth auth = await _getAuth();
 
     final String url = "https://$bucket.$endpoint/?acl";
