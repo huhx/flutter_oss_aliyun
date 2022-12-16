@@ -322,6 +322,24 @@ class Client {
     return await Future.wait(uploads);
   }
 
+  /// get object metadata
+  Future<Response<dynamic>> getObjectMeta(
+    String fileKey, {
+    String? bucketName,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$bucket.$endpoint/$fileKey";
+    final HttpRequest request = HttpRequest(url, 'HEAD', {}, {});
+    auth.sign(request, bucket, fileKey);
+
+    return RestClient.getInstance().head(
+      request.url,
+      options: Options(headers: request.headers),
+    );
+  }
+
   /// delete object from oss
   Future<Response<dynamic>> deleteObject(
     String fileKey, {
