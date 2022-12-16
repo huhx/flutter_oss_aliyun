@@ -9,6 +9,7 @@ import 'package:mime_type/mime_type.dart';
 import 'asset_entity.dart';
 import 'auth.dart';
 import 'dio_client.dart';
+import 'enums.dart';
 
 class Client {
   static Client? _instance;
@@ -354,7 +355,29 @@ class Client {
     );
   }
 
-    /// get all supported regions
+  /// put bucket acl
+  Future<Response<dynamic>> putBucketAcl(
+    AciMode aciMode, {
+    String? bucketName,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$bucket.$endpoint/?acl";
+    final HttpRequest request = HttpRequest(url, 'PUT', {}, {
+      'content-type': Headers.jsonContentType,
+      'x-oss-acl': aciMode.content,
+    });
+    auth.sign(request, bucket, "?acl");
+
+    return RestClient.getInstance().put(
+      request.url,
+      options: Options(headers: request.headers),
+    );
+  }
+
+  /// get all supported regions
   Future<Response<dynamic>> getRegion(String region) async {
     final Auth auth = await _getAuth();
 
