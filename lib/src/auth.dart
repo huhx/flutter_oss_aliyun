@@ -9,7 +9,11 @@ class Auth {
   final String accessSecret;
   final String secureToken;
 
-  Auth(this.accessKey, this.accessSecret, this.secureToken);
+  Auth(
+    this.accessKey,
+    this.accessSecret,
+    this.secureToken,
+  );
 
   /// access aliyun need authenticated, this is the implementation refer to the official document.
   /// [req] include the request headers information that use for auth.

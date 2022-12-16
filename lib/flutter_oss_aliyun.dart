@@ -3,3 +3,4 @@ library flutter_oss_aliyun;
 
 export 'src/client.dart';
 export 'src/asset_entity.dart';
+export 'src/request_option.dart';

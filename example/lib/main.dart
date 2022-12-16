@@ -44,12 +44,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 await Client().putObject(
                   bytes,
                   "filename.txt",
-                  onSendProgress: (count, total) {
-                    debugPrint("sent = $count, total = $total");
-                  },
-                  onReceiveProgress: (count, total) {
-                    debugPrint("received = $count, total = $total");
-                  },
+                  option: PutRequestOption(
+                    onSendProgress: (count, total) {
+                      print("send: count = $count, and total = $total");
+                    },
+                    onReceiveProgress: (count, total) {
+                      print("receive: count = $count, and total = $total");
+                    },
+                  ),
                 );
               },
               child: const Text("Upload object"),
@@ -90,12 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     AssetEntity(
                       filename: "filename1.txt",
                       bytes: "files1".codeUnits,
-                      onSendProgress: (count, total) {
-                        debugPrint("sent = $count, total = $total");
-                      },
-                      onReceiveProgress: (count, total) {
-                        debugPrint("received = $count, total = $total");
-                      },
+                      option: PutRequestOption(onSendProgress: (count, total) {
+                        print("send: count = $count, and total = $total");
+                      }, onReceiveProgress: (count, total) {
+                        print("receive: count = $count, and total = $total");
+                      }),
                     ),
                     AssetEntity(
                         filename: "filename2.txt", bytes: "files2".codeUnits),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
+import 'package:flutter_oss_aliyun/src/request_option.dart';
 import 'package:mime_type/mime_type.dart';
 
 import 'asset_entity.dart';
@@ -24,11 +25,12 @@ class Client {
     this.tokenGetter,
   );
 
-  static void init(
-      {String? stsUrl,
-      required String ossEndpoint,
-      required String bucketName,
-      Future<String> Function()? tokenGetter}) {
+  static void init({
+    String? stsUrl,
+    required String ossEndpoint,
+    required String bucketName,
+    Future<String> Function()? tokenGetter,
+  }) {
     assert(stsUrl != null || tokenGetter != null);
     final tokenGet = tokenGetter ??
         () async {
@@ -44,8 +46,11 @@ class Client {
   /// get object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> getObject(String fileKey,
-      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
+  Future<Response<dynamic>> getObject(
+    String fileKey, {
+    String? bucketName,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -64,8 +69,11 @@ class Client {
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   /// [expireSeconds] is optional, default expired time are 60 seconds
-  Future<String> getSignedUrl(String fileKey,
-      {String? bucketName, int expireSeconds = 60}) async {
+  Future<String> getSignedUrl(
+    String fileKey, {
+    String? bucketName,
+    int expireSeconds = 60,
+  }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
     final int expires =
@@ -88,12 +96,18 @@ class Client {
   /// [fileKeys] list of object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   /// [expireSeconds] is optional, default expired time are 60 seconds
-  Future<Map<String, String>> getSignedUrls(List<String> fileKeys,
-      {String? bucketName, int expireSeconds = 60}) async {
+  Future<Map<String, String>> getSignedUrls(
+    List<String> fileKeys, {
+    String? bucketName,
+    int expireSeconds = 60,
+  }) async {
     Map<String, String> mapResult = {};
     for (final String fileKey in fileKeys.toSet()) {
-      final String signedUrl = await getSignedUrl(fileKey,
-          bucketName: bucketName, expireSeconds: expireSeconds);
+      final String signedUrl = await getSignedUrl(
+        fileKey,
+        bucketName: bucketName,
+        expireSeconds: expireSeconds,
+      );
       mapResult[fileKey] = signedUrl;
     }
     return mapResult;
@@ -101,8 +115,10 @@ class Client {
 
   /// list objects from oss server
   /// [parameters] parameters for filter, refer to: https://help.aliyun.com/document_detail/31957.html
-  Future<Response<dynamic>> listBuckets(Map<String, dynamic> parameters,
-      {ProgressCallback? onReceiveProgress}) async {
+  Future<Response<dynamic>> listBuckets(
+    Map<String, dynamic> parameters, {
+    ProgressCallback? onReceiveProgress,
+  }) async {
     final Auth auth = await _getAuth();
 
     final String url = "https://$endpoint";
@@ -119,8 +135,11 @@ class Client {
   /// list objects from oss server
   /// [parameters] parameters for filter, refer to: https://help.aliyun.com/document_detail/187544.html
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> listObjects(Map<String, dynamic> parameters,
-      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
+  Future<Response<dynamic>> listObjects(
+    Map<String, dynamic> parameters, {
+    String? bucketName,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -138,8 +157,10 @@ class Client {
 
   /// get bucket info
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> getBucketInfo(
-      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
+  Future<Response<dynamic>> getBucketInfo({
+    String? bucketName,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -156,8 +177,10 @@ class Client {
 
   /// get bucket stat
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> getBucketStat(
-      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
+  Future<Response<dynamic>> getBucketStat({
+    String? bucketName,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -176,8 +199,12 @@ class Client {
   /// [fileKey] is the object name from oss
   /// [savePath] is where we save the object(file) that download from oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response> downloadObject(String fileKey, String savePath,
-      {String? bucketName, ProgressCallback? onReceiveProgress}) async {
+  Future<Response> downloadObject(
+    String fileKey,
+    String savePath, {
+    String? bucketName,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
@@ -196,19 +223,23 @@ class Client {
   /// upload object(file) to oss server
   /// [fileData] is the binary data that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> putObject(List<int> fileData, String fileKey,
-      {String? bucketName,
-      ProgressCallback? onSendProgress,
-      ProgressCallback? onReceiveProgress}) async {
-    final String bucket = bucketName ?? this.bucketName;
+  Future<Response<dynamic>> putObject(
+    List<int> fileData,
+    String fileKey, {
+    PutRequestOption? option,
+  }) async {
+    final String bucket = option?.bucketName ?? bucketName;
     final Auth auth = await _getAuth();
 
-    final MultipartFile multipartFile =
-        MultipartFile.fromBytes(fileData, filename: fileKey);
+    final MultipartFile multipartFile = MultipartFile.fromBytes(
+      fileData,
+      filename: fileKey,
+    );
 
-    final Map<String, String> headers = {
+    final Map<String, dynamic> headers = {
       'content-type': mime(fileKey) ?? "image/png",
-      'content-length': "${multipartFile.length}",
+      'content-length': multipartFile.length,
+      'x-oss-forbid-overwrite': !(option?.isOverwrite ?? true)
     };
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -218,30 +249,33 @@ class Client {
       request.url,
       data: multipartFile.finalize(),
       options: Options(headers: request.headers),
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
+      onSendProgress: option?.onSendProgress,
+      onReceiveProgress: option?.onReceiveProgress,
     );
   }
 
   /// upload object(file) to oss server
   /// [file] is the file that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
-  Future<Response<dynamic>> putObjectFile(File file,
-      {String? bucketName,
-      String? fileKey,
-      ProgressCallback? onSendProgress,
-      ProgressCallback? onReceiveProgress}) async {
-    final String bucket = bucketName ?? this.bucketName;
+  Future<Response<dynamic>> putObjectFile(
+    File file, {
+    PutRequestOption? option,
+    String? fileKey,
+  }) async {
+    final String bucket = option?.bucketName ?? bucketName;
     final String filename =
         fileKey ?? file.path.split(Platform.pathSeparator).last;
     final Auth auth = await _getAuth();
 
-    final MultipartFile multipartFile =
-        await MultipartFile.fromFile(file.path, filename: filename);
+    final MultipartFile multipartFile = await MultipartFile.fromFile(
+      file.path,
+      filename: filename,
+    );
 
-    final Map<String, String> headers = {
-      'content-length': "${multipartFile.length}",
-      'content-type': mime(filename) ?? "image/png",
+    final Map<String, dynamic> headers = {
+      'content-type': mime(fileKey) ?? "image/png",
+      'content-length': multipartFile.length,
+      'x-oss-forbid-overwrite': !(option?.isOverwrite ?? true)
     };
     final String url = "https://$bucket.$endpoint/$filename";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -251,8 +285,8 @@ class Client {
       request.url,
       data: multipartFile.finalize(),
       options: Options(headers: request.headers),
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
+      onSendProgress: option?.onSendProgress,
+      onReceiveProgress: option?.onReceiveProgress,
     );
   }
 
@@ -260,16 +294,13 @@ class Client {
   /// [assetEntities] is list of files need to be uploaded to oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<List<Response<dynamic>>> putObjectFiles(
-    List<AssetFileEntity> assetEntities, {
-    String? bucketName,
-  }) async {
+    List<AssetFileEntity> assetEntities,
+  ) async {
     final uploads = assetEntities
         .map((fileEntity) async => await putObjectFile(
               fileEntity.file,
               fileKey: fileEntity.filename,
-              bucketName: bucketName,
-              onSendProgress: fileEntity.onSendProgress,
-              onReceiveProgress: fileEntity.onReceiveProgress,
+              option: fileEntity.option,
             ))
         .toList();
     return await Future.wait(uploads);
@@ -279,42 +310,48 @@ class Client {
   /// [assetEntities] is list of files need to be uploaded to oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<List<Response<dynamic>>> putObjects(
-    List<AssetEntity> assetEntities, {
-    String? bucketName,
-  }) async {
+    List<AssetEntity> assetEntities,
+  ) async {
     final uploads = assetEntities
         .map((file) async => await putObject(
               file.bytes,
               file.filename,
-              bucketName: bucketName,
-              onSendProgress: file.onSendProgress,
-              onReceiveProgress: file.onReceiveProgress,
+              option: file.option,
             ))
         .toList();
     return await Future.wait(uploads);
   }
 
   /// delete object from oss
-  Future<Response<dynamic>> deleteObject(String fileKey,
-      {String? bucketName}) async {
+  Future<Response<dynamic>> deleteObject(
+    String fileKey, {
+    String? bucketName,
+  }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
 
     final String url = "https://$bucket.$endpoint/$fileKey";
-    final HttpRequest request = HttpRequest(
-        url, 'DELETE', {}, {'content-type': Headers.jsonContentType});
+    final HttpRequest request = HttpRequest(url, 'DELETE', {}, {
+      'content-type': Headers.jsonContentType,
+    });
     auth.sign(request, bucket, fileKey);
 
-    return RestClient.getInstance()
-        .delete(request.url, options: Options(headers: request.headers));
+    return RestClient.getInstance().delete(
+      request.url,
+      options: Options(headers: request.headers),
+    );
   }
 
   /// delete objects from oss
-  Future<List<Response<dynamic>>> deleteObjects(List<String> keys,
-      {String? bucketName}) async {
+  Future<List<Response<dynamic>>> deleteObjects(
+    List<String> keys, {
+    String? bucketName,
+  }) async {
     final deletes = keys
-        .map((fileKey) async =>
-            await deleteObject(fileKey, bucketName: bucketName))
+        .map((fileKey) async => await deleteObject(
+              fileKey,
+              bucketName: bucketName,
+            ))
         .toList();
     return await Future.wait(deletes);
   }
@@ -324,8 +361,11 @@ class Client {
     if (_isNotAuthenticated()) {
       final resp = await tokenGetter();
       final respMap = jsonDecode(resp);
-      _auth = Auth(respMap['AccessKeyId'], respMap['AccessKeySecret'],
-          respMap['SecurityToken']);
+      _auth = Auth(
+        respMap['AccessKeyId'],
+        respMap['AccessKeySecret'],
+        respMap['SecurityToken'],
+      );
       _expire = respMap['Expiration'];
     }
     return _auth!;
