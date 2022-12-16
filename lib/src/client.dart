@@ -408,6 +408,27 @@ class Client {
     );
   }
 
+  /// put bucket policy
+  Future<Response<dynamic>> putBucketPolicy(
+    Map<String, dynamic> policy, {
+    String? bucketName,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$bucket.$endpoint/?policy";
+    final HttpRequest request = HttpRequest(url, 'PUT', {}, {
+      'content-type': Headers.jsonContentType,
+    });
+    auth.sign(request, bucket, "?policy");
+
+    return RestClient.getInstance().put(
+      data: policy,
+      request.url,
+      options: Options(headers: request.headers),
+    );
+  }
+
   /// put bucket acl
   Future<Response<dynamic>> putBucketAcl(
     AciMode aciMode, {
