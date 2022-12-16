@@ -25,13 +25,17 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 - [x] get bucket stat
 - [x] upload local file
 - [x] upload local files
+- [x] get object metadata
+- [x] get regions 
+- [x] bucket acl
+- [x] bucket policy
 
 
 ## 🎨&nbsp;Usage
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.1.7
+  flutter_oss_aliyun: ^5.0.0
 ```
 Don't forget to `flutter pub get`.
 
@@ -203,6 +207,69 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
       },
     ),
   ],
+);
+```
+
+
+### 16. get object metadata
+
+```dart
+final Response<dynamic> resp = await Client().getObjectMeta("huhx.csv");
+```
+
+### 17. query regions
+* find all
+
+```dart
+final Response<dynamic> resp = await Client().getAllRegions();
+```
+
+* find by name
+
+```dart
+final Response<dynamic> resp = await Client().getRegion("oss-ap-northeast-1");
+```
+
+### 18. bucket acl
+* query
+
+```dart
+final Response<dynamic> resp = await Client().getBucketAcl(
+  bucketName: "bucket-name",
+);
+```
+
+* add or update
+
+```dart
+final Response<dynamic> resp = await Client().putBucketAcl(
+  AciMode.publicRead, 
+  bucketName: "bucket-name",
+);
+```
+
+### 19. bucket policy
+* query
+
+```dart
+final Response<dynamic> resp = await Client().getBucketPolicy(
+  bucketName: "bucket-name",
+);
+```
+
+* update
+
+```dart
+final Response<dynamic> resp = await Client().putBucketAcl(
+  AciMode.publicRead, 
+  bucketName: "bucket-name",
+);
+```
+
+* delete
+```dart
+final Response<dynamic> resp = await Client().deleteBucketPolicy(
+  bucketName: "bucket-name",
 );
 ```
 

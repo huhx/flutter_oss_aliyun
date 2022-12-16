@@ -1,3 +1,16 @@
+## 5.0.0 - 2022-12-16
+`Breaking Change`: 
+* putObject use PutRequestOption instead of multile parameters
+* pubObjectFile use PutRequestOption instead of multile parameters
+
+
+`New Features`: 
+* get object metadata
+* get regions information
+* bucket acl support
+* bucket policy support
+
+
 ## 4.1.7 - 2022-12-15
 * upload multiple local files
 

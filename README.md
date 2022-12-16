@@ -25,13 +25,16 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 - [x] 获取bucket的储容量以及文件数量
 - [x] 上传本地文件
 - [x] 批量上传本地文件
-
+- [x] 获取文件元信息
+- [x] 获取region的信息
+- [x] bucket acl的crud操作
+- [x] bucket policy的crud操作
 
 ## 🎨&nbsp;使用
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^4.1.7
+  flutter_oss_aliyun: ^5.0.0
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -203,6 +206,68 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
       },
     ),
   ],
+);
+```
+
+### 16. 获取文件元信息
+
+```dart
+final Response<dynamic> resp = await Client().getObjectMeta("huhx.csv");
+```
+
+### 17. regions的查询
+* 查询所有
+
+```dart
+final Response<dynamic> resp = await Client().getAllRegions();
+```
+
+* 查询特定
+
+```dart
+final Response<dynamic> resp = await Client().getRegion("oss-ap-northeast-1");
+```
+
+### 18. bucket acl的操作
+* 查询
+
+```dart
+final Response<dynamic> resp = await Client().getBucketAcl(
+  bucketName: "bucket-name",
+);
+```
+
+* 更新
+
+```dart
+final Response<dynamic> resp = await Client().putBucketAcl(
+  AciMode.publicRead, 
+  bucketName: "bucket-name",
+);
+```
+
+### 19. bucket policy的操作
+* 查询
+
+```dart
+final Response<dynamic> resp = await Client().getBucketPolicy(
+  bucketName: "bucket-name",
+);
+```
+
+* 更新
+
+```dart
+final Response<dynamic> resp = await Client().putBucketAcl(
+  AciMode.publicRead, 
+  bucketName: "bucket-name",
+);
+```
+
+* 删除
+```dart
+final Response<dynamic> resp = await Client().deleteBucketPolicy(
+  bucketName: "bucket-name",
 );
 ```
 
