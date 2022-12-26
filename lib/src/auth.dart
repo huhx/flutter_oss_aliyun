@@ -20,7 +20,7 @@ class Auth {
   /// [bucket] is the name of bucket used in aliyun oss
   /// [key] is the object name in aliyun oss, alias the 'filepath/filename'
   void sign(HttpRequest req, String bucket, String key) {
-    req.headers['date'] = HttpDate.format(DateTime.now());
+    req.headers['x-oss-date'] = HttpDate.format(DateTime.now());
     req.headers['x-oss-security-token'] = secureToken;
     final String signature = _makeSignature(req, bucket, key);
     req.headers['Authorization'] = "OSS $accessKey:$signature";
@@ -46,7 +46,7 @@ class Auth {
   String _makeSignature(HttpRequest req, String bucket, String key) {
     final String contentMd5 = req.headers['content-md5'] ?? '';
     final String contentType = req.headers['content-type'] ?? '';
-    final String date = req.headers['date'] ?? '';
+    final String date = req.headers['x-oss-date'] ?? '';
     final String headerString = _getHeaderString(req);
     final String resourceString = _getResourceString(bucket, key);
     final String stringToSign = [

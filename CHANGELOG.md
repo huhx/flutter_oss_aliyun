@@ -1,3 +1,6 @@
+## 5.0.1 - 2022-12-26
+* [web] fix the unsafe header `Date` issue
+
 ## 5.0.0 - 2022-12-16
 `Breaking Change`: 
 * putObject use PutRequestOption instead of multile parameters
