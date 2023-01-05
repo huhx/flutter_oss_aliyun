@@ -1,9 +1,10 @@
-enum AciMode {
+enum AclMode {
   publicWrite("public-read-write"),
   publicRead("public-read"),
-  private("private");
+  private("private"),
+  inherited("default");
 
   final String content;
 
-  const AciMode(this.content);
+  const AclMode(this.content);
 }

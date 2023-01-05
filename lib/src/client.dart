@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 import 'package:flutter_oss_aliyun/src/request_option.dart';
@@ -248,7 +250,7 @@ class Client {
 
     return RestClient.getInstance().put(
       request.url,
-      data: multipartFile.finalize(),
+      data: _chunkFile(multipartFile.finalize()),
       options: Options(headers: request.headers),
       onSendProgress: option?.onSendProgress,
       onReceiveProgress: option?.onReceiveProgress,
@@ -431,7 +433,7 @@ class Client {
 
   /// put bucket acl
   Future<Response<dynamic>> putBucketAcl(
-    AciMode aciMode, {
+    AclMode aciMode, {
     String? bucketName,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -521,5 +523,16 @@ class Client {
   /// whether the auth is expired or not
   bool _isExpired() {
     return _expire == null || DateTime.now().isAfter(DateTime.parse(_expire!));
+  }
+
+  Stream<List<int>> _chunkFile(Stream<List<int>> streamIn) async* {
+    final ChunkedStreamReader<int> reader = ChunkedStreamReader<int>(streamIn);
+    while (true) {
+      final Uint8List data = await reader.readBytes(64 * 1024);
+      if (data.isEmpty) {
+        break;
+      }
+      yield data;
+    }
   }
 }

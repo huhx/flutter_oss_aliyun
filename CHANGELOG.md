@@ -1,10 +1,14 @@
+## 5.0.2 - 2022-12-26
+* fix the typo AclMode
+* fix the onSendProgress callback in putObject
+
 ## 5.0.1 - 2022-12-26
 * [web] fix the unsafe header `Date` issue
 
 ## 5.0.0 - 2022-12-16
 `Breaking Change`: 
-* putObject use PutRequestOption instead of multile parameters
-* pubObjectFile use PutRequestOption instead of multile parameters
+* putObject use PutRequestOption instead of multiple parameters
+* pubObjectFile use PutRequestOption instead of multiple parameters
 
 
 `New Features`: 
