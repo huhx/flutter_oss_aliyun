@@ -95,12 +95,16 @@ final bytes = "file bytes".codeUnits;
 await Client().putObject(
   bytes, 
   "test.txt",
-  onSendProgress: (count, total) {
-    debugPrint("sent = $count, total = $total");
-  },
-  onReceiveProgress: (count, total) {
-    debugPrint("received = $count, total = $total");
-  }
+  option: PutRequestOption(
+    onSendProgress: (count, total) {
+      print("send: count = $count, and total = $total");
+    },
+    onReceiveProgress: (count, total) {
+      print("receive: count = $count, and total = $total");
+    },
+    isOverwrite: false,
+    acl: AclMode.publicRead,
+  ),
 );
 ```
 
@@ -132,18 +136,22 @@ await Client().deleteObject("test.txt");
 
 ### 6. batch put the object to oss
 ```dart
-await Client().putObjects(
-  [
-    AssetEntity(filename: "filename1.txt", bytes: "files1".codeUnits),
-    AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
-  ],
-  onSendProgress: (count, total) {
-    debugPrint("sent = $count, total = $total");
-  },
-  onReceiveProgress: (count, total) {
-    debugPrint("received = $count, total = $total");
-  },
-);
+await Client().putObjects([
+  AssetEntity(
+    filename: "filename1.txt",
+    bytes: "files1".codeUnits,
+    option: PutRequestOption(
+      onSendProgress: (count, total) {
+        print("send: count = $count, and total = $total");
+      },
+      onReceiveProgress: (count, total) {
+        print("receive: count = $count, and total = $total");
+      },
+      acl: AclMode.private,
+    ),
+  ),
+  AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
+]);
 ```
 
 ### 7. batch delete the object from oss
@@ -196,7 +204,19 @@ final Response<dynamic> resp = await Client().getBucketStat();
 ### 14. update object from local file
 
 ```dart
-final Response<dynamic> resp = await Client().putObjectFile(File("/Users/aaa.pdf"));
+final Response<dynamic> resp = await Client().putObjectFile(
+  File("/Users/aaa.pdf"),
+  fileKey: "aaa.png",
+  option: PutRequestOption(
+    onSendProgress: (count, total) {
+      print("send: count = $count, and total = $total");
+    },
+    onReceiveProgress: (count, total) {
+      print("receive: count = $count, and total = $total");
+    },
+    acl: AclMode.private,
+  ),
+);
 ```
 
 ### 15. batch upload local files to oss
@@ -206,16 +226,29 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
   [
     AssetFileEntity(
       file: File("//Users/private.txt"),
-      onSendProgress: (count, total) {
-        print("1: send: count = $count, and total = $total");
-      },
+      option: PutRequestOption(
+        onSendProgress: (count, total) {
+          print("send: count = $count, and total = $total");
+        },
+        onReceiveProgress: (count, total) {
+          print("receive: count = $count, and total = $total");
+        },
+        isOverride: false,
+        acl: AclMode.private,
+      ),
     ),
     AssetFileEntity(
       file: File("//Users/splash.png"),
       filename: "aaa.png",
-      onSendProgress: (count, total) {
-        print("2: send: count = $count, and total = $total");
-      },
+      option: PutRequestOption(
+        onSendProgress: (count, total) {
+          print("send: count = $count, and total = $total");
+        },
+        onReceiveProgress: (count, total) {
+          print("receive: count = $count, and total = $total");
+        },
+        isOverride: true,
+      ),
     ),
   ],
 );

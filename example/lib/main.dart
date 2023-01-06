@@ -51,6 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onReceiveProgress: (count, total) {
                       print("receive: count = $count, and total = $total");
                     },
+                    isOverwrite: false,
+                    acl: AclMode.private,
                   ),
                 );
               },
@@ -92,11 +94,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     AssetEntity(
                       filename: "filename1.txt",
                       bytes: "files1".codeUnits,
-                      option: PutRequestOption(onSendProgress: (count, total) {
-                        print("send: count = $count, and total = $total");
-                      }, onReceiveProgress: (count, total) {
-                        print("receive: count = $count, and total = $total");
-                      }),
+                      option: PutRequestOption(
+                        onSendProgress: (count, total) {
+                          print("send: count = $count, and total = $total");
+                        },
+                        onReceiveProgress: (count, total) {
+                          print("receive: count = $count, and total = $total");
+                        },
+                        isOverwrite: true,
+                        acl: AclMode.inherited,
+                      ),
                     ),
                     AssetEntity(
                         filename: "filename2.txt", bytes: "files2".codeUnits),
