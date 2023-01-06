@@ -81,10 +81,10 @@ String _tokenGetterMethod() async {
 you can pass the dio in `init` method to use your own Dio.
 ```dart
 Client.init(
+    stsUrl: "server url get sts token",
     ossEndpoint: "oss-cn-beijing.aliyuncs.com",
-    bucketName: "bucketName",
-    tokenGetter: _tokenGetterMethod,
-    dio: Dio()
+    bucketName: "bucket name",
+    dio: Dio(BaseOptions(connectTimeout: 9000)),
 );
 ```
 

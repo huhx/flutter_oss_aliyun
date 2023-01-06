@@ -79,10 +79,10 @@ String _tokenGetterMethod() async {
 在init函数中，你可以传入dio，做到dio的定制化。比如日志或者其他的interceptors.
 ```dart
 Client.init(
+    stsUrl: "server url get sts token",
     ossEndpoint: "oss-cn-beijing.aliyuncs.com",
-    bucketName: "bucketName",
-    tokenGetter: _tokenGetterMethod,
-    dio: Dio()
+    bucketName: "bucket name",
+    dio: Dio(BaseOptions(connectTimeout: 9000)),
 );
 ```
 
