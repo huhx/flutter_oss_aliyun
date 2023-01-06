@@ -1,4 +1,9 @@
-## 5.0.2 - 2022-12-26
+## 5.0.3 - 2023-01-06
+* correct the example in readme
+* enable the Dio customize
+* add acl parameter when upload file
+
+## 5.0.2 - 2023-01-05
 * fix the typo AclMode
 * fix the onSendProgress callback in putObject
 
