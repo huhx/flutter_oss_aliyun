@@ -258,8 +258,8 @@ final Response<dynamic> resp = await Client().getBucketPolicy(
 * 更新
 
 ```dart
-final Response<dynamic> resp = await Client().putBucketAcl(
-  AciMode.publicRead, 
+final Response<dynamic> resp = await Client().putBucketPolicy(
+  {}, 
   bucketName: "bucket-name",
 );
 ```

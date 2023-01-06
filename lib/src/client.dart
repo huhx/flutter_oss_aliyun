@@ -250,7 +250,7 @@ class Client {
 
     return RestClient.getInstance().put(
       request.url,
-      data: _chunkFile(multipartFile.finalize()),
+      data: _chunkFile(multipartFile),
       options: Options(headers: request.headers),
       onSendProgress: option?.onSendProgress,
       onReceiveProgress: option?.onReceiveProgress,
@@ -525,8 +525,8 @@ class Client {
     return _expire == null || DateTime.now().isAfter(DateTime.parse(_expire!));
   }
 
-  Stream<List<int>> _chunkFile(Stream<List<int>> streamIn) async* {
-    final ChunkedStreamReader<int> reader = ChunkedStreamReader<int>(streamIn);
+  Stream<List<int>> _chunkFile(MultipartFile multipartFile) async* {
+    final ChunkedStreamReader<int> reader = ChunkedStreamReader<int>(multipartFile.finalize());
     while (true) {
       final Uint8List data = await reader.readBytes(64 * 1024);
       if (data.isEmpty) {
