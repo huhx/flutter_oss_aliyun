@@ -106,33 +106,7 @@ await Client().putObject(
 );
 ```
 
-### 3. 下载文件附带进度回调
-```dart
-await Client().getObject(
-  "test.txt",
-  onReceiveProgress: (count, total) {
-    debugPrint("received = $count, total = $total");
-  },
-);
-```
-
-### 4. 下载并保存文件附带进度回调
-```dart
-await Client().downloadObject(
-  "test.txt",
-  "./example/test.txt",
-  onReceiveProgress: (count, total) {
-    debugPrint("received = $count, total = $total");
-  },
-);
-```
-
-### 5. 删除文件
-```dart
-await Client().deleteObject("test.txt");
-```
-
-### 6. 批量上传文件
+### 3. 批量上传文件
 ```dart
 await Client().putObjects([
   AssetEntity(
@@ -152,54 +126,8 @@ await Client().putObjects([
 ]);
 ```
 
-### 7. 批量删除文件
-```dart
-await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
-```
 
-### 8. 获取已签名的文件url，这个url可以直接在浏览器访问
-需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
-
-```dart
-final String url = await Client().getSignedUrl("filename1.txt");
-```
-
-### 9. 获取多个已签名的文件url
-需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
-
-```dart
-final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
-```
-
-### 10. 列举所有的存储空间
-列举请求者拥有的所有存储空间（Bucket）。您还可以通过设置prefix、marker或者max-keys参数列举满足指定条件的存储空间。参考：https://help.aliyun.com/document_detail/31957.html
-
-```dart
-final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
-```
-
-### 11. 列举存储空间中所有文件
-接口用于列举存储空间（Bucket）中所有文件（Object）的信息。请求参数和返回结果，请参考: https://help.aliyun.com/document_detail/187544.html
-
-```dart
-final Response<dynamic> resp = await Client().listFiles({});
-```
-
-### 12. 获取bucket信息
-查看存储空间（Bucket）的相关信息。返回结果请参考: https://help.aliyun.com/document_detail/31968.html
-
-```dart
-final Response<dynamic> resp = await Client().getBucketInfo();
-```
-
-### 13. 获取bucket的储容量以及文件数量
-获取指定存储空间（Bucket）的存储容量以及文件（Object）数量。返回结果请参考: https://help.aliyun.com/document_detail/426056.html
-
-```dart
-final Response<dynamic> resp = await Client().getBucketStat();
-```
-
-### 14. 上传本地文件
+### 4. 上传本地文件
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(
@@ -217,7 +145,7 @@ final Response<dynamic> resp = await Client().putObjectFile(
 );
 ```
 
-### 15. 批量上传本地文件
+### 5. 批量上传本地文件
 
 ```dart
 final List<Response<dynamic>> resp = await Client().putObjectFiles(
@@ -250,6 +178,81 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
     ),
   ],
 );
+```
+
+### 6. 下载文件附带进度回调
+```dart
+await Client().getObject(
+  "test.txt",
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
+```
+
+### 7. 下载并保存文件附带进度回调
+```dart
+await Client().downloadObject(
+  "test.txt",
+  "./example/test.txt",
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
+```
+
+### 8. 删除文件
+```dart
+await Client().deleteObject("test.txt");
+```
+
+
+
+### 9. 批量删除文件
+```dart
+await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
+```
+
+### 10. 获取已签名的文件url，这个url可以直接在浏览器访问
+需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
+
+```dart
+final String url = await Client().getSignedUrl("filename1.txt");
+```
+
+### 11. 获取多个已签名的文件url
+需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
+
+```dart
+final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
+```
+
+### 12. 列举所有的存储空间
+列举请求者拥有的所有存储空间（Bucket）。您还可以通过设置prefix、marker或者max-keys参数列举满足指定条件的存储空间。参考：https://help.aliyun.com/document_detail/31957.html
+
+```dart
+final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
+```
+
+### 13. 列举存储空间中所有文件
+接口用于列举存储空间（Bucket）中所有文件（Object）的信息。请求参数和返回结果，请参考: https://help.aliyun.com/document_detail/187544.html
+
+```dart
+final Response<dynamic> resp = await Client().listFiles({});
+```
+
+### 14. 获取bucket信息
+查看存储空间（Bucket）的相关信息。返回结果请参考: https://help.aliyun.com/document_detail/31968.html
+
+```dart
+final Response<dynamic> resp = await Client().getBucketInfo();
+```
+
+### 15. 获取bucket的储容量以及文件数量
+获取指定存储空间（Bucket）的存储容量以及文件（Object）数量。返回结果请参考: https://help.aliyun.com/document_detail/426056.html
+
+```dart
+final Response<dynamic> resp = await Client().getBucketStat();
 ```
 
 ### 16. 获取文件元信息

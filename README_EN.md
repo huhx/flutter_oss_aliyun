@@ -108,33 +108,7 @@ await Client().putObject(
 );
 ```
 
-### 3. get the object from oss with progress callback
-```dart
-await Client().getObject(
-  "test.txt",
-  onReceiveProgress: (count, total) {
-    debugPrint("received = $count, total = $total");
-  },
-);
-```
-
-### 4. download the object from oss with progress callback
-```dart
-await Client().downloadObject(
-  "test.txt", 
-  "./example/test.txt",
-  onReceiveProgress: (count, total) {
-    debugPrint("received = $count, total = $total");
-  },
-);
-```
-
-### 5. delete the object from oss
-```dart
-await Client().deleteObject("test.txt");
-```
-
-### 6. batch put the object to oss
+### 3. batch put the object to oss
 ```dart
 await Client().putObjects([
   AssetEntity(
@@ -154,54 +128,7 @@ await Client().putObjects([
 ]);
 ```
 
-### 7. batch delete the object from oss
-```dart
-await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
-```
-
-### 8. get signed url that can be accessed in browser directly
-This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
-
-```dart
-final String url = await Client().getSignedUrl("filename1.txt");
-```
-
-### 9. get multiple signed urls 
-This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
-
-```dart
-final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
-```
-
-### 10. list buckets
-list all owned buckets, refer to: https://help.aliyun.com/document_detail/31957.html
-
-```dart
-final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
-```
-
-### 11. list objects
-List the information of all files (Object) in the storage space (Bucket). The parameters and response, refer to: https://help.aliyun.com/document_detail/187544.html
-
-```dart
-final Response<dynamic> resp = await Client().listFiles({});
-```
-
-### 12. get bucket info
-View bucket information, The response refer to：https://help.aliyun.com/document_detail/31968.html
-
-```dart
-final Response<dynamic> resp = await Client().getBucketInfo();
-```
-
-### 13. get objects counts and bucket details
-Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to：https://help.aliyun.com/document_detail/426056.html
-
-```dart
-final Response<dynamic> resp = await Client().getBucketStat();
-```
-
-### 14. update object from local file
+### 4. update object from local file
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(
@@ -219,7 +146,7 @@ final Response<dynamic> resp = await Client().putObjectFile(
 );
 ```
 
-### 15. batch upload local files to oss
+### 5. batch upload local files to oss
 
 ```dart
 final List<Response<dynamic>> resp = await Client().putObjectFiles(
@@ -252,6 +179,79 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
     ),
   ],
 );
+```
+
+### 6. get the object from oss with progress callback
+```dart
+await Client().getObject(
+  "test.txt",
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
+```
+
+### 7. download the object from oss with progress callback
+```dart
+await Client().downloadObject(
+  "test.txt", 
+  "./example/test.txt",
+  onReceiveProgress: (count, total) {
+    debugPrint("received = $count, total = $total");
+  },
+);
+```
+
+### 8. delete the object from oss
+```dart
+await Client().deleteObject("test.txt");
+```
+
+### 9. batch delete the object from oss
+```dart
+await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
+```
+
+### 10. get signed url that can be accessed in browser directly
+This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
+
+```dart
+final String url = await Client().getSignedUrl("filename1.txt");
+```
+
+### 11. get multiple signed urls 
+This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
+
+```dart
+final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
+```
+
+### 12. list buckets
+list all owned buckets, refer to: https://help.aliyun.com/document_detail/31957.html
+
+```dart
+final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
+```
+
+### 13. list objects
+List the information of all files (Object) in the storage space (Bucket). The parameters and response, refer to: https://help.aliyun.com/document_detail/187544.html
+
+```dart
+final Response<dynamic> resp = await Client().listFiles({});
+```
+
+### 14. get bucket info
+View bucket information, The response refer to：https://help.aliyun.com/document_detail/31968.html
+
+```dart
+final Response<dynamic> resp = await Client().getBucketInfo();
+```
+
+### 15. get objects counts and bucket details
+Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to：https://help.aliyun.com/document_detail/426056.html
+
+```dart
+final Response<dynamic> resp = await Client().getBucketStat();
 ```
 
 
