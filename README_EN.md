@@ -89,11 +89,14 @@ Client.init(
 ```
 
 ### 2. put the object to oss with progress callback
+* storage type：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
+* acl policy：  https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
+
 ```dart
 final bytes = "file bytes".codeUnits;
 
 await Client().putObject(
-  bytes, 
+  bytes,
   "test.txt",
   option: PutRequestOption(
     onSendProgress: (count, total) {
@@ -104,6 +107,7 @@ await Client().putObject(
     },
     isOverwrite: false,
     acl: AclMode.publicRead,
+    storageType: StorageType.ia,
   ),
 );
 ```

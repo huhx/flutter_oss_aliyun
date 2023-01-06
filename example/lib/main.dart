@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     isOverwrite: false,
                     acl: AclMode.private,
+                    storageType: StorageType.standard,
                   ),
                 );
               },

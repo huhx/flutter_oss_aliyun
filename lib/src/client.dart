@@ -248,6 +248,8 @@ class Client {
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': !(option?.isOverwrite ?? true),
       'x-oss-object-acl': option?.acl?.content ?? AclMode.inherited.content,
+      'x-oss-storage-class':
+          option?.storageType?.content ?? StorageType.standard.content,
     };
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -285,6 +287,8 @@ class Client {
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': !(option?.isOverwrite ?? true),
       'x-oss-object-acl': option?.acl?.content ?? AclMode.inherited.content,
+      'x-oss-storage-class':
+          option?.storageType?.content ?? StorageType.standard.content,
     };
     final String url = "https://$bucket.$endpoint/$filename";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);

@@ -87,6 +87,9 @@ Client.init(
 ```
 
 ### 2. 上传文件附带进度回调
+* 存储类型：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
+* acl策略：https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
+
 ```dart
 final bytes = "file bytes".codeUnits;
 
@@ -102,6 +105,7 @@ await Client().putObject(
     },
     isOverwrite: false,
     acl: AclMode.publicRead,
+    storageType: StorageType.ia,
   ),
 );
 ```
