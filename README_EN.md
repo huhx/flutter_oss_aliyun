@@ -77,6 +77,17 @@ String _tokenGetterMethod() async {
 }
 ```
 
+#### customize the dio
+you can pass the dio in `init` method to use your own Dio.
+```dart
+Client.init(
+    ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+    bucketName: "bucketName",
+    tokenGetter: _tokenGetterMethod,
+    dio: Dio()
+);
+```
+
 ### 2. put the object to oss with progress callback
 ```dart
 final bytes = "file bytes".codeUnits;

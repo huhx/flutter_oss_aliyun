@@ -75,6 +75,17 @@ String _tokenGetterMethod() async {
 }
 ```
 
+#### 你可以传入自定义的Dio
+在init函数中，你可以传入dio，做到dio的定制化。比如日志或者其他的interceptors.
+```dart
+Client.init(
+    ossEndpoint: "oss-cn-beijing.aliyuncs.com",
+    bucketName: "bucketName",
+    tokenGetter: _tokenGetterMethod,
+    dio: Dio()
+);
+```
+
 ### 2. 上传文件附带进度回调
 ```dart
 final bytes = "file bytes".codeUnits;

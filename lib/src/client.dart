@@ -21,6 +21,7 @@ class Client {
   final String endpoint;
   final String bucketName;
   final Future<String> Function() tokenGetter;
+  static late Dio _dio;
 
   Client._(
     this.endpoint,
@@ -33,11 +34,14 @@ class Client {
     required String ossEndpoint,
     required String bucketName,
     Future<String> Function()? tokenGetter,
+    Dio? dio,
   }) {
     assert(stsUrl != null || tokenGetter != null);
+    _dio = dio ?? RestClient.getInstance();
+
     final tokenGet = tokenGetter ??
         () async {
-          final response = await RestClient.getInstance().get<String>(stsUrl!);
+          final response = await _dio.get<String>(stsUrl!);
           return response.data!;
         };
     _instance = Client._(ossEndpoint, bucketName, tokenGet);
@@ -61,7 +65,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, fileKey);
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
@@ -128,7 +132,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', parameters, {});
     auth.sign(request, "", "");
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
@@ -151,7 +155,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', parameters, {});
     auth.sign(request, bucket, "");
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
@@ -171,7 +175,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, "?bucketInfo");
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
@@ -191,7 +195,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, "?stat");
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
@@ -215,7 +219,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, fileKey);
 
-    return await RestClient.getInstance().download(
+    return await _dio.download(
       request.url,
       savePath,
       options: Options(headers: request.headers),
@@ -248,7 +252,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
     auth.sign(request, bucket, fileKey);
 
-    return RestClient.getInstance().put(
+    return _dio.put(
       request.url,
       data: _chunkFile(multipartFile),
       options: Options(headers: request.headers),
@@ -284,7 +288,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
     auth.sign(request, bucket, filename);
 
-    return RestClient.getInstance().put(
+    return _dio.put(
       request.url,
       data: multipartFile.finalize(),
       options: Options(headers: request.headers),
@@ -337,7 +341,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'HEAD', {}, {});
     auth.sign(request, bucket, fileKey);
 
-    return RestClient.getInstance().head(
+    return _dio.head(
       request.url,
       options: Options(headers: request.headers),
     );
@@ -351,7 +355,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, "", "");
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
     );
@@ -368,7 +372,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, "?acl");
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
     );
@@ -385,7 +389,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, bucket, "?policy");
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
     );
@@ -404,7 +408,7 @@ class Client {
     });
     auth.sign(request, bucket, "?policy");
 
-    return RestClient.getInstance().delete(
+    return _dio.delete(
       request.url,
       options: Options(headers: request.headers),
     );
@@ -424,7 +428,7 @@ class Client {
     });
     auth.sign(request, bucket, "?policy");
 
-    return RestClient.getInstance().put(
+    return _dio.put(
       data: policy,
       request.url,
       options: Options(headers: request.headers),
@@ -446,7 +450,7 @@ class Client {
     });
     auth.sign(request, bucket, "?acl");
 
-    return RestClient.getInstance().put(
+    return _dio.put(
       request.url,
       options: Options(headers: request.headers),
     );
@@ -460,7 +464,7 @@ class Client {
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
     auth.sign(request, "", "");
 
-    return RestClient.getInstance().get(
+    return _dio.get(
       request.url,
       options: Options(headers: request.headers),
     );
@@ -480,7 +484,7 @@ class Client {
     });
     auth.sign(request, bucket, fileKey);
 
-    return RestClient.getInstance().delete(
+    return _dio.delete(
       request.url,
       options: Options(headers: request.headers),
     );
@@ -503,7 +507,7 @@ class Client {
   /// get auth information from sts server
   Future<Auth> _getAuth() async {
     if (_isNotAuthenticated()) {
-      final resp = await tokenGetter();
+      final String resp = await tokenGetter();
       final respMap = jsonDecode(resp);
       _auth = Auth(
         respMap['AccessKeyId'],
@@ -525,8 +529,10 @@ class Client {
     return _expire == null || DateTime.now().isAfter(DateTime.parse(_expire!));
   }
 
+  /// chunk multipartFile to stream, chunk size is: 64KB
   Stream<List<int>> _chunkFile(MultipartFile multipartFile) async* {
-    final ChunkedStreamReader<int> reader = ChunkedStreamReader<int>(multipartFile.finalize());
+    final ChunkedStreamReader<int> reader =
+        ChunkedStreamReader<int>(multipartFile.finalize());
     while (true) {
       final Uint8List data = await reader.readBytes(64 * 1024);
       if (data.isEmpty) {
