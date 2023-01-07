@@ -1,10 +1,25 @@
+## 5.1.3+3 - 2023-01-07
+`Docs`
+* update the docs
+
+## 5.1.3+2 - 2023-01-07
+`Docs`
+* use english colon to avoid link issue in pub website
+
+## 5.1.3+1 - 2023-01-07
+`Docs`
+* use span instead of div in docs
+
 ## 5.1.3 - 2023-01-07
+`Docs`
 * fix the link style when anchor include chinese words
 
 ## 5.1.2 - 2023-01-07
+`Docs`
 * fix the link style in docs
 
 ## 5.1.1+1 - 2023-01-07
+`Docs`
 * fix table style in docs
 
 ## 5.1.1 - 2023-01-07

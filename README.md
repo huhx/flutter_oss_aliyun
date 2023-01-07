@@ -12,7 +12,7 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.1.3
+  flutter_oss_aliyun: ^5.1.3+3
 ```
 
 ### **初始化oss client, 这里我们提供两种方式**
@@ -86,17 +86,6 @@ Client.init(
 - [bucket policy的操作](#bucket-policy)
 
 ### <span id="put-object">**上传文件附带进度回调**</span>
-* 存储类型：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
-* acl策略：https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
-
-**PutRequestOption 字段说明,字段皆为非必需**
-
-| Filed       | Default value | Description                                                                                                                                                                                                                                                                                                                                                       |
-| ----------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| override    | true          | true: 允许覆盖同名Object<br>false: 禁止覆盖同名Object                                                                                                                                                                                                                                                                                                             |
-| aclModel    | inherited     | 1. publicWrite: 任何人（包括匿名访问者）都可以对该Object进行读写操作<br>2. publicRead: 只有该Object的拥有者可以对该Object进行写操作，任何人（包括匿名访问者）都可以对该Object进行读操作<br>3. private: 只有Object的拥有者可以对该Object进行读写操作，其他人无法访问该Object<br>4. inherited: 该Object遵循Bucket的读写权限，即Bucket是什么权限，Object就是什么权限 |
-| storageType | Standard      | 参考：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb                                                                                                                                                                                                                                                 |
-
 ```dart
 final bytes = "file bytes".codeUnits;
 
@@ -116,7 +105,13 @@ await Client().putObject(
   ),
 );
 ```
+**PutRequestOption 字段说明,字段皆为非必需**
 
+| Filed       | Default value | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| override    | true          | true: 允许覆盖同名Object<br>false: 禁止覆盖同名Object                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| aclModel    | inherited     | 1. publicWrite: 任何人（包括匿名访问者）都可以对该Object进行读写操作<br>2. publicRead: 只有该Object的拥有者可以对该Object进行写操作，任何人（包括匿名访问者）都可以对该Object进行读操作<br>3. private: 只有Object的拥有者可以对该Object进行读写操作，其他人无法访问该Object<br>4. inherited: 该Object遵循Bucket的读写权限，即Bucket是什么权限，Object就是什么权限<br>参考文档: https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb |
+| storageType | Standard      | 参考文档: https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb                                                                                                                                                                                                                                                                                                                                                                       |
 ### <span id="batch-put-object">**批量上传文件**</span>
 ```dart
 await Client().putObjects([
@@ -223,21 +218,21 @@ await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 ```
 
 ### <span id="get-signed-url">**获取已签名的文件url**</span>
-需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短. 这个url可以直接在浏览器访问
+需要注意的是: 这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短. 这个url可以直接在浏览器访问
 
 ```dart
 final String url = await Client().getSignedUrl("filename1.txt");
 ```
 
 ### <span id="batch-get-signed-url">**获取多个已签名的文件url**</span>
-需要注意的是：这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
+需要注意的是: 这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短
 
 ```dart
 final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
 ```
 
 ### <span id="list-bucket">**列举所有的存储空间**</span>
-列举请求者拥有的所有存储空间（Bucket）。您还可以通过设置prefix、marker或者max-keys参数列举满足指定条件的存储空间。参考：https://help.aliyun.com/document_detail/31957.html
+列举请求者拥有的所有存储空间（Bucket）。您还可以通过设置prefix、marker或者max-keys参数列举满足指定条件的存储空间。参考: https://help.aliyun.com/document_detail/31957.html
 
 ```dart
 final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});

@@ -12,7 +12,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.1.3
+  flutter_oss_aliyun: ^5.1.3+3
 ```
 Don't forget to `flutter pub get`.
 
@@ -87,18 +87,6 @@ Client.init(
 - [bucket policy](#bucket-policy)
 
 ### **put the object to oss with progress callback**
-* storage type：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
-* acl policy：  https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
-
-**PutRequestOption ,fields are optional**
-
-| Filed       | Default value | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ----------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| override    | true          | true: Allow override the same name Object<br>false: Not allow override the same name Object                                                                                                                                                                                                                                                                                                                                                                                             |
-| aclModel    | inherited     | 1. publicWrite: Anyone (including anonymous visitors) can read and write about the Object<br>2. publicRead: Only the owner of the Object can write to the Object, and anyone (including anonymous visitors) can read the Object<br>3. private: Only the owner of the Object can read and write to the Object, and no one else can access the Object<br>4. inherited: This Object follows the read and write permission of Bucket, which is what is Bucket and Object is what permission |
-| storageType | Standard      | reference：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb                                                                                                                                                                                                                                                                                                                                                                  |
-
-
 ```dart
 final bytes = "file bytes".codeUnits;
 
@@ -119,6 +107,12 @@ await Client().putObject(
 );
 ```
 
+**PutRequestOption, fields are optional**
+| Filed       | Default value | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| override    | true          | true: Allow override the same name Object<br>false: Not allow override the same name Object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| aclModel    | inherited     | 1. publicWrite: Anyone (including anonymous visitors) can read and write about the Object<br>2. publicRead: Only the owner of the Object can write to the Object, and anyone (including anonymous visitors) can read the Object<br>3. private: Only the owner of the Object can read and write to the Object, and no one else can access the Object<br>4. inherited: This Object follows the read and write permission of Bucket, which is what is Bucket and Object is what permission <br>reference: https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb |
+| storageType | Standard      | reference: https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 ### **batch put the object to oss**
 ```dart
 await Client().putObjects([
@@ -252,14 +246,14 @@ final Response<dynamic> resp = await Client().listFiles({});
 ```
 
 ### **get bucket info**
-View bucket information, The response refer to：https://help.aliyun.com/document_detail/31968.html
+View bucket information, The response refer to: https://help.aliyun.com/document_detail/31968.html
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketInfo();
 ```
 
 ### **get objects counts and bucket details**
-Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to：https://help.aliyun.com/document_detail/426056.html
+Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to: https://help.aliyun.com/document_detail/426056.html
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketStat();
