@@ -1,3 +1,6 @@
+## 5.1.3 - 2023-01-07
+* fix the link style when anchor include chinese words
+
 ## 5.1.2 - 2023-01-07
 * fix the link style in docs
 
