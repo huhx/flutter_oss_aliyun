@@ -1,7 +1,20 @@
+## 5.1.1+1 - 2023-01-07
+* fix table style in docs
+
+## 5.1.1 - 2023-01-07
+`Optimize`
+* optimize the docs
+* refactor code
+
 ## 5.1.0 - 2023-01-07
-`Breaking Change`: In PutRequestOption
+`Breaking Change`
+
+**In PutRequestOption**
 * `acl` => `aclModel`
 * `isOverwrite` => `override`
+
+`Test`
+* add unit test
 
 ## 5.0.4 - 2023-01-06
 * reorder the example in readme
