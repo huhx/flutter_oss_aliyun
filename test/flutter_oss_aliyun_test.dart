@@ -17,12 +17,14 @@ void main() {
       stsUrl: env["sts_url"],
       ossEndpoint: env["oss_endpoint"] ?? "",
       bucketName: env["bucket_name"] ?? "",
+      dio: Dio(),
     );
   });
 
   test("test the put object in Client", () async {
-    var file = File("$home/Downloads/idiom.csv");
-    var string = await file.readAsString();
+    final File file = File("$home/Downloads/idiom.csv");
+    final String string = await file.readAsString();
+
     final Response<dynamic> resp = await Client().putObject(
       Uint8List.fromList(utf8.encode(string)),
       "test.csv",
@@ -97,7 +99,7 @@ void main() {
   });
 
   test("test the put bucket policy in Client", () async {
-    Map<String, dynamic> policy = {
+    const Map<String, dynamic> policy = {
       "Version": "1",
       "Statement": [
         {
