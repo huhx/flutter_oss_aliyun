@@ -259,7 +259,7 @@ void main() {
   });
 
   test("test the get object url in Client", () async {
-    final String url = await Client().getSignedUrl("test.txt");
+    final String url = await Client().getSignedUrl("test.csv");
     if (kDebugMode) {
       print("downloadurl $url");
     }
