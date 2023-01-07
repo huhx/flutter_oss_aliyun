@@ -92,6 +92,14 @@ Client.init(
 * storage type：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
 * acl policy：  https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
 
+**PutRequestOption ,fields are optional**
+| Filed       | Default value | Description                                                  |
+| ----------- | ------------- | ------------------------------------------------------------ |
+| override    | true          | true: Allow override the same name Object<br>false: Not allow override the same name Object        |
+| aclModel    | inherited     | 1. publicWrite: Anyone (including anonymous visitors) can read and write about the Object<br>2. publicRead: Only the owner of the Object can write to the Object, and anyone (including anonymous visitors) can read the Object<br>3. private: Only the owner of the Object can read and write to the Object, and no one else can access the Object<br>4. inherited: This Object follows the read and write permission of Bucket, which is what is Bucket and Object is what permission |
+| storageType | Standard      | reference：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb |
+
+
 ```dart
 final bytes = "file bytes".codeUnits;
 

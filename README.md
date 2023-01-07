@@ -90,6 +90,14 @@ Client.init(
 * 存储类型：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
 * acl策略：https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
 
+**PutRequestOption 字段说明,字段皆为非必需**
+| Filed       | Default value | Description                                                  |
+| ----------- | ------------- | ------------------------------------------------------------ |
+| override    | true          | true: 允许覆盖同名Object<br>false: 禁止覆盖同名Object        |
+| aclModel    | inherited     | 1. publicWrite: 任何人（包括匿名访问者）都可以对该Object进行读写操作<br>2. publicRead: 只有该Object的拥有者可以对该Object进行写操作，任何人（包括匿名访问者）都可以对该Object进行读操作<br>3. private: 只有Object的拥有者可以对该Object进行读写操作，其他人无法访问该Object<br>4. inherited: 该Object遵循Bucket的读写权限，即Bucket是什么权限，Object就是什么权限 |
+| storageType | Standard      | 参考：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb |
+
+
 ```dart
 final bytes = "file bytes".codeUnits;
 
