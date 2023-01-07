@@ -503,6 +503,7 @@ class Client {
               bucketName: bucketName,
             ))
         .toList();
+
     return await Future.wait(deletes);
   }
 
@@ -518,6 +519,7 @@ class Client {
       );
       _expire = respMap['Expiration'];
     }
+
     return _auth!;
   }
 

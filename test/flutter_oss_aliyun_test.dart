@@ -68,8 +68,10 @@ void main() {
   });
 
   test("test the put bucket acl in Client", () async {
-    final Response<dynamic> resp = await Client()
-        .putBucketAcl(AclMode.publicRead, bucketName: "huhx-family-dev");
+    final Response<dynamic> resp = await Client().putBucketAcl(
+      AclMode.publicRead,
+      bucketName: "huhx-family-dev",
+    );
 
     expect(resp.statusCode, 200);
   });
@@ -153,31 +155,29 @@ void main() {
   });
 
   test("test the put object files in Client", () async {
-    final List<Response<dynamic>> resp = await Client().putObjectFiles(
-      [
-        AssetFileEntity(
-          file: File("$home/Downloads/test.txt"),
-          option: PutRequestOption(
-            onSendProgress: (count, total) {
-              if (kDebugMode) {
-                print("1: send: count = $count, and total = $total");
-              }
-            },
-          ),
+    final List<Response<dynamic>> resp = await Client().putObjectFiles([
+      AssetFileEntity(
+        file: File("$home/Downloads/test.txt"),
+        option: PutRequestOption(
+          onSendProgress: (count, total) {
+            if (kDebugMode) {
+              print("1: send: count = $count, and total = $total");
+            }
+          },
         ),
-        AssetFileEntity(
-          file: File("$home/Downloads/splash.png"),
-          filename: "aaa.png",
-          option: PutRequestOption(
-            onSendProgress: (count, total) {
-              if (kDebugMode) {
-                print("2: send: count = $count, and total = $total");
-              }
-            },
-          ),
+      ),
+      AssetFileEntity(
+        file: File("$home/Downloads/splash.png"),
+        filename: "aaa.png",
+        option: PutRequestOption(
+          onSendProgress: (count, total) {
+            if (kDebugMode) {
+              print("2: send: count = $count, and total = $total");
+            }
+          },
         ),
-      ],
-    );
+      ),
+    ]);
 
     expect(resp.length, 2);
   });
@@ -226,8 +226,10 @@ void main() {
   });
 
   test("test the download object in Client", () async {
-    final Response resp =
-        await Client().downloadObject("test.txt", "result.txt");
+    final Response resp = await Client().downloadObject(
+      "test.txt",
+      "result.txt",
+    );
     final File file = File("result.txt");
 
     expect(resp.statusCode, 200);

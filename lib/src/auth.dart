@@ -15,9 +15,7 @@ class Auth {
     this.secureToken,
   );
 
-  String get encodedToken {
-    return secureToken.replaceAll("+", "%2B");
-  }
+  String get encodedToken => secureToken.replaceAll("+", "%2B");
 
   /// access aliyun need authenticated, this is the implementation refer to the official document.
   /// [req] include the request headers information that use for auth.
@@ -42,8 +40,9 @@ class Auth {
       expires,
       "${_getResourceString(bucket, key)}?security-token=$secureToken"
     ].join("\n");
-    return Uri.encodeFull(EncryptUtil.hmacSign(accessSecret, stringToSign))
-        .replaceAll("+", "%2B");
+    final String signed = EncryptUtil.hmacSign(accessSecret, stringToSign);
+
+    return Uri.encodeFull(signed).replaceAll("+", "%2B");
   }
 
   /// sign the string use hmac
@@ -61,6 +60,7 @@ class Auth {
       headerString,
       resourceString
     ].join("\n");
+
     return EncryptUtil.hmacSign(accessSecret, stringToSign);
   }
 
@@ -71,6 +71,7 @@ class Auth {
         .toList();
     if (ossHeaders.isEmpty) return '';
     ossHeaders.sort((s1, s2) => s1.compareTo(s2));
+
     return ossHeaders.map((key) => "$key:${req.headers[key]}").join("\n");
   }
 
@@ -79,6 +80,7 @@ class Auth {
     String path = "/";
     if (bucket.isNotEmpty) path += "$bucket/";
     if (fileKey.isNotEmpty) path += fileKey;
+
     return path;
   }
 }

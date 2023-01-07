@@ -7,10 +7,10 @@ extension PutRequestOptionExtension on PutRequestOption? {
   }
 
   String get acl {
-    return this?.aclModel?.content ?? AclMode.inherited.content;
+    return (this?.aclModel ?? AclMode.inherited).content;
   }
 
   String get storage {
-    return this?.storageType?.content ?? StorageType.standard.content;
+    return (this?.storageType ?? StorageType.standard).content;
   }
 }
