@@ -16,7 +16,7 @@ dependencies:
 ```
 Don't forget to `flutter pub get`.
 
-### **Init the client, we provide two ways to do it**
+### Init the client, we provide two ways to do it
 #### 1. `Use sts server api`: provide the sts url from our backend server:
 ```dart
 Client.init(
@@ -86,7 +86,7 @@ Client.init(
 - [bucket acl](#bucket-acl)
 - [bucket policy](#bucket-policy)
 
-### **put the object to oss with progress callback**
+### put the object to oss with progress callback
 * storage type：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
 * acl policy：  https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
 
@@ -119,7 +119,7 @@ await Client().putObject(
 );
 ```
 
-### **batch put the object to oss**
+### batch put the object to oss
 ```dart
 await Client().putObjects([
   AssetEntity(
@@ -139,7 +139,7 @@ await Client().putObjects([
 ]);
 ```
 
-### **update object from local file**
+### update object from local file
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(
@@ -157,7 +157,7 @@ final Response<dynamic> resp = await Client().putObjectFile(
 );
 ```
 
-### **batch upload local files to oss**
+### batch upload local files to oss
 
 ```dart
 final List<Response<dynamic>> resp = await Client().putObjectFiles(
@@ -192,7 +192,7 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
 );
 ```
 
-### **get the object from oss with progress callback**
+### get the object from oss with progress callback
 ```dart
 await Client().getObject(
   "test.txt",
@@ -202,7 +202,7 @@ await Client().getObject(
 );
 ```
 
-### **download the object from oss with progress callback**
+### download the object from oss with progress callback
 ```dart
 await Client().downloadObject(
   "test.txt", 
@@ -213,65 +213,65 @@ await Client().downloadObject(
 );
 ```
 
-### **delete the object from oss**
+### delete the object from oss
 ```dart
 await Client().deleteObject("test.txt");
 ```
 
-### **batch delete the object from oss**
+### batch delete the object from oss
 ```dart
 await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 ```
 
-### **get signed url that can be accessed in browser directly**
+### get signed url that can be accessed in browser directly
 This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
 
 ```dart
 final String url = await Client().getSignedUrl("filename1.txt");
 ```
 
-### **get multiple signed urls**
+### get multiple signed urls
 This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
 
 ```dart
 final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
 ```
 
-### **list buckets**
+### list buckets
 list all owned buckets, refer to: https://help.aliyun.com/document_detail/31957.html
 
 ```dart
 final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
 ```
 
-### **list objects**
+### list objects
 List the information of all files (Object) in the storage space (Bucket). The parameters and response, refer to: https://help.aliyun.com/document_detail/187544.html
 
 ```dart
 final Response<dynamic> resp = await Client().listFiles({});
 ```
 
-### **get bucket info**
+### get bucket info
 View bucket information, The response refer to：https://help.aliyun.com/document_detail/31968.html
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketInfo();
 ```
 
-### **get objects counts and bucket details**
+### get objects counts and bucket details
 Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to：https://help.aliyun.com/document_detail/426056.html
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketStat();
 ```
 
-### **get object metadata**
+### get object metadata
 
 ```dart
 final Response<dynamic> resp = await Client().getObjectMeta("huhx.csv");
 ```
 
-### **query regions**
+### query regions
 * find all
 
 ```dart
@@ -284,7 +284,7 @@ final Response<dynamic> resp = await Client().getAllRegions();
 final Response<dynamic> resp = await Client().getRegion("oss-ap-northeast-1");
 ```
 
-### **bucket acl**
+### bucket acl
 * query
 
 ```dart
@@ -302,7 +302,7 @@ final Response<dynamic> resp = await Client().putBucketAcl(
 );
 ```
 
-### **bucket policy**
+### bucket policy
 * query
 
 ```dart

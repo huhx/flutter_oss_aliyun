@@ -44,7 +44,6 @@
 * bucket acl support
 * bucket policy support
 
-
 ## 4.1.7 - 2022-12-15
 * upload multiple local files
 
