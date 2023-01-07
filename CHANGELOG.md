@@ -1,3 +1,6 @@
+## 5.1.2 - 2023-01-07
+* fix the link style in docs
+
 ## 5.1.1+1 - 2023-01-07
 * fix table style in docs
 
