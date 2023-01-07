@@ -12,6 +12,7 @@ import 'asset_entity.dart';
 import 'auth.dart';
 import 'dio_client.dart';
 import 'enums.dart';
+import 'option_extension.dart';
 
 class Client {
   static Client? _instance;
@@ -244,10 +245,9 @@ class Client {
     final Map<String, dynamic> headers = {
       'content-type': mime(fileKey) ?? "image/png",
       'content-length': multipartFile.length,
-      'x-oss-forbid-overwrite': !(option?.isOverwrite ?? true),
-      'x-oss-object-acl': option?.acl?.content ?? AclMode.inherited.content,
-      'x-oss-storage-class':
-          option?.storageType?.content ?? StorageType.standard.content,
+      'x-oss-forbid-overwrite': option.forbidOverwrite,
+      'x-oss-object-acl': option.acl,
+      'x-oss-storage-class': option.storage,
     };
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -283,10 +283,9 @@ class Client {
     final Map<String, dynamic> headers = {
       'content-type': mime(fileKey) ?? "image/png",
       'content-length': multipartFile.length,
-      'x-oss-forbid-overwrite': !(option?.isOverwrite ?? true),
-      'x-oss-object-acl': option?.acl?.content ?? AclMode.inherited.content,
-      'x-oss-storage-class':
-          option?.storageType?.content ?? StorageType.standard.content,
+      'x-oss-forbid-overwrite': option.forbidOverwrite,
+      'x-oss-object-acl': option.acl,
+      'x-oss-storage-class': option.storage,
     };
     final String url = "https://$bucket.$endpoint/$filename";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);

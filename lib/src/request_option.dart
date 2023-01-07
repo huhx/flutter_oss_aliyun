@@ -5,16 +5,16 @@ class PutRequestOption {
   final String? bucketName;
   final ProgressCallback? onSendProgress;
   final ProgressCallback? onReceiveProgress;
-  final AclMode? acl;
-  final bool? isOverwrite;
+  final AclMode? aclModel;
+  final bool? override;
   final StorageType? storageType;
 
   const PutRequestOption({
     this.bucketName,
     this.onSendProgress,
     this.onReceiveProgress,
-    this.acl,
-    this.isOverwrite,
+    this.aclModel,
+    this.override,
     this.storageType,
   });
 }

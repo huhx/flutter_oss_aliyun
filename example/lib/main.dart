@@ -51,8 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onReceiveProgress: (count, total) {
                       print("receive: count = $count, and total = $total");
                     },
-                    isOverwrite: false,
-                    acl: AclMode.private,
+                    override: false,
+                    aclModel: AclMode.private,
                     storageType: StorageType.standard,
                   ),
                 );
@@ -102,8 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         onReceiveProgress: (count, total) {
                           print("receive: count = $count, and total = $total");
                         },
-                        isOverwrite: true,
-                        acl: AclMode.inherited,
+                        override: true,
+                        aclModel: AclMode.inherited,
                       ),
                     ),
                     AssetEntity(
