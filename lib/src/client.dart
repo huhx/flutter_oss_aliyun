@@ -108,16 +108,14 @@ class Client {
     String? bucketName,
     int expireSeconds = 60,
   }) async {
-    Map<String, String> mapResult = {};
-    for (final String fileKey in fileKeys.toSet()) {
-      final String signedUrl = await getSignedUrl(
-        fileKey,
-        bucketName: bucketName,
-        expireSeconds: expireSeconds,
-      );
-      mapResult[fileKey] = signedUrl;
-    }
-    return mapResult;
+    return {
+      for (final String fileKey in fileKeys.toSet())
+        fileKey: await getSignedUrl(
+          fileKey,
+          bucketName: bucketName,
+          expireSeconds: expireSeconds,
+        )
+    };
   }
 
   /// list objects from oss server
