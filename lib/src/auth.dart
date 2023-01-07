@@ -15,6 +15,10 @@ class Auth {
     this.secureToken,
   );
 
+  String get encodedToken {
+    return secureToken.replaceAll("+", "%2B");
+  }
+
   /// access aliyun need authenticated, this is the implementation refer to the official document.
   /// [req] include the request headers information that use for auth.
   /// [bucket] is the name of bucket used in aliyun oss

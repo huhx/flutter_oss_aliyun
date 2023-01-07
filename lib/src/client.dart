@@ -92,12 +92,11 @@ class Client {
       "OSSAccessKeyId": auth.accessKey,
       "Expires": expires,
       "Signature": auth.getSignature(expires, bucket, fileKey),
-      "security-token": auth.secureToken.replaceAll("+", "%2B")
+      "security-token": auth.encodedToken
     };
-    final String queryString =
-        params.entries.map((entry) => "${entry.key}=${entry.value}").join("&");
+    final HttpRequest request = HttpRequest(url, 'GET', params, {});
 
-    return "$url?$queryString";
+    return request.url;
   }
 
   /// get signed url from oss server
