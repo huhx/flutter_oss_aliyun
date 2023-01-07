@@ -15,7 +15,7 @@ dependencies:
   flutter_oss_aliyun: ^5.1.1
 ```
 
-### 初始化oss client, 这里我们提供两种方式
+### **初始化oss client, 这里我们提供两种方式**
 #### 1. 提供sts server地址，需要后端添加这个api
 ```dart
 Client.init(
@@ -85,7 +85,7 @@ Client.init(
 - [bucket acl的操作](#bucket-acl%E7%9A%84%E6%93%8D%E4%BD%9C)
 - [bucket policy的操作](#bucket-policy%E7%9A%84%E6%93%8D%E4%BD%9C)
 
-### 上传文件附带进度回调
+### **上传文件附带进度回调**
 * 存储类型：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
 * acl策略：https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
 
