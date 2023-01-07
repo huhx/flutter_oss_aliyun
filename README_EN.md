@@ -8,30 +8,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 
 **oss sts document**: [https://help.aliyun.com/document_detail/100624.html](https://help.aliyun.com/document_detail/100624.html)
 
-## 🐱&nbsp;Feature
-- [x] upload object 
-- [x] get object 
-- [x] save object in files
-- [x] delete object
-- [x] upload multiple objects at once
-- [x] delete multiple objects at once
-- [x] progress callback for uploading files
-- [x] progress callback for downloading files
-- [x] get signed url for file
-- [x] get multiple signed urls for files
-- [x] list buckets
-- [x] list objects in bucket
-- [x] get bucket info
-- [x] get bucket stat
-- [x] upload local file
-- [x] upload local files
-- [x] get object metadata
-- [x] get regions 
-- [x] bucket acl
-- [x] bucket policy
-
-
-## 🎨&nbsp;Usage
+## 🐱&nbsp; Init Client
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
@@ -39,8 +16,8 @@ dependencies:
 ```
 Don't forget to `flutter pub get`.
 
-### 1. init the client, we provide two ways to do it.
-#### use sts server, just provide the sts url from our backend server:
+### Init the client, we provide two ways to do it.
+#### 1. `Use sts server api`: provide the sts url from our backend server:
 ```dart
 Client.init(
     stsUrl: "server url get sts token",
@@ -59,7 +36,7 @@ This sts url api at least return the data:
 }
 ```
 
-#### you can also customize the way to get sts json response.
+#### 2. `Customize way`: provide a method to get sts json response.
 ```dart
 Client.init(
     ossEndpoint: "oss-cn-beijing.aliyuncs.com",
@@ -77,7 +54,8 @@ String _tokenGetterMethod() async {
 }
 ```
 
-#### customize the dio
+**`customize the dio`**
+
 you can pass the dio in `init` method to use your own Dio.
 ```dart
 Client.init(
@@ -88,7 +66,27 @@ Client.init(
 );
 ```
 
-### 2. put the object to oss with progress callback
+## 🎨&nbsp;Usage
+- [put the object to oss with progress callback](#put-the-object-to-oss-with-progress-callback)
+- [batch put the object to oss](#batch-put-the-object-to-oss)
+- [update object from local file](#update-object-from-local-file)
+- [batch upload local files to oss](#batch-upload-local-files-to-oss)
+- [get the object from oss with progress callback](#get-the-object-from-oss-with-progress-callback)
+- [download the object from oss with progress callback](#download-the-object-from-oss-with-progress-callback)
+- [delete the object from oss](#delete-the-object-from-oss)
+- [batch delete the object from oss](#batch-delete-the-object-from-oss)
+- [get signed url that can be accessed in browser directly](#get-signed-url-that-can-be-accessed-in-browser-directly)
+- [get multiple signed urls](#get-multiple-signed-urls)
+- [list buckets](#list-buckets)
+- [list objects](#list-objects)
+- [get bucket info](#get-bucket-info)
+- [get objects counts and bucket details](#get-objects-counts-and-bucket-details)
+- [get object metadata](#get-object-metadata)
+- [query regions](#query-regions)
+- [bucket acl](#bucket-acl)
+- [bucket policy](#bucket-policy)
+
+### put the object to oss with progress callback
 * storage type：https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb
 * acl policy：  https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb
 
@@ -120,7 +118,7 @@ await Client().putObject(
 );
 ```
 
-### 3. batch put the object to oss
+### batch put the object to oss
 ```dart
 await Client().putObjects([
   AssetEntity(
@@ -140,7 +138,7 @@ await Client().putObjects([
 ]);
 ```
 
-### 4. update object from local file
+### update object from local file
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(
@@ -158,7 +156,7 @@ final Response<dynamic> resp = await Client().putObjectFile(
 );
 ```
 
-### 5. batch upload local files to oss
+### batch upload local files to oss
 
 ```dart
 final List<Response<dynamic>> resp = await Client().putObjectFiles(
@@ -193,7 +191,7 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
 );
 ```
 
-### 6. get the object from oss with progress callback
+### get the object from oss with progress callback
 ```dart
 await Client().getObject(
   "test.txt",
@@ -203,7 +201,7 @@ await Client().getObject(
 );
 ```
 
-### 7. download the object from oss with progress callback
+### download the object from oss with progress callback
 ```dart
 await Client().downloadObject(
   "test.txt", 
@@ -214,52 +212,52 @@ await Client().downloadObject(
 );
 ```
 
-### 8. delete the object from oss
+### delete the object from oss
 ```dart
 await Client().deleteObject("test.txt");
 ```
 
-### 9. batch delete the object from oss
+### batch delete the object from oss
 ```dart
 await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 ```
 
-### 10. get signed url that can be accessed in browser directly
+### get signed url that can be accessed in browser directly
 This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
 
 ```dart
 final String url = await Client().getSignedUrl("filename1.txt");
 ```
 
-### 11. get multiple signed urls 
+### get multiple signed urls 
 This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
 
 ```dart
 final Map<String, String> result = await Client().getSignedUrls(["test.txt", "filename1.txt"]);
 ```
 
-### 12. list buckets
+### list buckets
 list all owned buckets, refer to: https://help.aliyun.com/document_detail/31957.html
 
 ```dart
 final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
 ```
 
-### 13. list objects
+### list objects
 List the information of all files (Object) in the storage space (Bucket). The parameters and response, refer to: https://help.aliyun.com/document_detail/187544.html
 
 ```dart
 final Response<dynamic> resp = await Client().listFiles({});
 ```
 
-### 14. get bucket info
+### get bucket info
 View bucket information, The response refer to：https://help.aliyun.com/document_detail/31968.html
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketInfo();
 ```
 
-### 15. get objects counts and bucket details
+### get objects counts and bucket details
 Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to：https://help.aliyun.com/document_detail/426056.html
 
 ```dart
@@ -267,13 +265,13 @@ final Response<dynamic> resp = await Client().getBucketStat();
 ```
 
 
-### 16. get object metadata
+### get object metadata
 
 ```dart
 final Response<dynamic> resp = await Client().getObjectMeta("huhx.csv");
 ```
 
-### 17. query regions
+### query regions
 * find all
 
 ```dart
@@ -286,7 +284,7 @@ final Response<dynamic> resp = await Client().getAllRegions();
 final Response<dynamic> resp = await Client().getRegion("oss-ap-northeast-1");
 ```
 
-### 18. bucket acl
+### bucket acl
 * query
 
 ```dart
@@ -304,7 +302,7 @@ final Response<dynamic> resp = await Client().putBucketAcl(
 );
 ```
 
-### 19. bucket policy
+### bucket policy
 * query
 
 ```dart
