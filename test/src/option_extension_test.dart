@@ -8,25 +8,25 @@ void main() {
     test("option is null", () {
       const PutRequestOption? option = null;
 
-      expect(option.forbidOverwrite, false);
+      expect(option.forbidOverride, false);
     });
 
     test("override is null", () {
       const PutRequestOption option = PutRequestOption();
 
-      expect(option.forbidOverwrite, false);
+      expect(option.forbidOverride, false);
     });
 
     test("override is true", () {
       const PutRequestOption option = PutRequestOption(override: true);
 
-      expect(option.forbidOverwrite, false);
+      expect(option.forbidOverride, false);
     });
 
     test("override is false", () {
       const PutRequestOption option = PutRequestOption(override: false);
 
-      expect(option.forbidOverwrite, true);
+      expect(option.forbidOverride, true);
     });
   });
 

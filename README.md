@@ -104,7 +104,7 @@ await Client().putObject(
       print("receive: count = $count, and total = $total");
     },
     isOverwrite: false,
-    acl: AclMode.publicRead,
+    aclModel: AclMode.publicRead,
     storageType: StorageType.ia,
   ),
 );
@@ -123,7 +123,7 @@ await Client().putObjects([
       onReceiveProgress: (count, total) {
         print("receive: count = $count, and total = $total");
       },
-      acl: AclMode.private,
+      aclModel: AclMode.private,
     ),
   ),
   AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
@@ -144,7 +144,7 @@ final Response<dynamic> resp = await Client().putObjectFile(
     onReceiveProgress: (count, total) {
       print("receive: count = $count, and total = $total");
     },
-    acl: AclMode.private,
+    aclModel: AclMode.private,
   ),
 );
 ```
@@ -163,8 +163,8 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
         onReceiveProgress: (count, total) {
           print("receive: count = $count, and total = $total");
         },
-        isOverride: false,
-        acl: AclMode.private,
+        override: false,
+        aclModel: AclMode.private,
       ),
     ),
     AssetFileEntity(
@@ -177,7 +177,7 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
         onReceiveProgress: (count, total) {
           print("receive: count = $count, and total = $total");
         },
-        isOverride: true,
+        override: true,
       ),
     ),
   ],

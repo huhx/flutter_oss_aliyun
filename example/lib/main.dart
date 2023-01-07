@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
 
@@ -46,10 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   "filename.txt",
                   option: PutRequestOption(
                     onSendProgress: (count, total) {
-                      print("send: count = $count, and total = $total");
+                      if (kDebugMode) {
+                        print("send: count = $count, and total = $total");
+                      }
                     },
                     onReceiveProgress: (count, total) {
-                      print("receive: count = $count, and total = $total");
+                      if (kDebugMode) {
+                        print("receive: count = $count, and total = $total");
+                      }
                     },
                     override: false,
                     aclModel: AclMode.private,
@@ -97,10 +102,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       bytes: "files1".codeUnits,
                       option: PutRequestOption(
                         onSendProgress: (count, total) {
-                          print("send: count = $count, and total = $total");
+                          if (kDebugMode) {
+                            print("send: count = $count, and total = $total");
+                          }
                         },
                         onReceiveProgress: (count, total) {
-                          print("receive: count = $count, and total = $total");
+                          if (kDebugMode) {
+                            print(
+                                "receive: count = $count, and total = $total");
+                          }
                         },
                         override: true,
                         aclModel: AclMode.inherited,

@@ -2,7 +2,7 @@ import 'package:flutter_oss_aliyun/src/enums.dart';
 import 'package:flutter_oss_aliyun/src/request_option.dart';
 
 extension PutRequestOptionExtension on PutRequestOption? {
-  bool get forbidOverwrite {
+  bool get forbidOverride {
     return !(this?.override ?? true);
   }
 
