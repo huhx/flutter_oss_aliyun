@@ -43,33 +43,33 @@ void main() {
       ),
     );
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the get object metadata in Client", () async {
     final Response<dynamic> resp = await Client().getObjectMeta("test.csv");
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the get all regions in Client", () async {
     final Response<dynamic> resp = await Client().getAllRegions();
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the get regions in Client", () async {
     final Response<dynamic> resp =
         await Client().getRegion("oss-ap-northeast-1");
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the put bucket acl in Client", () async {
     final Response<dynamic> resp = await Client()
         .putBucketAcl(AclMode.publicRead, bucketName: "huhx-family-dev");
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the get bucket acl in Client", () async {
@@ -77,7 +77,7 @@ void main() {
       bucketName: "huhx-family-dev",
     );
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the get bucket policy in Client", () async {
@@ -85,7 +85,7 @@ void main() {
       bucketName: "huhx-family-dev",
     );
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the delete bucket policy in Client", () async {
@@ -93,7 +93,7 @@ void main() {
       bucketName: "huhx-family-dev",
     );
 
-    expect(204, resp.statusCode);
+    expect(resp.statusCode, 204);
   });
 
   test("test the put bucket policy in Client", () async {
@@ -125,7 +125,7 @@ void main() {
       bucketName: "huhx-family-dev",
     );
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the put object file in Client", () async {
@@ -147,7 +147,7 @@ void main() {
       ),
     );
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the put object files in Client", () async {
@@ -177,7 +177,7 @@ void main() {
       ],
     );
 
-    expect(2, resp.length);
+    expect(resp.length, 2);
   });
 
   test("test the list objects in Client", () async {
@@ -186,7 +186,7 @@ void main() {
     if (kDebugMode) {
       print(resp);
     }
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the list buckets in Client", () async {
@@ -195,7 +195,7 @@ void main() {
     if (kDebugMode) {
       print(resp);
     }
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the get bucket info in Client", () async {
@@ -204,7 +204,7 @@ void main() {
     if (kDebugMode) {
       print(resp);
     }
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the get bucket info in Client", () async {
@@ -214,26 +214,31 @@ void main() {
       print(resp);
     }
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the get object in Client", () async {
     final Response<dynamic> resp = await Client().getObject("test.txt");
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
   });
 
   test("test the download object in Client", () async {
     final Response resp =
         await Client().downloadObject("test.txt", "result.txt");
+    final File file = File("result.txt");
 
-    expect(200, resp.statusCode);
+    expect(resp.statusCode, 200);
+    expect(file.existsSync(), true);
+
+    // tear down: delete result.txt
+    file.delete();
   });
 
   test("test the delete object in Client", () async {
     final Response<dynamic> resp = await Client().deleteObject("test.txt");
 
-    expect(204, resp.statusCode);
+    expect(resp.statusCode, 204);
   });
 
   test("test the put objects in Client", () async {
@@ -242,9 +247,9 @@ void main() {
       AssetEntity(filename: "filename2.txt", bytes: "files2".codeUnits),
     ]);
 
-    expect(2, resp.length);
-    expect(200, resp[0].statusCode);
-    expect(200, resp[1].statusCode);
+    expect(resp.length, 2);
+    expect(resp[0].statusCode, 200);
+    expect(resp[1].statusCode, 200);
   });
 
   test("test the delete objects in Client", () async {
@@ -253,15 +258,15 @@ void main() {
       "filename2.txt",
     ]);
 
-    expect(2, resp.length);
-    expect(204, resp[0].statusCode);
-    expect(204, resp[1].statusCode);
+    expect(resp.length, 2);
+    expect(resp[0].statusCode, 204);
+    expect(resp[1].statusCode, 204);
   });
 
   test("test the get object url in Client", () async {
     final String url = await Client().getSignedUrl("test.csv");
     if (kDebugMode) {
-      print("downloadurl $url");
+      print("download url = $url");
     }
 
     expect(url, isNotNull);
