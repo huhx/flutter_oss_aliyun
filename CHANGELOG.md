@@ -1,3 +1,8 @@
+## 5.1.0 - 2023-01-07
+`Breaking Change`: In PutRequestOption
+* `acl` => `aclModel`
+* `isOverwrite` => `override`
+
 ## 5.0.4 - 2023-01-06
 * reorder the example in readme
 * add storageType parameter when upload file

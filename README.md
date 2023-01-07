@@ -34,7 +34,7 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.0.4
+  flutter_oss_aliyun: ^5.1.0
 ```
 
 ### 1. 初始化oss client, 这里我们提供两种方式
@@ -103,7 +103,7 @@ await Client().putObject(
     onReceiveProgress: (count, total) {
       print("receive: count = $count, and total = $total");
     },
-    isOverwrite: false,
+    override: false,
     aclModel: AclMode.publicRead,
     storageType: StorageType.ia,
   ),
