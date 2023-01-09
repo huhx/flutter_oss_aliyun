@@ -48,6 +48,38 @@ void main() {
     expect(resp.statusCode, 200);
   });
 
+  test("test the put object cancel token in Client", () async {
+    final CancelToken cancelToken = CancelToken();
+
+    final File file = File("$home/Downloads/idiom.csv");
+    final String string = file.readAsStringSync();
+
+    await Client().putObject(
+      Uint8List.fromList(utf8.encode(string)),
+      "cancel_token_test.csv",
+      option: PutRequestOption(
+        onSendProgress: (count, total) {
+          if (kDebugMode) {
+            print("send: count = $count, and total = $total");
+          }
+          if (count > 56) {
+            cancelToken.cancel("cancel the uploading.");
+          }
+        },
+      ),
+      cancelToken: cancelToken,
+    ).then((response) {
+      // success
+      print("upload success = ${response.statusCode}");
+    }).catchError((err) {
+      if (CancelToken.isCancel(err)) {
+        print("error message = ${err.message}");
+      } else {
+        // handle other errors
+      }
+    });
+  });
+
   test("test the get object metadata in Client", () async {
     final Response<dynamic> resp = await Client().getObjectMeta("test.csv");
 

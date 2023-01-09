@@ -57,6 +57,7 @@ class Client {
   Future<Response<dynamic>> getObject(
     String fileKey, {
     String? bucketName,
+    CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -68,6 +69,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
     );
@@ -122,6 +124,7 @@ class Client {
   /// [parameters] parameters for filter, refer to: https://help.aliyun.com/document_detail/31957.html
   Future<Response<dynamic>> listBuckets(
     Map<String, dynamic> parameters, {
+    CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
     final Auth auth = await _getAuth();
@@ -132,6 +135,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
     );
@@ -143,6 +147,7 @@ class Client {
   Future<Response<dynamic>> listObjects(
     Map<String, dynamic> parameters, {
     String? bucketName,
+    CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -155,6 +160,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
     );
@@ -164,6 +170,7 @@ class Client {
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> getBucketInfo({
     String? bucketName,
+    CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -175,6 +182,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
     );
@@ -184,6 +192,7 @@ class Client {
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> getBucketStat({
     String? bucketName,
+    CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -195,6 +204,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
     );
@@ -208,6 +218,7 @@ class Client {
     String fileKey,
     String savePath, {
     String? bucketName,
+    CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -220,6 +231,7 @@ class Client {
     return await _dio.download(
       request.url,
       savePath,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
     );
@@ -231,6 +243,7 @@ class Client {
   Future<Response<dynamic>> putObject(
     List<int> fileData,
     String fileKey, {
+    CancelToken? cancelToken,
     PutRequestOption? option,
   }) async {
     final String bucket = option?.bucketName ?? bucketName;
@@ -255,6 +268,7 @@ class Client {
     return _dio.put(
       request.url,
       data: _chunkFile(multipartFile),
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onSendProgress: option?.onSendProgress,
       onReceiveProgress: option?.onReceiveProgress,
@@ -267,6 +281,7 @@ class Client {
   Future<Response<dynamic>> putObjectFile(
     File file, {
     PutRequestOption? option,
+    CancelToken? cancelToken,
     String? fileKey,
   }) async {
     final String bucket = option?.bucketName ?? bucketName;
@@ -294,6 +309,7 @@ class Client {
       request.url,
       data: multipartFile.finalize(),
       options: Options(headers: request.headers),
+      cancelToken: cancelToken,
       onSendProgress: option?.onSendProgress,
       onReceiveProgress: option?.onReceiveProgress,
     );
@@ -303,12 +319,14 @@ class Client {
   /// [assetEntities] is list of files need to be uploaded to oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<List<Response<dynamic>>> putObjectFiles(
-    List<AssetFileEntity> assetEntities,
-  ) async {
+    List<AssetFileEntity> assetEntities, {
+    CancelToken? cancelToken,
+  }) async {
     final uploads = assetEntities
         .map((fileEntity) async => await putObjectFile(
               fileEntity.file,
               fileKey: fileEntity.filename,
+              cancelToken: cancelToken,
               option: fileEntity.option,
             ))
         .toList();
@@ -319,12 +337,14 @@ class Client {
   /// [assetEntities] is list of files need to be uploaded to oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<List<Response<dynamic>>> putObjects(
-    List<AssetEntity> assetEntities,
-  ) async {
+    List<AssetEntity> assetEntities, {
+    CancelToken? cancelToken,
+  }) async {
     final uploads = assetEntities
         .map((file) async => await putObject(
               file.bytes,
               file.filename,
+              cancelToken: cancelToken,
               option: file.option,
             ))
         .toList();
@@ -334,6 +354,7 @@ class Client {
   /// get object metadata
   Future<Response<dynamic>> getObjectMeta(
     String fileKey, {
+    CancelToken? cancelToken,
     String? bucketName,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -345,12 +366,15 @@ class Client {
 
     return _dio.head(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
 
   /// get all supported regions
-  Future<Response<dynamic>> getAllRegions() async {
+  Future<Response<dynamic>> getAllRegions({
+    CancelToken? cancelToken,
+  }) async {
     final Auth auth = await _getAuth();
 
     final String url = "https://$endpoint/?regions";
@@ -359,6 +383,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
@@ -366,6 +391,7 @@ class Client {
   /// get bucket acl
   Future<Response<dynamic>> getBucketAcl({
     String? bucketName,
+    CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
@@ -376,6 +402,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
@@ -383,6 +410,7 @@ class Client {
   /// get bucket policy
   Future<Response<dynamic>> getBucketPolicy({
     String? bucketName,
+    CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
@@ -393,6 +421,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
@@ -400,6 +429,7 @@ class Client {
   /// delete bucket policy
   Future<Response<dynamic>> deleteBucketPolicy({
     String? bucketName,
+    CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
@@ -412,6 +442,7 @@ class Client {
 
     return _dio.delete(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
@@ -420,6 +451,7 @@ class Client {
   Future<Response<dynamic>> putBucketPolicy(
     Map<String, dynamic> policy, {
     String? bucketName,
+    CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
@@ -433,6 +465,7 @@ class Client {
     return _dio.put(
       data: policy,
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
@@ -440,6 +473,7 @@ class Client {
   /// put bucket acl
   Future<Response<dynamic>> putBucketAcl(
     AclMode aciMode, {
+    CancelToken? cancelToken,
     String? bucketName,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -454,12 +488,16 @@ class Client {
 
     return _dio.put(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
 
   /// get all supported regions
-  Future<Response<dynamic>> getRegion(String region) async {
+  Future<Response<dynamic>> getRegion(
+    String region, {
+    CancelToken? cancelToken,
+  }) async {
     final Auth auth = await _getAuth();
 
     final String url = "https://$endpoint/?regions=$region";
@@ -468,6 +506,7 @@ class Client {
 
     return _dio.get(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
@@ -476,6 +515,7 @@ class Client {
   Future<Response<dynamic>> deleteObject(
     String fileKey, {
     String? bucketName,
+    CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
@@ -488,6 +528,7 @@ class Client {
 
     return _dio.delete(
       request.url,
+      cancelToken: cancelToken,
       options: Options(headers: request.headers),
     );
   }
@@ -496,11 +537,13 @@ class Client {
   Future<List<Response<dynamic>>> deleteObjects(
     List<String> keys, {
     String? bucketName,
+    CancelToken? cancelToken,
   }) async {
     final deletes = keys
         .map((fileKey) async => await deleteObject(
               fileKey,
               bucketName: bucketName,
+              cancelToken: cancelToken,
             ))
         .toList();
 
