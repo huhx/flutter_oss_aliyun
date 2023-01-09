@@ -121,7 +121,8 @@ final bytes = ("long long bytes" * 1000).codeUnits;
 
 Client().putObject(
   Uint8List.fromList(utf8.encode(string)),
-  "cancel_token_test.csv",
+  "cancel_token_test.txt",
+  cancelToken: cancelToken,
   option: PutRequestOption(
     onSendProgress: (count, total) {
       if (kDebugMode) {
@@ -132,7 +133,6 @@ Client().putObject(
       }
     },
   ),
-  cancelToken: cancelToken,
 ).then((response) {
   // success
   print("upload success = ${response.statusCode}");
