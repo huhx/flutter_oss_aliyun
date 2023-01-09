@@ -56,7 +56,7 @@ void main() {
 
     await Client().putObject(
       Uint8List.fromList(utf8.encode(string)),
-      "cancel_token_test.csv",
+      "cancel_token_test2.csv",
       option: PutRequestOption(
         onSendProgress: (count, total) {
           if (kDebugMode) {
@@ -70,10 +70,14 @@ void main() {
       cancelToken: cancelToken,
     ).then((response) {
       // success
-      print("upload success = ${response.statusCode}");
+      if (kDebugMode) {
+        print("upload success = ${response.statusCode}");
+      }
     }).catchError((err) {
       if (CancelToken.isCancel(err)) {
-        print("error message = ${err.message}");
+        if (kDebugMode) {
+          print("error message = ${err.message}");
+        }
       } else {
         // handle other errors
       }

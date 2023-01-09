@@ -1,3 +1,7 @@
+## 5.1.4 - 2023-01-07
+`Feature`
+* add CancelToken that can cancel the request
+
 ## 5.1.3+3 - 2023-01-07
 `Docs`
 * update the docs
