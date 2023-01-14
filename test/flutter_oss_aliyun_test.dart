@@ -48,6 +48,18 @@ void main() {
     expect(resp.statusCode, 200);
   });
 
+  test("test the copy object in Client", () async {
+    final Response<dynamic> resp = await Client().copyObject(
+      const CopyRequestOption(
+        sourceFileKey: 'test.csv',
+        targetFileKey: "test_copy.csv",
+        targetBucketName: "bucket_2"
+      ),
+    );
+
+    expect(resp.statusCode, 200);
+  });
+
   test("test the put object cancel token in Client", () async {
     final CancelToken cancelToken = CancelToken();
 

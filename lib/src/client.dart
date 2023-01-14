@@ -370,6 +370,39 @@ class Client {
     );
   }
 
+  /// copy object
+  Future<Response<dynamic>> copyObject(
+    CopyRequestOption option, {
+    CancelToken? cancelToken,
+  }) async {
+    final String sourceBucketName = option.sourceBucketName ?? bucketName;
+    final String sourceFileKey = option.sourceFileKey;
+    final String copySource = "/$sourceBucketName/$sourceFileKey";
+
+    final String targetBucketName = option.targetBucketName ?? sourceBucketName;
+    final String targetFileKey = option.targetFileKey ?? sourceFileKey;
+
+    final Map<String, dynamic> headers = {
+      'content-type': "application/octet-stream",
+      'x-oss-copy-source': copySource,
+      'x-oss-forbid-overwrite': option.forbidOverride,
+      'x-oss-object-acl': option.acl,
+      'x-oss-storage-class': option.storage,
+    };
+
+    final Auth auth = await _getAuth();
+
+    final String url = "https://$targetBucketName.$endpoint/$targetFileKey";
+    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
+    auth.sign(request, targetBucketName, targetFileKey);
+
+    return _dio.put(
+      request.url,
+      cancelToken: cancelToken,
+      options: Options(headers: request.headers),
+    );
+  }
+
   /// get all supported regions
   Future<Response<dynamic>> getAllRegions({
     CancelToken? cancelToken,

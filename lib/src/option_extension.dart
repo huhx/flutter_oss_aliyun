@@ -14,3 +14,17 @@ extension PutRequestOptionExtension on PutRequestOption? {
     return (this?.storageType ?? StorageType.standard).content;
   }
 }
+
+extension CopyRequestOptionExtension on CopyRequestOption {
+  bool get forbidOverride {
+    return !(this.override ?? true);
+  }
+
+  String get acl {
+    return (aclModel ?? AclMode.inherited).content;
+  }
+
+  String get storage {
+    return (storageType ?? StorageType.standard).content;
+  }
+}
