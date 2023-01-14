@@ -6,7 +6,6 @@ import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 import 'package:flutter_oss_aliyun/src/request_option.dart';
-import 'package:mime_type/mime_type.dart';
 
 import 'asset_entity.dart';
 import 'auth.dart';
@@ -255,7 +254,7 @@ class Client {
     );
 
     final Map<String, dynamic> headers = {
-      'content-type': mime(fileKey) ?? "image/png",
+      'content-type': "application/octet-stream",
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
@@ -295,7 +294,7 @@ class Client {
     );
 
     final Map<String, dynamic> headers = {
-      'content-type': mime(fileKey) ?? "image/png",
+      'content-type': "application/octet-stream",
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
