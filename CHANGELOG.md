@@ -1,4 +1,11 @@
-## 5.1.4 - 2023-01-07
+## 5.1.5 - 2023-01-14
+`Feature`
+* add copyObject feature that can copy object from different bucket
+
+`Optimize`
+* remove `mime_type` dependencies
+
+## 5.1.4 - 2023-01-09
 `Feature`
 * add CancelToken that can cancel the request
 

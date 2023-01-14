@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -30,14 +30,10 @@ void main() {
       "test.csv",
       option: PutRequestOption(
         onSendProgress: (count, total) {
-          if (kDebugMode) {
-            print("send: count = $count, and total = $total");
-          }
+          print("send: count = $count, and total = $total");
         },
         onReceiveProgress: (count, total) {
-          if (kDebugMode) {
-            print("receive: count = $count, and total = $total");
-          }
+          print("receive: count = $count, and total = $total");
         },
         override: true,
         aclModel: AclMode.publicRead,
@@ -53,7 +49,6 @@ void main() {
       const CopyRequestOption(
         sourceFileKey: 'test.csv',
         targetFileKey: "test_copy.csv",
-        targetBucketName: "bucket_2"
       ),
     );
 
@@ -71,9 +66,7 @@ void main() {
       "cancel_token_test2.csv",
       option: PutRequestOption(
         onSendProgress: (count, total) {
-          if (kDebugMode) {
-            print("send: count = $count, and total = $total");
-          }
+          print("send: count = $count, and total = $total");
           if (count > 56) {
             cancelToken.cancel("cancel the uploading.");
           }
@@ -82,14 +75,10 @@ void main() {
       cancelToken: cancelToken,
     ).then((response) {
       // success
-      if (kDebugMode) {
-        print("upload success = ${response.statusCode}");
-      }
+      print("upload success = ${response.statusCode}");
     }).catchError((err) {
       if (CancelToken.isCancel(err)) {
-        if (kDebugMode) {
-          print("error message = ${err.message}");
-        }
+        print("error message = ${err.message}");
       } else {
         // handle other errors
       }
@@ -186,14 +175,10 @@ void main() {
       fileKey: "aaa.png",
       option: PutRequestOption(
         onSendProgress: (count, total) {
-          if (kDebugMode) {
-            print("send: count = $count, and total = $total");
-          }
+          print("send: count = $count, and total = $total");
         },
         onReceiveProgress: (count, total) {
-          if (kDebugMode) {
-            print("receive: count = $count, and total = $total");
-          }
+          print("receive: count = $count, and total = $total");
         },
         aclModel: AclMode.private,
       ),
@@ -208,9 +193,7 @@ void main() {
         file: File("$home/Downloads/test.txt"),
         option: PutRequestOption(
           onSendProgress: (count, total) {
-            if (kDebugMode) {
-              print("1: send: count = $count, and total = $total");
-            }
+            print("1: send: count = $count, and total = $total");
           },
         ),
       ),
@@ -219,9 +202,7 @@ void main() {
         filename: "aaa.png",
         option: PutRequestOption(
           onSendProgress: (count, total) {
-            if (kDebugMode) {
-              print("2: send: count = $count, and total = $total");
-            }
+            print("2: send: count = $count, and total = $total");
           },
         ),
       ),
@@ -233,36 +214,28 @@ void main() {
   test("test the list objects in Client", () async {
     final Response<dynamic> resp = await Client().listObjects({"max-keys": 12});
 
-    if (kDebugMode) {
-      print(resp);
-    }
+    print(resp);
     expect(resp.statusCode, 200);
   });
 
   test("test the list buckets in Client", () async {
     final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
 
-    if (kDebugMode) {
-      print(resp);
-    }
+    print(resp);
     expect(resp.statusCode, 200);
   });
 
   test("test the get bucket info in Client", () async {
     final Response<dynamic> resp = await Client().getBucketInfo();
 
-    if (kDebugMode) {
-      print(resp);
-    }
+    print(resp);
     expect(resp.statusCode, 200);
   });
 
   test("test the get bucket info in Client", () async {
     final Response<dynamic> resp = await Client().getBucketStat();
 
-    if (kDebugMode) {
-      print(resp);
-    }
+    print(resp);
 
     expect(resp.statusCode, 200);
   });
@@ -317,9 +290,7 @@ void main() {
 
   test("test the get object url in Client", () async {
     final String url = await Client().getSignedUrl("test.csv");
-    if (kDebugMode) {
-      print("download url = $url");
-    }
+    print("download url = $url");
 
     expect(url, isNotNull);
   });
@@ -330,9 +301,7 @@ void main() {
       "20220106095156755058.jpg",
     ]);
 
-    if (kDebugMode) {
-      print(result);
-    }
+    print(result);
 
     expect(result.length, 2);
   });
