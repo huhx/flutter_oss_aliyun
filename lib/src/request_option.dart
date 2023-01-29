@@ -8,6 +8,7 @@ class PutRequestOption {
   final AclMode? aclModel;
   final bool? override;
   final StorageType? storageType;
+  final String? contentType;
 
   const PutRequestOption({
     this.bucketName,
@@ -16,6 +17,7 @@ class PutRequestOption {
     this.aclModel,
     this.override,
     this.storageType,
+    this.contentType,
   });
 }
 
