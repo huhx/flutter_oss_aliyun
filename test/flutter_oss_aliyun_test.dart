@@ -17,7 +17,6 @@ void main() {
       stsUrl: env["sts_url"],
       ossEndpoint: env["oss_endpoint"] ?? "",
       bucketName: env["bucket_name"] ?? "",
-      dio: Dio(),
     );
   });
 
@@ -38,6 +37,7 @@ void main() {
         override: true,
         aclModel: AclMode.publicRead,
         storageType: StorageType.ia,
+        headers: {"content-type": "text/csv"},
       ),
     );
 

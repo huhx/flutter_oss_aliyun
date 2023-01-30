@@ -8,6 +8,7 @@ class PutRequestOption {
   final AclMode? aclModel;
   final bool? override;
   final StorageType? storageType;
+  final Map<String, dynamic>? headers;
 
   const PutRequestOption({
     this.bucketName,
@@ -16,6 +17,7 @@ class PutRequestOption {
     this.aclModel,
     this.override,
     this.storageType,
+    this.headers,
   });
 }
 
@@ -29,6 +31,7 @@ class CopyRequestOption {
   final AclMode? aclModel;
   final bool? override;
   final StorageType? storageType;
+  final Map<String, dynamic>? headers;
 
   const CopyRequestOption({
     this.sourceBucketName,
@@ -40,5 +43,6 @@ class CopyRequestOption {
     this.aclModel,
     this.override,
     this.storageType,
+    this.headers,
   });
 }

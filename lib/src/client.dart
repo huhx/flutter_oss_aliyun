@@ -254,13 +254,19 @@ class Client {
       filename: fileKey,
     );
 
-    final Map<String, dynamic> headers = {
+    final Map<String, dynamic> internalHeaders = {
       'content-type': mime(fileKey) ?? "application/octet-stream",
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
       'x-oss-storage-class': option.storage,
     };
+    final Map<String, dynamic> externalHeaders = option?.headers ?? {};
+    final Map<String, dynamic> headers = {
+      ...internalHeaders,
+      ...externalHeaders
+    };
+
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
     auth.sign(request, bucket, fileKey);
@@ -294,13 +300,20 @@ class Client {
       filename: filename,
     );
 
-    final Map<String, dynamic> headers = {
+    final Map<String, dynamic> internalHeaders = {
       'content-type': mime(fileKey) ?? "application/octet-stream",
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
       'x-oss-storage-class': option.storage,
     };
+
+    final Map<String, dynamic> externalHeaders = option?.headers ?? {};
+    final Map<String, dynamic> headers = {
+      ...internalHeaders,
+      ...externalHeaders
+    };
+
     final String url = "https://$bucket.$endpoint/$filename";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
     auth.sign(request, bucket, filename);
@@ -383,12 +396,18 @@ class Client {
     final String targetBucketName = option.targetBucketName ?? sourceBucketName;
     final String targetFileKey = option.targetFileKey ?? sourceFileKey;
 
-    final Map<String, dynamic> headers = {
+    final Map<String, dynamic> internalHeaders = {
       'content-type': mime(targetFileKey) ?? "application/octet-stream",
       'x-oss-copy-source': copySource,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
       'x-oss-storage-class': option.storage,
+    };
+
+    final Map<String, dynamic> externalHeaders = option.headers ?? {};
+    final Map<String, dynamic> headers = {
+      ...internalHeaders,
+      ...externalHeaders
     };
 
     final Auth auth = await _getAuth();
