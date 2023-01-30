@@ -12,7 +12,7 @@ class HttpRequest {
   );
 
   String get url {
-    final queryString =
+    final String queryString =
         param.entries.map((entry) => "${entry.key}=${entry.value}").join("&");
     return queryString.isEmpty ? _url : "$_url?$queryString";
   }
