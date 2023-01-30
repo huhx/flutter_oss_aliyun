@@ -1,3 +1,8 @@
+## 5.2.0 - 2023-01-30
+`Feature`
+* add content-type base on the filename
+* add customize header in `PutRequestOption` and `PutRequestOption`
+
 ## 5.1.5+1 - 2023-01-14
 * fix the format
 

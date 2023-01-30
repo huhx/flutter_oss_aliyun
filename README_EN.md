@@ -12,7 +12,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.1.5+1
+  flutter_oss_aliyun: ^5.2.0
 ```
 Don't forget to `flutter pub get`.
 
@@ -105,6 +105,7 @@ await Client().putObject(
     override: false,
     aclModel: AclMode.publicRead,
     storageType: StorageType.ia,
+    headers: {"cache-control": "no-cache"},
   ),
 );
 ```
