@@ -282,6 +282,51 @@ class Client {
   }
 
   /// upload object(file) to oss server
+  /// [fileData] is the binary data that will send to oss server
+  /// [position] next position that append to, default value is 0.
+  Future<Response<dynamic>> appendObject(
+    List<int> fileData,
+    String fileKey, {
+    CancelToken? cancelToken,
+    PutRequestOption? option,
+    int? position,
+  }) async {
+    final String bucket = option?.bucketName ?? bucketName;
+    final Auth auth = await _getAuth();
+
+    final MultipartFile multipartFile = MultipartFile.fromBytes(
+      fileData,
+      filename: fileKey,
+    );
+
+    final Map<String, dynamic> internalHeaders = {
+      'content-type': mime(fileKey) ?? "application/octet-stream",
+      'content-length': multipartFile.length,
+      'x-oss-object-acl': option.acl,
+      'x-oss-storage-class': option.storage,
+    };
+    final Map<String, dynamic> externalHeaders = option?.headers ?? {};
+    final Map<String, dynamic> headers = {
+      ...internalHeaders,
+      ...externalHeaders
+    };
+
+    final String url =
+        "https://$bucket.$endpoint/$fileKey?append&position=${position ?? 0}";
+    final HttpRequest request = HttpRequest(url, 'POST', {}, headers);
+    auth.sign(request, bucket, "$fileKey?append&position=${position ?? 0}");
+
+    return _dio.post(
+      request.url,
+      data: _chunkFile(multipartFile),
+      cancelToken: cancelToken,
+      options: Options(headers: request.headers),
+      onSendProgress: option?.onSendProgress,
+      onReceiveProgress: option?.onReceiveProgress,
+    );
+  }
+
+  /// upload object(file) to oss server
   /// [file] is the file that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> putObjectFile(

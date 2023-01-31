@@ -55,6 +55,27 @@ void main() {
     expect(resp.statusCode, 200);
   });
 
+  test("test the append object in Client", () async {
+    final Response<dynamic> resp = await Client().appendObject(
+      Uint8List.fromList(utf8.encode("Hello World")),
+      "test_append.txt",
+    );
+
+    expect(resp.statusCode, 200);
+    expect(resp.headers["x-oss-next-append-position"]?[0], "11");
+
+    final Response<dynamic> resp2 = await Client().appendObject(
+      position: 11,
+      Uint8List.fromList(utf8.encode(", Fluter.")),
+      "test_append.txt",
+    );
+
+    expect(resp2.statusCode, 200);
+    expect(resp2.headers["x-oss-next-append-position"]?[0], "20");
+
+    await Client().deleteObject("test_append.txt");
+  });
+
   test("test the put object cancel token in Client", () async {
     final CancelToken cancelToken = CancelToken();
 

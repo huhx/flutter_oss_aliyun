@@ -1,3 +1,7 @@
+## 5.3.0 - 2023-01-31
+`Feature`
+* add `appendObject` method to append object
+
 ## 5.2.0 - 2023-01-30
 `Feature`
 * add content-type base on the filename

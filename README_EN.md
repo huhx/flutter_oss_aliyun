@@ -12,7 +12,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.2.0
+  flutter_oss_aliyun: ^5.3.0
 ```
 Don't forget to `flutter pub get`.
 
@@ -68,6 +68,7 @@ Client.init(
 
 ## 🎨&nbsp;Usage
 - [put the object to oss with progress callback](#put-the-object-to-oss-with-progress-callback)
+- [append object](#append-object)
 - [copy object](#copy-object)
 - [cancel file upload](#cancel-put-object)
 - [batch put the object to oss](#batch-put-the-object-to-oss)
@@ -116,6 +117,20 @@ await Client().putObject(
 | override    | true          | true: Allow override the same name Object<br>false: Not allow override the same name Object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | aclModel    | inherited     | 1. publicWrite: Anyone (including anonymous visitors) can read and write about the Object<br>2. publicRead: Only the owner of the Object can write to the Object, and anyone (including anonymous visitors) can read the Object<br>3. private: Only the owner of the Object can read and write to the Object, and no one else can access the Object<br>4. inherited: This Object follows the read and write permission of Bucket, which is what is Bucket and Object is what permission <br>reference: https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb |
 | storageType | Standard      | reference: https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+### <span id="append-object">**append object**</span>
+```dart
+final Response<dynamic> resp = await Client().appendObject(
+  Uint8List.fromList(utf8.encode("Hello World")),
+  "test_append.txt",
+);
+
+final Response<dynamic> resp2 = await Client().appendObject(
+  position: 11,
+  Uint8List.fromList(utf8.encode(", Fluter.")),
+  "test_append.txt",
+);
+```
+
 ### <span id="copy-object">**copy object**</span>
 ```dart
 final Response<dynamic> resp = await Client().copyObject(
