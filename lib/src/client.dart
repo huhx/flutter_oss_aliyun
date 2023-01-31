@@ -6,7 +6,7 @@ import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 import 'package:flutter_oss_aliyun/src/request_option.dart';
-import 'package:mime_type/mime_type.dart';
+import 'package:mime/mime.dart';
 
 import 'asset_entity.dart';
 import 'auth.dart';
@@ -255,7 +255,7 @@ class Client {
     );
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': mime(fileKey) ?? "application/octet-stream",
+      'content-type': lookupMimeType(fileKey) ?? "application/octet-stream",
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
@@ -300,7 +300,7 @@ class Client {
     );
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': mime(fileKey) ?? "application/octet-stream",
+      'content-type': lookupMimeType(fileKey) ?? "application/octet-stream",
       'content-length': multipartFile.length,
       'x-oss-object-acl': option.acl,
       'x-oss-storage-class': option.storage,
@@ -346,7 +346,7 @@ class Client {
     );
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': mime(fileKey) ?? "application/octet-stream",
+      'content-type': lookupMimeType(filename) ?? "application/octet-stream",
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
@@ -442,7 +442,7 @@ class Client {
     final String targetFileKey = option.targetFileKey ?? sourceFileKey;
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': mime(targetFileKey) ?? "application/octet-stream",
+      'content-type': lookupMimeType(targetFileKey) ?? "application/octet-stream",
       'x-oss-copy-source': copySource,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
