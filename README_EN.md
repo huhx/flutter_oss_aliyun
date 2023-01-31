@@ -125,7 +125,7 @@ final Response<dynamic> resp = await Client().appendObject(
 );
 
 final Response<dynamic> resp2 = await Client().appendObject(
-  position: 11,
+  position: int.parse(resp.headers["x-oss-next-append-position"]?[0]),
   Uint8List.fromList(utf8.encode(", Fluter.")),
   "test_append.txt",
 );
