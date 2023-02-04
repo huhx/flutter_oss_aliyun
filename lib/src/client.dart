@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 import 'package:flutter_oss_aliyun/src/request_option.dart';
 import 'package:mime/mime.dart';
+import 'package:xml/xml.dart';
 
 import 'asset_entity.dart';
 import 'auth.dart';
@@ -237,6 +238,54 @@ class Client {
     );
   }
 
+  /// InitiateMultipartUpload
+  Future<String> initiateMultipartUpload(
+    File file, {
+    String? fileKey,
+    CancelToken? cancelToken,
+    PutRequestOption? option,
+  }) async {
+    final String bucket = option?.bucketName ?? bucketName;
+    final String filename =
+        fileKey ?? file.path.split(Platform.pathSeparator).last;
+    final Auth auth = await _getAuth();
+
+    final MultipartFile multipartFile = await MultipartFile.fromFile(
+      file.path,
+      filename: filename,
+    );
+
+    final Map<String, dynamic> internalHeaders = {
+      'content-type': lookupMimeType(filename) ?? "application/octet-stream",
+      'content-length': multipartFile.length,
+      'x-oss-forbid-overwrite': option.forbidOverride,
+      'x-oss-storage-class': option.storage,
+    };
+
+    final Map<String, dynamic> externalHeaders = option?.headers ?? {};
+    final Map<String, dynamic> headers = {
+      ...internalHeaders,
+      ...externalHeaders
+    };
+
+    final String url = "https://$bucket.$endpoint/$filename?uploads";
+    final HttpRequest request = HttpRequest(url, 'POST', {}, headers);
+    auth.sign(request, bucket, "$filename?uploads");
+
+    final Response<dynamic> response = await _dio.post(
+      request.url,
+      data: multipartFile.finalize(),
+      options: Options(headers: request.headers),
+      cancelToken: cancelToken,
+      onSendProgress: option?.onSendProgress,
+      onReceiveProgress: option?.onReceiveProgress,
+    );
+    final XmlDocument document = XmlDocument.parse(response.data);
+    final XmlElement uploadIdElement =
+        document.findAllElements("UploadId").first;
+    return uploadIdElement.text;
+  }
+
   /// upload object(file) to oss server
   /// [fileData] is the binary data that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
@@ -442,7 +491,8 @@ class Client {
     final String targetFileKey = option.targetFileKey ?? sourceFileKey;
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': lookupMimeType(targetFileKey) ?? "application/octet-stream",
+      'content-type':
+          lookupMimeType(targetFileKey) ?? "application/octet-stream",
       'x-oss-copy-source': copySource,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,

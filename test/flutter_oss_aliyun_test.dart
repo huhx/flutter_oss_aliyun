@@ -208,6 +208,24 @@ void main() {
     expect(resp.statusCode, 200);
   });
 
+  test("test the initiateMultipartUpload in Client", () async {
+    final String upload = await Client().initiateMultipartUpload(
+      File("$home/Downloads/journal_bg-min.png"),
+      fileKey: "multipart_upload.png",
+      option: PutRequestOption(
+        onSendProgress: (count, total) {
+          print("send: count = $count, and total = $total");
+        },
+        onReceiveProgress: (count, total) {
+          print("receive: count = $count, and total = $total");
+        },
+      ),
+    );
+    print(upload);
+
+    expect(upload, isNotEmpty);
+  });
+
   test("test the put object files in Client", () async {
     final List<Response<dynamic>> resp = await Client().putObjectFiles([
       AssetFileEntity(
