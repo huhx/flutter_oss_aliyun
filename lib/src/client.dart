@@ -250,14 +250,8 @@ class Client {
         fileKey ?? file.path.split(Platform.pathSeparator).last;
     final Auth auth = await _getAuth();
 
-    final MultipartFile multipartFile = await MultipartFile.fromFile(
-      file.path,
-      filename: filename,
-    );
-
     final Map<String, dynamic> internalHeaders = {
       'content-type': lookupMimeType(filename) ?? "application/octet-stream",
-      'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-storage-class': option.storage,
     };
@@ -274,7 +268,6 @@ class Client {
 
     final Response<dynamic> response = await _dio.post(
       request.url,
-      data: multipartFile.finalize(),
       options: Options(headers: request.headers),
       cancelToken: cancelToken,
       onSendProgress: option?.onSendProgress,
@@ -284,6 +277,50 @@ class Client {
     final XmlElement uploadIdElement =
         document.findAllElements("UploadId").first;
     return uploadIdElement.text;
+  }
+
+  /// uploadPart
+  Future<Response<dynamic>> uploadPart(
+    File file, {
+    String? fileKey,
+    int partNumber = 1,
+    required String uploadId,
+    CancelToken? cancelToken,
+    PutRequestOption? option,
+  }) async {
+    final String bucket = option?.bucketName ?? bucketName;
+    final String filename =
+        fileKey ?? file.path.split(Platform.pathSeparator).last;
+    final Auth auth = await _getAuth();
+
+    final dynamic stream = file.openRead(0, 6291456);
+
+    final Map<String, dynamic> internalHeaders = {
+      'content-type': "application/octet-stream",
+      'content-length': 6291456,
+    };
+
+    final Map<String, dynamic> externalHeaders = option?.headers ?? {};
+    final Map<String, dynamic> headers = {
+      ...internalHeaders,
+      ...externalHeaders
+    };
+
+    final String url =
+        "https://$bucket.$endpoint/$filename?partNumber=$partNumber&uploadId=$uploadId";
+    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
+    auth.sign(
+        request, bucket, "$filename?partNumber=$partNumber&uploadId=$uploadId");
+
+    return await _dio.put(
+      request.url,
+      data: stream,
+      options:
+          Options(headers: request.headers, responseType: ResponseType.plain),
+      cancelToken: cancelToken,
+      onSendProgress: option?.onSendProgress,
+      onReceiveProgress: option?.onReceiveProgress,
+    );
   }
 
   /// upload object(file) to oss server
