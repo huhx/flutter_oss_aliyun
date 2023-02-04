@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_oss_aliyun/src/multipart/complete_upload_info.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 import 'package:flutter_oss_aliyun/src/request_option.dart';
 import 'package:mime/mime.dart';
@@ -293,7 +294,7 @@ class Client {
         fileKey ?? file.path.split(Platform.pathSeparator).last;
     final Auth auth = await _getAuth();
 
-    final dynamic stream = file.openRead(0, 6291456);
+    final Stream<List<int>> stream = file.openRead(0, 6291456);
 
     final Map<String, dynamic> internalHeaders = {
       'content-type': "application/octet-stream",
@@ -315,8 +316,49 @@ class Client {
     return await _dio.put(
       request.url,
       data: stream,
-      options:
-          Options(headers: request.headers, responseType: ResponseType.plain),
+      options: Options(headers: request.headers),
+      cancelToken: cancelToken,
+      onSendProgress: option?.onSendProgress,
+      onReceiveProgress: option?.onReceiveProgress,
+    );
+  }
+
+  /// uploadPart
+  Future<Response<dynamic>> completeMultipartUpload(
+    File file, {
+    String? fileKey,
+    int partNumber = 1,
+    required String uploadId,
+    required CompleteMultipartUpload multipartUpload,
+    CancelToken? cancelToken,
+    PutRequestOption? option,
+  }) async {
+    final String bucket = option?.bucketName ?? bucketName;
+    final String filename =
+        fileKey ?? file.path.split(Platform.pathSeparator).last;
+    final Auth auth = await _getAuth();
+
+    final String xmlString = multipartUpload.toXml();
+
+    final Map<String, dynamic> internalHeaders = {
+      'content-type': 'application/xml',
+      'content-length': xmlString.length,
+    };
+
+    final Map<String, dynamic> externalHeaders = option?.headers ?? {};
+    final Map<String, dynamic> headers = {
+      ...internalHeaders,
+      ...externalHeaders
+    };
+
+    final String url = "https://$bucket.$endpoint/$filename?uploadId=$uploadId";
+    final HttpRequest request = HttpRequest(url, 'POST', {}, headers);
+    auth.sign(request, bucket, "$filename?uploadId=$uploadId");
+
+    return await _dio.post(
+      request.url,
+      data: Stream.fromIterable(utf8.encode(xmlString)),
+      options: Options(headers: request.headers),
       cancelToken: cancelToken,
       onSendProgress: option?.onSendProgress,
       onReceiveProgress: option?.onReceiveProgress,
