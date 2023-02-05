@@ -242,7 +242,7 @@ class Client {
   }
 
   /// put multi part
-  void putMultipart(
+  Future<Response<dynamic>> putMultipart(
     File file, {
     String? fileKey,
     int? chunkSize,
@@ -267,7 +267,7 @@ class Client {
 
       final Map<String, dynamic> internalHeaders = {
         'content-type': "application/octet-stream",
-        'content-length': 6291456,
+        'content-length': part.end - part.start,
       };
 
       final Map<String, dynamic> externalHeaders = option?.headers ?? {};
@@ -276,7 +276,8 @@ class Client {
         ...externalHeaders
       };
 
-      var params = 'partNumber=${part.index}&uploadId=${partInfo.uploadId}';
+      final String params =
+          'partNumber=${part.index}&uploadId=${partInfo.uploadId}';
       final String url =
           "https://${partInfo.bucket}.$endpoint/${partInfo.fileKey}?${params}";
       final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -290,7 +291,7 @@ class Client {
         onSendProgress: option?.onSendProgress,
         onReceiveProgress: option?.onReceiveProgress,
       );
-      part.tag = response.headers.map['ETag']!.first.toString();
+      part.tag = response.headers["etag"]!.first.toString();
       partInfo.progress = part.end;
     }
 
@@ -301,9 +302,13 @@ class Client {
     }
 
     if (conditionUpload && partInfo.length == partInfo.progress) {
-      completeMultipartUpload(partInfo,
-          cancelToken: cancelToken, option: option);
+      return completeMultipartUpload(
+        partInfo,
+        cancelToken: cancelToken,
+        option: option,
+      );
     }
+    return Future.error("Failed uploaded $taskId");
   }
 
   /// InitiateMultipartUpload
@@ -341,6 +346,7 @@ class Client {
       onSendProgress: option?.onSendProgress,
       onReceiveProgress: option?.onReceiveProgress,
     );
+
     final XmlDocument document = XmlDocument.parse(response.data);
     final XmlElement uploadIdElement =
         document.findAllElements("UploadId").first;
@@ -387,7 +393,7 @@ class Client {
 
     return await _dio.post(
       request.url,
-      data: multipartUpload,
+      data: xmlString,
       options: Options(headers: request.headers),
       cancelToken: cancelToken,
       onSendProgress: option?.onSendProgress,

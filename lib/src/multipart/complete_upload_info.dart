@@ -30,6 +30,6 @@ class PartTag {
   }
 
   String toXml() {
-    return """<Part><PartNumber>$index</PartNumber><ETag>"$eTag"</ETag></Part>""";
+    return """<Part><PartNumber>$index</PartNumber><ETag>$eTag</ETag></Part>""";
   }
 }

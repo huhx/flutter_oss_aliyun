@@ -209,6 +209,17 @@ void main() {
     expect(resp.statusCode, 200);
   });
 
+  test("test the putMultipart in Client", () async {
+    final Response<dynamic> response = await Client().putMultipart(
+      File("$home/Downloads/idiom.csv"),
+      taskId: "1234",
+      chunkSize: 3 * 1000 * 1000,
+      fileKey: "put_multipart.csv",
+    );
+
+    expect(response.data, isNotEmpty);
+  });
+
   test("test the initiateMultipartUpload in Client", () async {
     final MultipartUploadInfo uploadInfo =
         await Client().initiateMultipartUpload(
