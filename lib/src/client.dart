@@ -306,7 +306,7 @@ class Client {
         option: option,
       );
     }
-    return Future.error("Failed uploaded $taskId");
+    return Future.error("Failed to upload with taskId = $taskId");
   }
 
   /// InitiateMultipartUpload
