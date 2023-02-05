@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
+import 'package:flutter_oss_aliyun/src/multipart/multipart_upload_info.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -209,22 +210,13 @@ void main() {
   });
 
   test("test the initiateMultipartUpload in Client", () async {
-    final String upload = await Client().initiateMultipartUpload(
+    final MultipartUploadInfo uploadInfo =
+        await Client().initiateMultipartUpload(
       File("$home/Downloads/test_upload.mp4"),
     );
-    print(upload);
+    print(uploadInfo);
 
-    expect(upload, isNotEmpty);
-  });
-
-  test("test the uploadPart in Client", () async {
-    final Response<dynamic> response = await Client().uploadPart(
-      File("$home/Downloads/test_upload.mp4"),
-      partNumber: 2,
-      uploadId: '08965AB7ABD34693BE7EC32F16F74B63',
-    );
-
-    expect(response.statusCode, 200);
+    expect(uploadInfo, isNotEmpty);
   });
 
   test("test the put object files in Client", () async {

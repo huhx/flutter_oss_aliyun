@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('test CompleteMultipartUpload toXml', () async {
-    const List<Part> parts = [
-      Part(index: 1, eTag: "aaa"),
-      Part(index: 2, eTag: "bbb"),
+    const List<PartTag> parts = [
+      PartTag(index: 1, eTag: "aaa"),
+      PartTag(index: 2, eTag: "bbb"),
     ];
     const CompleteMultipartUpload multipartUpload =
         CompleteMultipartUpload(parts);

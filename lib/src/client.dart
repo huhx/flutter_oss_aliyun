@@ -14,6 +14,8 @@ import 'asset_entity.dart';
 import 'auth.dart';
 import 'dio_client.dart';
 import 'enums.dart';
+import 'multipart/multipart_upload_info.dart';
+import 'multipart/part_info.dart';
 import 'option_extension.dart';
 
 class Client {
@@ -239,8 +241,73 @@ class Client {
     );
   }
 
+  /// put multi part
+  void putMultipart(
+    File file, {
+    String? fileKey,
+    int? chunkSize,
+    required String taskId,
+    CancelToken? cancelToken,
+    PutRequestOption? option,
+  }) async {
+    final MultipartUploadInfo uploadInfo = await initiateMultipartUpload(
+      file,
+      fileKey: fileKey,
+      cancelToken: cancelToken,
+      option: option,
+    );
+    bool conditionUpload = true;
+
+    final PartInfo partInfo = PartInfo.from(uploadInfo, chunkSize);
+
+    Future uploadPart(Part part) async {
+      final Auth auth = await _getAuth();
+      final File file = partInfo.file;
+      final Stream<List<int>> stream = file.openRead(part.start, part.end);
+
+      final Map<String, dynamic> internalHeaders = {
+        'content-type': "application/octet-stream",
+        'content-length': 6291456,
+      };
+
+      final Map<String, dynamic> externalHeaders = option?.headers ?? {};
+      final Map<String, dynamic> headers = {
+        ...internalHeaders,
+        ...externalHeaders
+      };
+
+      var params = 'partNumber=${part.index}&uploadId=${partInfo.uploadId}';
+      final String url =
+          "https://${partInfo.bucket}.$endpoint/${partInfo.fileKey}?${params}";
+      final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
+      auth.sign(request, partInfo.bucket, "${partInfo.fileKey}?$params");
+
+      final Response<dynamic> response = await _dio.put(
+        request.url,
+        data: stream,
+        options: Options(headers: request.headers),
+        cancelToken: cancelToken,
+        onSendProgress: option?.onSendProgress,
+        onReceiveProgress: option?.onReceiveProgress,
+      );
+      part.tag = response.headers.map['ETag']!.first.toString();
+      partInfo.progress = part.end;
+    }
+
+    final Iterator<Part> iterator =
+        partInfo.parts.where((item) => item.tag == null).iterator;
+    while (conditionUpload && iterator.moveNext()) {
+      await uploadPart(iterator.current);
+    }
+
+    if (conditionUpload && partInfo.length == partInfo.progress) {
+      completeMultipartUpload(partInfo,
+          cancelToken: cancelToken, option: option);
+    }
+  }
+
   /// InitiateMultipartUpload
-  Future<String> initiateMultipartUpload(
+  Future<MultipartUploadInfo> initiateMultipartUpload(
     File file, {
     String? fileKey,
     CancelToken? cancelToken,
@@ -277,67 +344,30 @@ class Client {
     final XmlDocument document = XmlDocument.parse(response.data);
     final XmlElement uploadIdElement =
         document.findAllElements("UploadId").first;
-    return uploadIdElement.text;
-  }
-
-  /// uploadPart
-  Future<Response<dynamic>> uploadPart(
-    File file, {
-    String? fileKey,
-    int partNumber = 1,
-    required String uploadId,
-    CancelToken? cancelToken,
-    PutRequestOption? option,
-  }) async {
-    final String bucket = option?.bucketName ?? bucketName;
-    final String filename =
-        fileKey ?? file.path.split(Platform.pathSeparator).last;
-    final Auth auth = await _getAuth();
-
-    final Stream<List<int>> stream = file.openRead(0, 6291456);
-
-    final Map<String, dynamic> internalHeaders = {
-      'content-type': "application/octet-stream",
-      'content-length': 6291456,
-    };
-
-    final Map<String, dynamic> externalHeaders = option?.headers ?? {};
-    final Map<String, dynamic> headers = {
-      ...internalHeaders,
-      ...externalHeaders
-    };
-
-    final String url =
-        "https://$bucket.$endpoint/$filename?partNumber=$partNumber&uploadId=$uploadId";
-    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
-    auth.sign(
-        request, bucket, "$filename?partNumber=$partNumber&uploadId=$uploadId");
-
-    return await _dio.put(
-      request.url,
-      data: stream,
-      options: Options(headers: request.headers),
-      cancelToken: cancelToken,
-      onSendProgress: option?.onSendProgress,
-      onReceiveProgress: option?.onReceiveProgress,
+    final int length = await file.length();
+    return MultipartUploadInfo(
+      fileKey: filename,
+      length: length,
+      bucket: bucket,
+      uploadId: uploadIdElement.text,
+      file: file,
     );
   }
 
-  /// uploadPart
+  /// completeMultipartUpload
   Future<Response<dynamic>> completeMultipartUpload(
-    File file, {
-    String? fileKey,
-    int partNumber = 1,
-    required String uploadId,
-    required CompleteMultipartUpload multipartUpload,
+    PartInfo partInfo, {
     CancelToken? cancelToken,
     PutRequestOption? option,
   }) async {
-    final String bucket = option?.bucketName ?? bucketName;
-    final String filename =
-        fileKey ?? file.path.split(Platform.pathSeparator).last;
+    final String bucket = partInfo.bucket;
+    final String filename = partInfo.fileKey;
+    final String uploadId = partInfo.uploadId;
+
     final Auth auth = await _getAuth();
 
+    final CompleteMultipartUpload multipartUpload =
+        CompleteMultipartUpload.from(partInfo.parts);
     final String xmlString = multipartUpload.toXml();
 
     final Map<String, dynamic> internalHeaders = {
@@ -357,7 +387,7 @@ class Client {
 
     return await _dio.post(
       request.url,
-      data: Stream.fromIterable(utf8.encode(xmlString)),
+      data: multipartUpload,
       options: Options(headers: request.headers),
       cancelToken: cancelToken,
       onSendProgress: option?.onSendProgress,
