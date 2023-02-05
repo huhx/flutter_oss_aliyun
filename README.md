@@ -12,7 +12,7 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.3.0
+  flutter_oss_aliyun: ^6.0.0-dev.2
 ```
 
 ### **初始化oss client, 这里我们提供两种方式**
@@ -69,6 +69,7 @@ Client.init(
 - [上传文件附带进度回调](#put-object)
 - [追加文件上传](#append-object)
 - [跨bucket复制文件](#copy-object)
+- [分片上传文件](#put-multi-part)
 - [取消上传文件](#cancel-put-object)
 - [批量上传文件](#batch-put-object)
 - [上传本地文件](#put-local-object)
@@ -138,6 +139,16 @@ final Response<dynamic> resp = await Client().copyObject(
     targetFileKey: "test_copy.csv",
     targetBucketName: "bucket_2"
   ),
+);
+```
+
+### <span id="put-multi-part">**分片上传文件**</span>
+```dart
+final Response<dynamic> response = await Client().putMultipart(
+  File("$home/Downloads/idiom.csv"),
+  taskId: "1234", // unique id，后续用于断点续传
+  chunkSize: 3 * 1024 * 1024, // 分片的大小，单位是bit
+  fileKey: "put_multipart.csv",
 );
 ```
 

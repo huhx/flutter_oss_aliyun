@@ -41,6 +41,8 @@ class PartInfo extends Equatable {
       progress: 0,
     );
   }
+
+  bool get isCompleted => length == progress;
 }
 
 // ignore: must_be_immutable

@@ -1,3 +1,11 @@
+## 6.0.0-dev.2 - 2023-02-05
+`Docs`
+* update docs
+
+## 6.0.0-dev.1 - 2023-02-05
+`Feature`
+* add `putMultiPart` method to upload multi part
+
 ## 5.3.0 - 2023-01-31
 `Feature`
 * add `appendObject` method to append object

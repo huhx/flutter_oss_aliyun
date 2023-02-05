@@ -256,8 +256,6 @@ class Client {
       cancelToken: cancelToken,
       option: option,
     );
-    bool conditionUpload = true;
-
     final PartInfo partInfo = PartInfo.from(uploadInfo, chunkSize);
 
     Future uploadPart(Part part) async {
@@ -279,7 +277,7 @@ class Client {
       final String params =
           'partNumber=${part.index}&uploadId=${partInfo.uploadId}';
       final String url =
-          "https://${partInfo.bucket}.$endpoint/${partInfo.fileKey}?${params}";
+          "https://${partInfo.bucket}.$endpoint/${partInfo.fileKey}?$params";
       final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
       auth.sign(request, partInfo.bucket, "${partInfo.fileKey}?$params");
 
@@ -297,11 +295,11 @@ class Client {
 
     final Iterator<Part> iterator =
         partInfo.parts.where((item) => item.tag == null).iterator;
-    while (conditionUpload && iterator.moveNext()) {
+    while (iterator.moveNext()) {
       await uploadPart(iterator.current);
     }
 
-    if (conditionUpload && partInfo.length == partInfo.progress) {
+    if (partInfo.isCompleted) {
       return completeMultipartUpload(
         partInfo,
         cancelToken: cancelToken,

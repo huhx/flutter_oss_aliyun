@@ -12,7 +12,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.3.0
+  flutter_oss_aliyun: ^6.0.0-dev.2
 ```
 Don't forget to `flutter pub get`.
 
@@ -70,6 +70,7 @@ Client.init(
 - [put the object to oss with progress callback](#put-the-object-to-oss-with-progress-callback)
 - [append object](#append-object)
 - [copy object](#copy-object)
+- [put multi part](#put-multi-part)
 - [cancel file upload](#cancel-put-object)
 - [batch put the object to oss](#batch-put-the-object-to-oss)
 - [update object from local file](#update-object-from-local-file)
@@ -139,6 +140,16 @@ final Response<dynamic> resp = await Client().copyObject(
     targetFileKey: "test_copy.csv",
     targetBucketName: "bucket_2"
   ),
+);
+```
+
+### <span id="put-multi-part">**put multi part**</span>
+```dart
+final Response<dynamic> response = await Client().putMultipart(
+  File("$home/Downloads/idiom.csv"),
+  taskId: "1234", // unique id，will use it to resume upload later on
+  chunkSize: 3 * 1024 * 1024, // chunk size for the part, the unit is bit.
+  fileKey: "put_multipart.csv",
 );
 ```
 
