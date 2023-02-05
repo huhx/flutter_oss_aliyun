@@ -1,5 +1,5 @@
 class CompleteMultipartUpload {
-  final List<Part> parts;
+  final List<PartTag> parts;
 
   const CompleteMultipartUpload(this.parts);
 
@@ -9,11 +9,11 @@ class CompleteMultipartUpload {
   }
 }
 
-class Part {
+class PartTag {
   final int index;
   final String eTag;
 
-  const Part({required this.index, required this.eTag});
+  const PartTag({required this.index, required this.eTag});
 
   String toXml() {
     return """<Part><PartNumber>$index</PartNumber><ETag>"$eTag"</ETag></Part>""";
