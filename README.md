@@ -66,18 +66,18 @@ Client.init(
 ```
 
 ## 🎨&nbsp;使用
-- [上传文件附带进度回调](#put-object)
+- [文件上传](#put-object)
 - [追加文件上传](#append-object)
-- [跨bucket复制文件](#copy-object)
-- [分片上传文件](#put-multi-part)
-- [取消上传文件](#cancel-put-object)
-- [批量上传文件](#batch-put-object)
-- [上传本地文件](#put-local-object)
-- [批量上传本地文件](#batch-put-local-object)
-- [下载文件附带进度回调](#download-object)
-- [下载并保存文件附带进度回调](#save-object)
-- [删除文件](#delete-object)
-- [批量删除文件](#batch-delete-object)
+- [跨bucket文件复制](#copy-object)
+- [分片文件上传](#put-multi-part)
+- [取消文件上传](#cancel-put-object)
+- [批量文件上传](#batch-put-object)
+- [本地文件上传](#put-local-object)
+- [批量本地文件上传](#batch-put-local-object)
+- [文件下载](#download-object)
+- [文件下载并保存](#save-object)
+- [文件删除](#delete-object)
+- [批量文件删除](#batch-delete-object)
 - [获取已签名的文件url](#get-signed-url)
 - [获取多个已签名的文件url](#batch-get-signed-url)
 - [列举所有的存储空间](#list-bucket)
@@ -89,7 +89,7 @@ Client.init(
 - [bucket acl的操作](#bucket-acl)
 - [bucket policy的操作](#bucket-policy)
 
-### <span id="put-object">**上传文件附带进度回调**</span>
+### <span id="put-object">**文件上传**</span>
 ```dart
 final bytes = "file bytes".codeUnits;
 
@@ -142,7 +142,7 @@ final Response<dynamic> resp = await Client().copyObject(
 );
 ```
 
-### <span id="put-multi-part">**分片上传文件**</span>
+### <span id="put-multi-part">**分片文件上传**</span>
 ```dart
 final Response<dynamic> response = await Client().putMultipart(
   File("$home/Downloads/idiom.csv"),
@@ -152,7 +152,7 @@ final Response<dynamic> response = await Client().putMultipart(
 );
 ```
 
-### <span id="cancel-put-object">**取消上传文件**</span>
+### <span id="cancel-put-object">**取消文件上传**</span>
 ```dart
 final CancelToken cancelToken = CancelToken();
 final bytes = ("long long bytes" * 1000).codeUnits;
@@ -183,7 +183,7 @@ Client().putObject(
 });
 ```
 
-### <span id="batch-put-object">**批量上传文件**</span>
+### <span id="batch-put-object">**批量文件上传**</span>
 ```dart
 await Client().putObjects([
   AssetEntity(
@@ -204,7 +204,7 @@ await Client().putObjects([
 ```
 
 
-### <span id="put-local-object">**上传本地文件**</span>
+### <span id="put-local-object">**本地文件上传**</span>
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(
@@ -222,7 +222,7 @@ final Response<dynamic> resp = await Client().putObjectFile(
 );
 ```
 
-### <span id="batch-put-local-object">**批量上传本地文件**</span>
+### <span id="batch-put-local-object">**批量本地文件上传**</span>
 
 ```dart
 final List<Response<dynamic>> resp = await Client().putObjectFiles(
@@ -257,7 +257,7 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
 );
 ```
 
-### <span id="download-object">**下载文件附带进度回调**</span>
+### <span id="download-object">**文件下载**</span>
 ```dart
 await Client().getObject(
   "test.txt",
@@ -267,7 +267,7 @@ await Client().getObject(
 );
 ```
 
-### <span id="save-object">**下载并保存文件附带进度回调**</span>
+### <span id="save-object">**文件下载并保存**</span>
 ```dart
 await Client().downloadObject(
   "test.txt",
@@ -278,12 +278,12 @@ await Client().downloadObject(
 );
 ```
 
-### <span id="delete-object">**删除文件**</span>
+### <span id="delete-object">**文件删除**</span>
 ```dart
 await Client().deleteObject("test.txt");
 ```
 
-### <span id="batch-delete-object">**批量删除文件**</span>
+### <span id="batch-delete-object">**批量文件删除**</span>
 ```dart
 await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 ```
