@@ -1,3 +1,6 @@
+## 5.3.1 - 2023-02-16
+* upgrade `dio` version 
+
 ## 5.3.0 - 2023-01-31
 `Feature`
 * add `appendObject` method to append object
