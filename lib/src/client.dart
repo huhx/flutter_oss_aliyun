@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -21,7 +22,7 @@ class Client {
 
   final String endpoint;
   final String bucketName;
-  final Future<String> Function() tokenGetter;
+  final FutureOr<String> Function() tokenGetter;
   static late Dio _dio;
 
   Client._(
@@ -34,7 +35,7 @@ class Client {
     String? stsUrl,
     required String ossEndpoint,
     required String bucketName,
-    Future<String> Function()? tokenGetter,
+    FutureOr<String> Function()? tokenGetter,
     Dio? dio,
   }) {
     assert(stsUrl != null || tokenGetter != null);
@@ -442,7 +443,8 @@ class Client {
     final String targetFileKey = option.targetFileKey ?? sourceFileKey;
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': lookupMimeType(targetFileKey) ?? "application/octet-stream",
+      'content-type':
+          lookupMimeType(targetFileKey) ?? "application/octet-stream",
       'x-oss-copy-source': copySource,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,

@@ -1,3 +1,6 @@
+## 5.3.1+1 - 2023-02-22
+* change to use `FutureOr<String> Function()?` for `tokenGetter`
+
 ## 5.3.1 - 2023-02-16
 * upgrade `dio` version 
 
