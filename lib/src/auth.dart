@@ -8,12 +8,14 @@ class Auth {
   final String accessKey;
   final String accessSecret;
   final String secureToken;
+  final String expire;
 
-  Auth(
-    this.accessKey,
-    this.accessSecret,
-    this.secureToken,
-  );
+  Auth({
+    required this.accessKey,
+    required this.accessSecret,
+    required this.secureToken,
+    required this.expire,
+  });
 
   String get encodedToken => secureToken.replaceAll("+", "%2B");
 

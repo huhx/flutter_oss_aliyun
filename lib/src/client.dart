@@ -50,7 +50,6 @@ class Client {
   }
 
   Auth? _auth;
-  String? _expire;
 
   /// get object(file) from oss server
   /// [fileKey] is the object name from oss
@@ -655,24 +654,18 @@ class Client {
       final String resp = await tokenGetter();
       final respMap = jsonDecode(resp);
       _auth = Auth(
-        respMap['AccessKeyId'],
-        respMap['AccessKeySecret'],
-        respMap['SecurityToken'],
+        accessKey: respMap['AccessKeyId'],
+        accessSecret: respMap['AccessKeySecret'],
+        secureToken: respMap['SecurityToken'],
+        expire: respMap['Expiration'],
       );
-      _expire = respMap['Expiration'];
     }
-
     return _auth!;
   }
 
   /// whether auth is valid or not
   bool _isNotAuthenticated() {
-    return _auth == null || _isExpired();
-  }
-
-  /// whether the auth is expired or not
-  bool _isExpired() {
-    return _expire == null || DateTime.now().isAfter(DateTime.parse(_expire!));
+    return _auth == null || DateTime.now().isAfter(DateTime.parse(_auth!.expire));
   }
 
   /// chunk multipartFile to stream, chunk size is: 64KB
