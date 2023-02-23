@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:async/async.dart';
@@ -334,18 +333,17 @@ class Client {
   /// [file] is the file that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   Future<Response<dynamic>> putObjectFile(
-    File file, {
+    String filepath, {
     PutRequestOption? option,
     CancelToken? cancelToken,
     String? fileKey,
   }) async {
     final String bucket = option?.bucketName ?? bucketName;
-    final String filename =
-        fileKey ?? file.path.split(Platform.pathSeparator).last;
+    final String filename = fileKey ?? filepath.split('/').last;
     final Auth auth = await _getAuth();
 
     final MultipartFile multipartFile = await MultipartFile.fromFile(
-      file.path,
+      filepath,
       filename: filename,
     );
 
@@ -386,7 +384,7 @@ class Client {
   }) async {
     final uploads = assetEntities
         .map((fileEntity) async => await putObjectFile(
-              fileEntity.file,
+              fileEntity.filepath,
               fileKey: fileEntity.filename,
               cancelToken: cancelToken,
               option: fileEntity.option,

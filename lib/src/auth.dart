@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:flutter_oss_aliyun/src/date_extension.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 
 import 'encrypt.dart';
@@ -24,7 +23,7 @@ class Auth {
   /// [bucket] is the name of bucket used in aliyun oss
   /// [key] is the object name in aliyun oss, alias the 'filepath/filename'
   void sign(HttpRequest req, String bucket, String key) {
-    req.headers['x-oss-date'] = HttpDate.format(DateTime.now());
+    req.headers['x-oss-date'] = DateTime.now().toGMTString();
     req.headers['x-oss-security-token'] = secureToken;
     final String signature = _makeSignature(req, bucket, key);
     req.headers['Authorization'] = "OSS $accessKey:$signature";

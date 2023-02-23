@@ -192,7 +192,7 @@ void main() {
 
   test("test the put object file in Client", () async {
     final Response<dynamic> resp = await Client().putObjectFile(
-      File("$home/Downloads/journal_bg-min.png"),
+      "$home/Downloads/journal_bg-min.png",
       fileKey: "aaa.png",
       option: PutRequestOption(
         onSendProgress: (count, total) {
@@ -211,7 +211,7 @@ void main() {
   test("test the put object files in Client", () async {
     final List<Response<dynamic>> resp = await Client().putObjectFiles([
       AssetFileEntity(
-        file: File("$home/Downloads/test.txt"),
+        filepath: "$home/Downloads/test.txt",
         option: PutRequestOption(
           onSendProgress: (count, total) {
             print("1: send: count = $count, and total = $total");
@@ -219,7 +219,7 @@ void main() {
         ),
       ),
       AssetFileEntity(
-        file: File("$home/Downloads/splash.png"),
+        filepath: "$home/Downloads/splash.png",
         filename: "aaa.png",
         option: PutRequestOption(
           onSendProgress: (count, total) {
