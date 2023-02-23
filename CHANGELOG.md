@@ -1,3 +1,6 @@
+## 5.4.1 - 2023-02-22
+* add `authGetter` to get Auth in init method
+
 ## 5.3.1+1 - 2023-02-22
 * change to use `FutureOr<String> Function()?` for `tokenGetter`
 
