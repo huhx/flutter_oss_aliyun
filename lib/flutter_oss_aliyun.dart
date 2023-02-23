@@ -5,3 +5,4 @@ export 'src/client.dart';
 export 'src/asset_entity.dart';
 export 'src/request_option.dart';
 export 'src/enums.dart';
+export 'src/auth.dart';

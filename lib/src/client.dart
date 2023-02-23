@@ -23,22 +23,26 @@ class Client {
   final String endpoint;
   final String bucketName;
   final FutureOr<String> Function() tokenGetter;
+  final FutureOr<Auth> Function()? _authGetter;
   static late Dio _dio;
 
   Client._(
     this.endpoint,
     this.bucketName,
     this.tokenGetter,
+    this._authGetter,
   );
 
   static void init({
     String? stsUrl,
     required String ossEndpoint,
     required String bucketName,
-    FutureOr<String> Function()? tokenGetter,
+    @Deprecated("Use tokenGetter that return string which it is so flexible, use authGetter instead.")
+        FutureOr<String> Function()? tokenGetter,
+    FutureOr<Auth> Function()? authGetter,
     Dio? dio,
   }) {
-    assert(stsUrl != null || tokenGetter != null);
+    assert(stsUrl != null || tokenGetter != null || authGetter != null);
     _dio = dio ?? RestClient.getInstance();
 
     final tokenGet = tokenGetter ??
@@ -46,7 +50,7 @@ class Client {
           final response = await _dio.get<String>(stsUrl!);
           return response.data!;
         };
-    _instance = Client._(ossEndpoint, bucketName, tokenGet);
+    _instance = Client._(ossEndpoint, bucketName, tokenGet, authGetter);
   }
 
   Auth? _auth;
@@ -651,6 +655,10 @@ class Client {
   /// get auth information from sts server
   Future<Auth> _getAuth() async {
     if (_isNotAuthenticated()) {
+      if (_authGetter != null) {
+        _auth = await _authGetter!();
+        return _auth!;
+      }
       final String resp = await tokenGetter();
       final respMap = jsonDecode(resp);
       _auth = Auth(
@@ -665,7 +673,8 @@ class Client {
 
   /// whether auth is valid or not
   bool _isNotAuthenticated() {
-    return _auth == null || DateTime.now().isAfter(DateTime.parse(_auth!.expire));
+    return _auth == null ||
+        DateTime.now().isAfter(DateTime.parse(_auth!.expire));
   }
 
   /// chunk multipartFile to stream, chunk size is: 64KB
