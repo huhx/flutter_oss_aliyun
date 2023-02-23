@@ -12,7 +12,7 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.4.1
+  flutter_oss_aliyun: ^6.0.0
 ```
 Don't forget to `flutter pub get`.
 
@@ -215,7 +215,7 @@ await Client().putObjects([
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(
-  File("/Users/aaa.pdf"),
+  "/Users/aaa.pdf",
   fileKey: "aaa.png",
   option: PutRequestOption(
     onSendProgress: (count, total) {
@@ -235,7 +235,7 @@ final Response<dynamic> resp = await Client().putObjectFile(
 final List<Response<dynamic>> resp = await Client().putObjectFiles(
   [
     AssetFileEntity(
-      file: File("//Users/private.txt"),
+      filepath: "//Users/private.txt",
       option: PutRequestOption(
         onSendProgress: (count, total) {
           print("send: count = $count, and total = $total");
@@ -248,7 +248,7 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
       ),
     ),
     AssetFileEntity(
-      file: File("//Users/splash.png"),
+      filepath: "//Users/splash.png",
       filename: "aaa.png",
       option: PutRequestOption(
         onSendProgress: (count, total) {

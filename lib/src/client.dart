@@ -341,7 +341,7 @@ class Client implements ClientApi {
   }
 
   /// upload object(file) to oss server
-  /// [file] is the file that will send to oss server
+  /// [filepath] is the filepath of the File that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   @override
   Future<Response<dynamic>> putObjectFile(

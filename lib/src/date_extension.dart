@@ -1,6 +1,7 @@
 extension DateExtension on DateTime {
+  /// get GMT format String
   String toGMTString() {
-    const List wkday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const List weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const List month = [
       "Jan",
       "Feb",
@@ -18,7 +19,7 @@ extension DateExtension on DateTime {
 
     DateTime d = toUtc();
     StringBuffer sb = StringBuffer()
-      ..write(wkday[d.weekday - 1])
+      ..write(weekdays[d.weekday - 1])
       ..write(", ")
       ..write(d.day <= 9 ? "0" : "")
       ..write(d.day.toString())

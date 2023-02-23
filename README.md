@@ -12,7 +12,7 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^5.4.1
+  flutter_oss_aliyun: ^6.0.0
 ```
 
 ### **初始化oss client, 这里我们提供三种方式**
@@ -215,7 +215,7 @@ await Client().putObjects([
 
 ```dart
 final Response<dynamic> resp = await Client().putObjectFile(
-  File("/Users/aaa.pdf"),
+  "/Users/aaa.pdf",
   fileKey: "aaa.png",
   option: PutRequestOption(
     onSendProgress: (count, total) {
@@ -235,7 +235,7 @@ final Response<dynamic> resp = await Client().putObjectFile(
 final List<Response<dynamic>> resp = await Client().putObjectFiles(
   [
     AssetFileEntity(
-      file: File("//Users/private.txt"),
+      filepath: "//Users/private.txt",
       option: PutRequestOption(
         onSendProgress: (count, total) {
           print("send: count = $count, and total = $total");
@@ -248,7 +248,7 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
       ),
     ),
     AssetFileEntity(
-      file: File("//Users/splash.png"),
+      filepath: "//Users/splash.png",
       filename: "aaa.png",
       option: PutRequestOption(
         onSendProgress: (count, total) {

@@ -1,3 +1,10 @@
+## 6.0.0 - 2023-02-22
+`Feature`
+* fully support `Web` platform
+
+`Breaking Change`
+* `putObjectFile` change to use `String filepath` instead of `File file`
+
 ## 5.4.1 - 2023-02-22
 * add `authGetter` to get Auth in init method
 
