@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_oss_aliyun/src/client_api.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 import 'package:flutter_oss_aliyun/src/request_option.dart';
 import 'package:mime/mime.dart';
@@ -14,7 +15,7 @@ import 'dio_client.dart';
 import 'enums.dart';
 import 'option_extension.dart';
 
-class Client {
+class Client implements ClientApi {
   static Client? _instance;
 
   factory Client() => _instance!;
@@ -57,6 +58,7 @@ class Client {
   /// get object(file) from oss server
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<Response<dynamic>> getObject(
     String fileKey, {
     String? bucketName,
@@ -82,6 +84,7 @@ class Client {
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   /// [expireSeconds] is optional, default expired time are 60 seconds
+  @override
   Future<String> getSignedUrl(
     String fileKey, {
     String? bucketName,
@@ -108,6 +111,7 @@ class Client {
   /// [fileKeys] list of object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
   /// [expireSeconds] is optional, default expired time are 60 seconds
+  @override
   Future<Map<String, String>> getSignedUrls(
     List<String> fileKeys, {
     String? bucketName,
@@ -125,6 +129,7 @@ class Client {
 
   /// list objects from oss server
   /// [parameters] parameters for filter, refer to: https://help.aliyun.com/document_detail/31957.html
+  @override
   Future<Response<dynamic>> listBuckets(
     Map<String, dynamic> parameters, {
     CancelToken? cancelToken,
@@ -147,6 +152,7 @@ class Client {
   /// list objects from oss server
   /// [parameters] parameters for filter, refer to: https://help.aliyun.com/document_detail/187544.html
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<Response<dynamic>> listObjects(
     Map<String, dynamic> parameters, {
     String? bucketName,
@@ -171,6 +177,7 @@ class Client {
 
   /// get bucket info
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<Response<dynamic>> getBucketInfo({
     String? bucketName,
     CancelToken? cancelToken,
@@ -193,6 +200,7 @@ class Client {
 
   /// get bucket stat
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<Response<dynamic>> getBucketStat({
     String? bucketName,
     CancelToken? cancelToken,
@@ -217,6 +225,7 @@ class Client {
   /// [fileKey] is the object name from oss
   /// [savePath] is where we save the object(file) that download from oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<Response> downloadObject(
     String fileKey,
     String savePath, {
@@ -243,6 +252,7 @@ class Client {
   /// upload object(file) to oss server
   /// [fileData] is the binary data that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<Response<dynamic>> putObject(
     List<int> fileData,
     String fileKey, {
@@ -287,6 +297,7 @@ class Client {
   /// upload object(file) to oss server
   /// [fileData] is the binary data that will send to oss server
   /// [position] next position that append to, default value is 0.
+  @override
   Future<Response<dynamic>> appendObject(
     List<int> fileData,
     String fileKey, {
@@ -332,6 +343,7 @@ class Client {
   /// upload object(file) to oss server
   /// [file] is the file that will send to oss server
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<Response<dynamic>> putObjectFile(
     String filepath, {
     PutRequestOption? option,
@@ -378,6 +390,7 @@ class Client {
   /// upload object(files) to oss server
   /// [assetEntities] is list of files need to be uploaded to oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<List<Response<dynamic>>> putObjectFiles(
     List<AssetFileEntity> assetEntities, {
     CancelToken? cancelToken,
@@ -396,6 +409,7 @@ class Client {
   /// upload object(files) to oss server
   /// [assetEntities] is list of files need to be uploaded to oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
   Future<List<Response<dynamic>>> putObjects(
     List<AssetEntity> assetEntities, {
     CancelToken? cancelToken,
@@ -412,6 +426,7 @@ class Client {
   }
 
   /// get object metadata
+  @override
   Future<Response<dynamic>> getObjectMeta(
     String fileKey, {
     CancelToken? cancelToken,
@@ -432,6 +447,7 @@ class Client {
   }
 
   /// copy object
+  @override
   Future<Response<dynamic>> copyObject(
     CopyRequestOption option, {
     CancelToken? cancelToken,
@@ -472,6 +488,7 @@ class Client {
   }
 
   /// get all supported regions
+  @override
   Future<Response<dynamic>> getAllRegions({
     CancelToken? cancelToken,
   }) async {
@@ -489,6 +506,7 @@ class Client {
   }
 
   /// get bucket acl
+  @override
   Future<Response<dynamic>> getBucketAcl({
     String? bucketName,
     CancelToken? cancelToken,
@@ -508,6 +526,7 @@ class Client {
   }
 
   /// get bucket policy
+  @override
   Future<Response<dynamic>> getBucketPolicy({
     String? bucketName,
     CancelToken? cancelToken,
@@ -527,6 +546,7 @@ class Client {
   }
 
   /// delete bucket policy
+  @override
   Future<Response<dynamic>> deleteBucketPolicy({
     String? bucketName,
     CancelToken? cancelToken,
@@ -548,6 +568,7 @@ class Client {
   }
 
   /// put bucket policy
+  @override
   Future<Response<dynamic>> putBucketPolicy(
     Map<String, dynamic> policy, {
     String? bucketName,
@@ -571,6 +592,7 @@ class Client {
   }
 
   /// put bucket acl
+  @override
   Future<Response<dynamic>> putBucketAcl(
     AclMode aciMode, {
     CancelToken? cancelToken,
@@ -594,6 +616,7 @@ class Client {
   }
 
   /// get all supported regions
+  @override
   Future<Response<dynamic>> getRegion(
     String region, {
     CancelToken? cancelToken,
@@ -612,6 +635,7 @@ class Client {
   }
 
   /// delete object from oss
+  @override
   Future<Response<dynamic>> deleteObject(
     String fileKey, {
     String? bucketName,
@@ -634,6 +658,7 @@ class Client {
   }
 
   /// delete objects from oss
+  @override
   Future<List<Response<dynamic>>> deleteObjects(
     List<String> keys, {
     String? bucketName,
