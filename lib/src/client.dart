@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:async/async.dart';
@@ -22,35 +21,31 @@ class Client implements ClientApi {
 
   final String endpoint;
   final String bucketName;
-  final FutureOr<String> Function() tokenGetter;
-  final FutureOr<Auth> Function()? _authGetter;
+  final FutureOr<Auth> Function() authGetter;
   static late Dio _dio;
 
   Client._(
     this.endpoint,
     this.bucketName,
-    this.tokenGetter,
-    this._authGetter,
+    this.authGetter,
   );
 
   static void init({
     String? stsUrl,
     required String ossEndpoint,
     required String bucketName,
-    @Deprecated("Use tokenGetter that return string which it is so flexible, use authGetter instead.")
-        FutureOr<String> Function()? tokenGetter,
     FutureOr<Auth> Function()? authGetter,
     Dio? dio,
   }) {
-    assert(stsUrl != null || tokenGetter != null || authGetter != null);
+    assert(stsUrl != null || authGetter != null);
     _dio = dio ?? RestClient.getInstance();
 
-    final tokenGet = tokenGetter ??
+    final authGet = authGetter ??
         () async {
-          final response = await _dio.get<String>(stsUrl!);
-          return response.data!;
+          final response = await _dio.get<dynamic>(stsUrl!);
+          return Auth.fromJson(response.data!);
         };
-    _instance = Client._(ossEndpoint, bucketName, tokenGet, authGetter);
+    _instance = Client._(ossEndpoint, bucketName, authGet);
   }
 
   Auth? _auth;
@@ -678,18 +673,8 @@ class Client implements ClientApi {
   /// get auth information from sts server
   Future<Auth> _getAuth() async {
     if (_isNotAuthenticated()) {
-      if (_authGetter != null) {
-        _auth = await _authGetter!();
-        return _auth!;
-      }
-      final String resp = await tokenGetter();
-      final respMap = jsonDecode(resp);
-      _auth = Auth(
-        accessKey: respMap['AccessKeyId'],
-        accessSecret: respMap['AccessKeySecret'],
-        secureToken: respMap['SecurityToken'],
-        expire: respMap['Expiration'],
-      );
+      _auth = await authGetter();
+      return _auth!;
     }
     return _auth!;
   }

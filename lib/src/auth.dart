@@ -16,6 +16,15 @@ class Auth {
     required this.expire,
   });
 
+  factory Auth.fromJson(Map<String, dynamic> json) {
+    return Auth(
+      accessKey: json['AccessKeyId'] as String,
+      accessSecret: json['AccessKeySecret'] as String,
+      secureToken: json['SecurityToken'] as String,
+      expire: json['Expiration'] as String,
+    );
+  }
+
   String get encodedToken => secureToken.replaceAll("+", "%2B");
 
   /// access aliyun need authenticated, this is the implementation refer to the official document.
