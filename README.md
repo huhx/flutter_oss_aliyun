@@ -12,10 +12,10 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 添加依赖
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^6.0.0
+  flutter_oss_aliyun: ^6.1.0
 ```
 
-### **初始化oss client, 这里我们提供三种方式**
+### **初始化oss client, 这里我们提供两种方式**
 #### 1. 提供sts server地址，需要后端添加这个api
 ```dart
 Client.init(
@@ -35,25 +35,7 @@ Client.init(
 }
 ```
 
-#### 2. 当然你可以自定义使用其他的方式返回以下的json数据(deprecated)
-```dart
-Client.init(
-    ossEndpoint: "oss-cn-beijing.aliyuncs.com",
-    bucketName: "bucketName",
-    tokenGetter: _tokenGetterMethod
-);
-
-String _tokenGetterMethod() {
-  return '''{
-        "AccessKeyId": "access id",
-        "AccessKeySecret": "AccessKeySecret",
-        "SecurityToken": "security token",
-        "Expiration": "2022-03-22T11:33:06Z"
-    }''';
-}
-```
-
-#### 3. 自定义authGetter得到Auth
+#### 2. 自定义authGetter得到Auth
 ```dart
 Client.init(
     ossEndpoint: "oss-cn-beijing.aliyuncs.com",

@@ -1,4 +1,8 @@
-## 6.0.0 - 2023-02-22
+## 6.1.0 - 2023-02-24
+`Breaking Change`
+* remove `tokenGetter` 
+
+## 6.0.0 - 2023-02-23
 `Feature`
 * fully support `Web` platform
 
