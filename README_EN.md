@@ -90,6 +90,8 @@ Client.init(
 - [bucket policy](#bucket-policy)
 
 ### **put the object to oss with progress callback**
+callback reference: https://help.aliyun.com/document_detail/31989.htm?spm=a2c4g.11186623.0.0.73a830ffn45LMY#reference-zkm-311-hgb
+
 ```dart
 final bytes = "file bytes".codeUnits;
 

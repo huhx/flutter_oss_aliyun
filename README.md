@@ -89,6 +89,7 @@ Client.init(
 - [bucket policy的操作](#bucket-policy)
 
 ### <span id="put-object">**文件上传**</span>
+关于callback的使用: https://help.aliyun.com/document_detail/31989.htm?spm=a2c4g.11186623.0.0.73a830ffn45LMY#reference-zkm-311-hgb
 ```dart
 final bytes = "file bytes".codeUnits;
 
