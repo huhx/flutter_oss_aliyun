@@ -17,8 +17,8 @@ extension DateExtension on DateTime {
       "Dec"
     ];
 
-    DateTime d = toUtc();
-    StringBuffer sb = StringBuffer()
+    final DateTime d = toUtc();
+    final StringBuffer sb = StringBuffer()
       ..write(weekdays[d.weekday - 1])
       ..write(", ")
       ..write(d.day <= 9 ? "0" : "")
@@ -35,5 +35,9 @@ extension DateExtension on DateTime {
       ..write(d.second.toString())
       ..write(" GMT");
     return sb.toString();
+  }
+
+  int secondsSinceEpoch() {
+    return (millisecondsSinceEpoch / 1000).floor();
   }
 }

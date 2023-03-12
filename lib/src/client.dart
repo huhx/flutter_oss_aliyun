@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_oss_aliyun/src/extension/date_extension.dart';
 import 'package:flutter_oss_aliyun/src/model/callback.dart';
 import 'package:flutter_oss_aliyun/src/client_api.dart';
 import 'package:flutter_oss_aliyun/src/model/request.dart';
@@ -88,8 +89,7 @@ class Client implements ClientApi {
   }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await _getAuth();
-    final int expires =
-        (DateTime.now().millisecondsSinceEpoch / 1000).floor() + expireSeconds;
+    final int expires = DateTime.now().secondsSinceEpoch() + expireSeconds;
 
     final String url = "https://$bucket.$endpoint/$fileKey";
     final Map<String, dynamic> params = {
