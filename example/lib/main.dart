@@ -61,6 +61,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     override: false,
                     aclModel: AclMode.private,
                     storageType: StorageType.standard,
+                    callback: Callback(
+                      callbackUrl: "callbackUrl",
+                      callbackBody:
+                          "{\"mimeType\":\${mimeType}, \"filepath\":\${object},\"size\":\${size},\"bucket\":\${bucket},\"phone\":\${x:phone}}",
+                      callbackVar: {"x:phone": "android"},
+                      calbackBodyType: CalbackBodyType.json,
+                    ),
                   ),
                 );
               },

@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
-import 'package:flutter_oss_aliyun/src/callback.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,3 +1,6 @@
+## 6.2.1 - 2023-03-12
+* expose `callback` 
+
 ## 6.2.0 - 2023-03-12
 `Feature`
 * add `callback` in `putObject` 

@@ -274,7 +274,7 @@ class Client implements ClientApi {
     final Map<String, dynamic> externalHeaders = option?.headers ?? {};
     final Map<String, dynamic> headers = {
       ...internalHeaders,
-      if (callback != null) ...callback.toHeaderMap(),
+      if (callback != null) ...callback.toHeaders(),
       ...externalHeaders,
     };
 

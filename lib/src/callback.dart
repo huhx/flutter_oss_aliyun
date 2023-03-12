@@ -21,7 +21,7 @@ class Callback {
     return callbackVar != null && callbackVar!.isNotEmpty;
   }
 
-  Map<String, String> toHeaderMap() {
+  Map<String, String> toHeaders() {
     return {
       "x-oss-callback": jsonCallback(),
       if (hasCallbackVar()) "x-oss-callback-var": jsonCallbackVar(),
