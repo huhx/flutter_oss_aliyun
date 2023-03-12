@@ -3,34 +3,34 @@ import 'dart:typed_data';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_oss_aliyun/src/auth_mixin.dart';
+import 'package:flutter_oss_aliyun/src/client_api.dart';
 import 'package:flutter_oss_aliyun/src/extension/date_extension.dart';
 import 'package:flutter_oss_aliyun/src/model/callback.dart';
-import 'package:flutter_oss_aliyun/src/client_api.dart';
 import 'package:flutter_oss_aliyun/src/model/request.dart';
 import 'package:flutter_oss_aliyun/src/model/request_option.dart';
 import 'package:mime/mime.dart';
 
+import 'extension/option_extension.dart';
 import 'model/asset_entity.dart';
 import 'model/auth.dart';
-import 'util/dio_client.dart';
 import 'model/enums.dart';
-import 'extension/option_extension.dart';
+import 'util/dio_client.dart';
 
-class Client implements ClientApi {
+class Client extends AuthMixin implements ClientApi {
   static Client? _instance;
 
   factory Client() => _instance!;
 
   final String endpoint;
   final String bucketName;
-  final FutureOr<Auth> Function() authGetter;
   static late Dio _dio;
 
-  Client._(
-    this.endpoint,
-    this.bucketName,
-    this.authGetter,
-  );
+  Client._({
+    required this.endpoint,
+    required this.bucketName,
+    required super.authGetter,
+  });
 
   static void init({
     String? stsUrl,
@@ -47,10 +47,9 @@ class Client implements ClientApi {
           final response = await _dio.get<dynamic>(stsUrl!);
           return Auth.fromJson(response.data!);
         };
-    _instance = Client._(ossEndpoint, bucketName, authGet);
+    _instance = Client._(
+        endpoint: ossEndpoint, bucketName: bucketName, authGetter: authGet);
   }
-
-  Auth? _auth;
 
   /// get object(file) from oss server
   /// [fileKey] is the object name from oss
@@ -63,7 +62,7 @@ class Client implements ClientApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
@@ -88,7 +87,7 @@ class Client implements ClientApi {
     int expireSeconds = 60,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
     final int expires = DateTime.now().secondsSinceEpoch() + expireSeconds;
 
     final String url = "https://$bucket.$endpoint/$fileKey";
@@ -131,7 +130,7 @@ class Client implements ClientApi {
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$endpoint";
     final HttpRequest request = HttpRequest(url, 'GET', parameters, {});
@@ -156,7 +155,7 @@ class Client implements ClientApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint";
     parameters["list-type"] = 2;
@@ -180,7 +179,7 @@ class Client implements ClientApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint?bucketInfo";
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
@@ -203,7 +202,7 @@ class Client implements ClientApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint?stat";
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
@@ -230,7 +229,7 @@ class Client implements ClientApi {
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
@@ -256,7 +255,7 @@ class Client implements ClientApi {
     PutRequestOption? option,
   }) async {
     final String bucket = option?.bucketName ?? bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final MultipartFile multipartFile = MultipartFile.fromBytes(
       fileData,
@@ -304,7 +303,7 @@ class Client implements ClientApi {
     int? position,
   }) async {
     final String bucket = option?.bucketName ?? bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final MultipartFile multipartFile = MultipartFile.fromBytes(
       fileData,
@@ -350,7 +349,7 @@ class Client implements ClientApi {
   }) async {
     final String bucket = option?.bucketName ?? bucketName;
     final String filename = fileKey ?? filepath.split('/').last;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final MultipartFile multipartFile = await MultipartFile.fromFile(
       filepath,
@@ -431,7 +430,7 @@ class Client implements ClientApi {
     String? bucketName,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'HEAD', {}, {});
@@ -472,7 +471,7 @@ class Client implements ClientApi {
       ...externalHeaders
     };
 
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$targetBucketName.$endpoint/$targetFileKey";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
@@ -490,7 +489,7 @@ class Client implements ClientApi {
   Future<Response<dynamic>> getAllRegions({
     CancelToken? cancelToken,
   }) async {
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$endpoint/?regions";
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
@@ -510,7 +509,7 @@ class Client implements ClientApi {
     CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?acl";
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
@@ -530,7 +529,7 @@ class Client implements ClientApi {
     CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?policy";
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
@@ -550,7 +549,7 @@ class Client implements ClientApi {
     CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?policy";
     final HttpRequest request = HttpRequest(url, 'DELETE', {}, {
@@ -573,7 +572,7 @@ class Client implements ClientApi {
     CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?policy";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, {
@@ -597,7 +596,7 @@ class Client implements ClientApi {
     String? bucketName,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?acl";
     final HttpRequest request = HttpRequest(url, 'PUT', {}, {
@@ -619,7 +618,7 @@ class Client implements ClientApi {
     String region, {
     CancelToken? cancelToken,
   }) async {
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$endpoint/?regions=$region";
     final HttpRequest request = HttpRequest(url, 'GET', {}, {});
@@ -640,7 +639,7 @@ class Client implements ClientApi {
     CancelToken? cancelToken,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
-    final Auth auth = await _getAuth();
+    final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/$fileKey";
     final HttpRequest request = HttpRequest(url, 'DELETE', {}, {
@@ -671,20 +670,6 @@ class Client implements ClientApi {
         .toList();
 
     return await Future.wait(deletes);
-  }
-
-  /// get auth information from sts server
-  Future<Auth> _getAuth() async {
-    if (_isNotAuthenticated()) {
-      _auth = await authGetter();
-      return _auth!;
-    }
-    return _auth!;
-  }
-
-  /// whether auth is valid or not
-  bool _isNotAuthenticated() {
-    return _auth == null || _auth!.isExpired;
   }
 
   /// chunk multipartFile to stream, chunk size is: 64KB
