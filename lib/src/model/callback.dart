@@ -17,24 +17,19 @@ class Callback {
     this.callbackVar,
   });
 
-  bool hasCallbackVar() {
-    return callbackVar != null && callbackVar!.isNotEmpty;
-  }
-
   Map<String, String> toHeaders() {
     return {
-      "x-oss-callback": jsonCallback(),
-      if (hasCallbackVar()) "x-oss-callback-var": jsonCallbackVar(),
+      "x-oss-callback": _jsonCallback(),
+      if (_hasCallbackVar) "x-oss-callback-var": _jsonCallbackVar(),
     };
   }
 
-  String jsonCallback() {
+  String _jsonCallback() {
     assert(calbackBodyType != null);
 
     final Map<String, String> map = {
       "callbackUrl": callbackUrl,
-      if (callbackHost != null && callbackHost!.isNotEmpty)
-        "callbackHost": callbackHost!,
+      if (_hasCallbackHost) "callbackHost": callbackHost!,
       "callbackBody": callbackBody,
       "callbackBodyType": calbackBodyType!.contentType,
     };
@@ -43,12 +38,20 @@ class Callback {
     return base64Encode(encodeString.codeUnits);
   }
 
-  String jsonCallbackVar() {
+  String _jsonCallbackVar() {
     assert(callbackVar != null && callbackVar!.isNotEmpty);
 
     final String encodeString = json.encode(callbackVar);
     final String base64encodeString = base64Encode(encodeString.codeUnits);
 
     return base64encodeString.replaceAll("\n", "").replaceAll("\r", "");
+  }
+
+  bool get _hasCallbackVar {
+    return callbackVar != null && callbackVar!.isNotEmpty;
+  }
+
+  bool get _hasCallbackHost {
+    return callbackHost != null && callbackHost!.isNotEmpty;
   }
 }
