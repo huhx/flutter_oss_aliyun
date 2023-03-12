@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_oss_aliyun/src/callback.dart';
 import 'package:flutter_oss_aliyun/src/client_api.dart';
 import 'package:flutter_oss_aliyun/src/request.dart';
 import 'package:flutter_oss_aliyun/src/request_option.dart';
@@ -261,6 +262,7 @@ class Client implements ClientApi {
       fileData,
       filename: fileKey,
     );
+    final Callback? callback = option?.callback;
 
     final Map<String, dynamic> internalHeaders = {
       'content-type': lookupMimeType(fileKey) ?? "application/octet-stream",
@@ -272,7 +274,8 @@ class Client implements ClientApi {
     final Map<String, dynamic> externalHeaders = option?.headers ?? {};
     final Map<String, dynamic> headers = {
       ...internalHeaders,
-      ...externalHeaders
+      if (callback != null) ...callback.toHeaderMap(),
+      ...externalHeaders,
     };
 
     final String url = "https://$bucket.$endpoint/$fileKey";

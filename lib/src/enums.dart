@@ -20,3 +20,12 @@ enum StorageType {
 
   const StorageType(this.content, this.description);
 }
+
+enum CalbackBodyType {
+  url("application/x-www-form-urlencoded"),
+  json("application/json");
+
+  final String contentType;
+
+  const CalbackBodyType(this.contentType);
+}

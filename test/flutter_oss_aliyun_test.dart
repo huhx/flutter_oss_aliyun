@@ -4,14 +4,17 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
+import 'package:flutter_oss_aliyun/src/callback.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   late String home;
+  late String callbackUrl;
 
   setUpAll(() {
     final Map<String, String> env = Platform.environment;
     home = Platform.environment['HOME'] ?? Platform.environment['USERPROFILE']!;
+    callbackUrl = env['oss_callback_url'] ?? "";
 
     Client.init(
       stsUrl: env["sts_url"],
@@ -38,6 +41,12 @@ void main() {
         aclModel: AclMode.publicRead,
         storageType: StorageType.ia,
         headers: {"content-type": "text/csv"},
+        callback: Callback(
+          callbackUrl: callbackUrl,
+          callbackBody: "{\"mimeType\":\${mimeType}, \"filepath\":\${object},\"size\":\${size},\"bucket\":\${bucket},\"phone\":\${x:phone}}",
+          callbackVar: {"x:phone": "android"},
+          calbackBodyType: CalbackBodyType.json,
+        ),
       ),
     );
 
@@ -119,8 +128,7 @@ void main() {
   });
 
   test("test the get regions in Client", () async {
-    final Response<dynamic> resp =
-        await Client().getRegion("oss-ap-northeast-1");
+    final Response<dynamic> resp = await Client().getRegion("oss-ap-northeast-1");
 
     expect(resp.statusCode, 200);
   });
@@ -165,10 +173,7 @@ void main() {
         {
           "Principal": ["221050028580141672"],
           "Effect": "Allow",
-          "Resource": [
-            "acs:oss:*:1504416580632704:huhx-family-dev",
-            "acs:oss:*:1504416580632704:huhx-family-dev/*"
-          ],
+          "Resource": ["acs:oss:*:1504416580632704:huhx-family-dev", "acs:oss:*:1504416580632704:huhx-family-dev/*"],
           "Action": [
             "oss:GetObject",
             "oss:GetObjectAcl",
