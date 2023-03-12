@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
+import 'package:flutter_oss_aliyun/src/callback.dart';
 
 class PutRequestOption {
   final String? bucketName;
@@ -9,6 +10,7 @@ class PutRequestOption {
   final bool? override;
   final StorageType? storageType;
   final Map<String, dynamic>? headers;
+  final Callback? callback;
 
   const PutRequestOption({
     this.bucketName,
@@ -18,6 +20,7 @@ class PutRequestOption {
     this.override,
     this.storageType,
     this.headers,
+    this.callback,
   });
 }
 
