@@ -1,3 +1,7 @@
+## 6.2.0 - 2023-03-12
+`Feature`
+* add `callback` in `putObject` 
+
 ## 6.1.0 - 2023-02-24
 `Breaking Change`
 * remove `tokenGetter` 
