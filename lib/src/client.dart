@@ -3,17 +3,17 @@ import 'dart:typed_data';
 
 import 'package:async/async.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_oss_aliyun/src/callback.dart';
+import 'package:flutter_oss_aliyun/src/model/callback.dart';
 import 'package:flutter_oss_aliyun/src/client_api.dart';
-import 'package:flutter_oss_aliyun/src/request.dart';
-import 'package:flutter_oss_aliyun/src/request_option.dart';
+import 'package:flutter_oss_aliyun/src/model/request.dart';
+import 'package:flutter_oss_aliyun/src/model/request_option.dart';
 import 'package:mime/mime.dart';
 
-import 'asset_entity.dart';
-import 'auth.dart';
-import 'dio_client.dart';
-import 'enums.dart';
-import 'option_extension.dart';
+import 'model/asset_entity.dart';
+import 'model/auth.dart';
+import 'util/dio_client.dart';
+import 'model/enums.dart';
+import 'extension/option_extension.dart';
 
 class Client implements ClientApi {
   static Client? _instance;

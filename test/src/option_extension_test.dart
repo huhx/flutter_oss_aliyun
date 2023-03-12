@@ -1,7 +1,7 @@
-import 'package:flutter_oss_aliyun/src/enums.dart';
-import 'package:flutter_oss_aliyun/src/request_option.dart';
+import 'package:flutter_oss_aliyun/src/model/enums.dart';
+import 'package:flutter_oss_aliyun/src/model/request_option.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_oss_aliyun/src/option_extension.dart';
+import 'package:flutter_oss_aliyun/src/extension/option_extension.dart';
 
 void main() {
   group("test override", () {

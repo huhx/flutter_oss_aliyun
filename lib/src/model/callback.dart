@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_oss_aliyun/src/enums.dart';
+import 'enums.dart';
 
 class Callback {
   final String callbackUrl;

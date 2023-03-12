@@ -1,4 +1,4 @@
-import 'package:flutter_oss_aliyun/src/request_option.dart';
+import 'request_option.dart';
 
 class AssetEntity {
   final List<int> bytes;

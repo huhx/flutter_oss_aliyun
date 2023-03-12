@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_oss_aliyun/src/enums.dart';
 
 import 'callback.dart';
+import 'enums.dart';
 
 class PutRequestOption {
   final String? bucketName;

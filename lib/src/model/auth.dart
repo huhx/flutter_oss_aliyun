@@ -1,7 +1,7 @@
-import 'package:flutter_oss_aliyun/src/date_extension.dart';
-import 'package:flutter_oss_aliyun/src/request.dart';
+import 'package:flutter_oss_aliyun/src/extension/date_extension.dart';
+import 'package:flutter_oss_aliyun/src/model/request.dart';
 
-import 'encrypt.dart';
+import '../util/encrypt.dart';
 
 class Auth {
   final String accessKey;

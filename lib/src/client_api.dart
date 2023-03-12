@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_oss_aliyun/src/asset_entity.dart';
-import 'package:flutter_oss_aliyun/src/enums.dart';
-import 'package:flutter_oss_aliyun/src/request_option.dart';
+import 'package:flutter_oss_aliyun/src/model/asset_entity.dart';
+import 'package:flutter_oss_aliyun/src/model/enums.dart';
+import 'package:flutter_oss_aliyun/src/model/request_option.dart';
 
 abstract class ClientApi {
   Future<Response<dynamic>> getObject(
