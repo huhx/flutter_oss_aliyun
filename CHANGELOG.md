@@ -1,5 +1,8 @@
+## 6.2.2 - 2023-03-12
+* code enhancement
+
 ## 6.2.1 - 2023-03-12
-* expose `callback` 
+* expose `Callback` 
 
 ## 6.2.0 - 2023-03-12
 `Feature`
