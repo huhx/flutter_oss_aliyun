@@ -684,8 +684,7 @@ class Client implements ClientApi {
 
   /// whether auth is valid or not
   bool _isNotAuthenticated() {
-    return _auth == null ||
-        DateTime.now().isAfter(DateTime.parse(_auth!.expire));
+    return _auth == null || _auth!.isExpired;
   }
 
   /// chunk multipartFile to stream, chunk size is: 64KB

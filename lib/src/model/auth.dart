@@ -24,6 +24,8 @@ class Auth {
     );
   }
 
+  bool get isExpired => DateTime.now().isAfter(DateTime.parse(expire));
+
   String get encodedToken => secureToken.replaceAll("+", "%2B");
 
   /// access aliyun need authenticated, this is the implementation refer to the official document.
