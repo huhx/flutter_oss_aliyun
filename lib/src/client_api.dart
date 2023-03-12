@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/model/asset_entity.dart';
 import 'package:flutter_oss_aliyun/src/model/enums.dart';
 import 'package:flutter_oss_aliyun/src/model/request_option.dart';
+import 'package:mime/mime.dart';
 
 abstract class ClientApi {
   Future<Response<dynamic>> getObject(
@@ -148,4 +149,8 @@ abstract class ClientApi {
     String? bucketName,
     CancelToken? cancelToken,
   });
+
+  String contentType(String filename) {
+    return lookupMimeType(filename) ?? "application/octet-stream";
+  }
 }

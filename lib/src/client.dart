@@ -1,15 +1,13 @@
 import 'dart:async';
-import 'dart:typed_data';
 
-import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_oss_aliyun/src/auth_mixin.dart';
 import 'package:flutter_oss_aliyun/src/client_api.dart';
 import 'package:flutter_oss_aliyun/src/extension/date_extension.dart';
+import 'package:flutter_oss_aliyun/src/extension/file_extension.dart';
 import 'package:flutter_oss_aliyun/src/model/callback.dart';
 import 'package:flutter_oss_aliyun/src/model/request.dart';
 import 'package:flutter_oss_aliyun/src/model/request_option.dart';
-import 'package:mime/mime.dart';
 
 import 'extension/option_extension.dart';
 import 'model/asset_entity.dart';
@@ -17,7 +15,7 @@ import 'model/auth.dart';
 import 'model/enums.dart';
 import 'util/dio_client.dart';
 
-class Client extends AuthMixin implements ClientApi {
+class Client extends AuthMixin with ClientApi {
   static Client? _instance;
 
   factory Client() => _instance!;
@@ -264,7 +262,7 @@ class Client extends AuthMixin implements ClientApi {
     final Callback? callback = option?.callback;
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': lookupMimeType(fileKey) ?? "application/octet-stream",
+      'content-type': contentType(fileKey),
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
@@ -283,7 +281,7 @@ class Client extends AuthMixin implements ClientApi {
 
     return _dio.put(
       request.url,
-      data: _chunkFile(multipartFile),
+      data: multipartFile.chunk(),
       cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onSendProgress: option?.onSendProgress,
@@ -311,7 +309,7 @@ class Client extends AuthMixin implements ClientApi {
     );
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': lookupMimeType(fileKey) ?? "application/octet-stream",
+      'content-type': contentType(fileKey),
       'content-length': multipartFile.length,
       'x-oss-object-acl': option.acl,
       'x-oss-storage-class': option.storage,
@@ -329,7 +327,7 @@ class Client extends AuthMixin implements ClientApi {
 
     return _dio.post(
       request.url,
-      data: _chunkFile(multipartFile),
+      data: multipartFile.chunk(),
       cancelToken: cancelToken,
       options: Options(headers: request.headers),
       onSendProgress: option?.onSendProgress,
@@ -357,7 +355,7 @@ class Client extends AuthMixin implements ClientApi {
     );
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type': lookupMimeType(filename) ?? "application/octet-stream",
+      'content-type': contentType(filename),
       'content-length': multipartFile.length,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
@@ -457,8 +455,7 @@ class Client extends AuthMixin implements ClientApi {
     final String targetFileKey = option.targetFileKey ?? sourceFileKey;
 
     final Map<String, dynamic> internalHeaders = {
-      'content-type':
-          lookupMimeType(targetFileKey) ?? "application/octet-stream",
+      'content-type': contentType(targetFileKey),
       'x-oss-copy-source': copySource,
       'x-oss-forbid-overwrite': option.forbidOverride,
       'x-oss-object-acl': option.acl,
@@ -670,18 +667,5 @@ class Client extends AuthMixin implements ClientApi {
         .toList();
 
     return await Future.wait(deletes);
-  }
-
-  /// chunk multipartFile to stream, chunk size is: 64KB
-  Stream<List<int>> _chunkFile(MultipartFile multipartFile) async* {
-    final ChunkedStreamReader<int> reader =
-        ChunkedStreamReader<int>(multipartFile.finalize());
-    while (true) {
-      final Uint8List data = await reader.readBytes(64 * 1024);
-      if (data.isEmpty) {
-        break;
-      }
-      yield data;
-    }
   }
 }
