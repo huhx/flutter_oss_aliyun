@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_oss_aliyun/src/auth_mixin.dart';
+import 'package:flutter_oss_aliyun/src/auth_wrapper.dart';
 import 'package:flutter_oss_aliyun/src/client_api.dart';
 import 'package:flutter_oss_aliyun/src/extension/date_extension.dart';
 import 'package:flutter_oss_aliyun/src/extension/file_extension.dart';
 import 'package:flutter_oss_aliyun/src/model/callback.dart';
 import 'package:flutter_oss_aliyun/src/model/request.dart';
 import 'package:flutter_oss_aliyun/src/model/request_option.dart';
+import 'package:mime/mime.dart';
 
 import 'extension/option_extension.dart';
 import 'model/asset_entity.dart';
@@ -15,7 +16,7 @@ import 'model/auth.dart';
 import 'model/enums.dart';
 import 'util/dio_client.dart';
 
-class Client extends AuthMixin with ClientApi {
+class Client extends AuthWrapper implements ClientApi {
   static Client? _instance;
 
   factory Client() => _instance!;
@@ -668,4 +669,8 @@ class Client extends AuthMixin with ClientApi {
 
     return await Future.wait(deletes);
   }
+}
+
+String contentType(String filename) {
+  return lookupMimeType(filename) ?? "application/octet-stream";
 }

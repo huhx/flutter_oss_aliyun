@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'model/auth.dart';
 
-abstract class AuthMixin {
+abstract class AuthWrapper {
   final FutureOr<Auth> Function() authGetter;
-  AuthMixin({required this.authGetter});
+  AuthWrapper({required this.authGetter});
 
   Auth? auth;
 
