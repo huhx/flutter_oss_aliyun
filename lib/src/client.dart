@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_oss_aliyun/src/auth_wrapper.dart';
+import 'package:flutter_oss_aliyun/src/auth_mixin.dart';
 import 'package:flutter_oss_aliyun/src/client_api.dart';
 import 'package:flutter_oss_aliyun/src/extension/date_extension.dart';
 import 'package:flutter_oss_aliyun/src/extension/file_extension.dart';
@@ -16,7 +16,7 @@ import 'model/auth.dart';
 import 'model/enums.dart';
 import 'util/dio_client.dart';
 
-class Client extends AuthWrapper implements ClientApi {
+class Client with AuthMixin implements ClientApi {
   static Client? _instance;
 
   factory Client() => _instance!;
@@ -28,7 +28,6 @@ class Client extends AuthWrapper implements ClientApi {
   Client._({
     required this.endpoint,
     required this.bucketName,
-    required super.authGetter,
   });
 
   static void init({
@@ -46,8 +45,8 @@ class Client extends AuthWrapper implements ClientApi {
           final response = await _dio.get<dynamic>(stsUrl!);
           return Auth.fromJson(response.data!);
         };
-    _instance = Client._(
-        endpoint: ossEndpoint, bucketName: bucketName, authGetter: authGet);
+    _instance = Client._(endpoint: ossEndpoint, bucketName: bucketName)
+      ..authGetter = authGet;
   }
 
   /// get object(file) from oss server
