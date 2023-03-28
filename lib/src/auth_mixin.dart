@@ -10,7 +10,11 @@ mixin AuthMixin {
   /// get auth information from sts server
   Future<Auth> getAuth() async {
     if (_isNotAuthenticated()) {
-      auth = await authGetter();
+      if(authGetter is Future Function()) {
+        auth = await authGetter();
+      } else {
+        auth = authGetter() as Auth;
+      }
       return auth!;
     }
     return auth!;
