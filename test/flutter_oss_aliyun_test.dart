@@ -211,6 +211,13 @@ void main() {
           print("receive: count = $count, and total = $total");
         },
         aclModel: AclMode.private,
+        callback: Callback(
+          callbackUrl: callbackUrl,
+          callbackBody:
+              "{\"mimeType\":\${mimeType}, \"filepath\":\${object},\"size\":\${size},\"bucket\":\${bucket},\"phone\":\${x:phone}}",
+          callbackVar: {"x:phone": "android"},
+          calbackBodyType: CalbackBodyType.json,
+        ),
       ),
     );
 

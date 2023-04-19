@@ -354,6 +354,8 @@ class Client with AuthMixin implements ClientApi {
       filename: filename,
     );
 
+    final Callback? callback = option?.callback;
+
     final Map<String, dynamic> internalHeaders = {
       'content-type': contentType(filename),
       'content-length': multipartFile.length,
@@ -365,6 +367,7 @@ class Client with AuthMixin implements ClientApi {
     final Map<String, dynamic> externalHeaders = option?.headers ?? {};
     final Map<String, dynamic> headers = {
       ...internalHeaders,
+      if (callback != null) ...callback.toHeaders(),
       ...externalHeaders
     };
 
