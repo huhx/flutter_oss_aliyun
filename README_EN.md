@@ -9,15 +9,20 @@ Oss aliyun plugin for flutter. Use sts policy to authenticate the user.
 **oss sts document**: [https://help.aliyun.com/document_detail/100624.html](https://help.aliyun.com/document_detail/100624.html)
 
 ## 🐱&nbsp; Init Client
+
 First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
+
 ```yaml
 dependencies:
   flutter_oss_aliyun: ^6.2.3
 ```
+
 Don't forget to `flutter pub get`.
 
 ### **Init the client, we provide two ways to do it**
-#### 1. `Use sts server api`: provide the sts url from our backend server:
+
+#### 1. `Use sts server api`: provide the sts url from our backend server
+
 ```dart
 Client.init(
     stsUrl: "server url get sts token",
@@ -27,6 +32,7 @@ Client.init(
 ```
 
 This sts url api at least return the data:
+
 ```json
 {
   "AccessKeyId": "AccessKeyId",
@@ -37,6 +43,7 @@ This sts url api at least return the data:
 ```
 
 #### 2. use authGetter
+
 ```dart
 Client.init(
     ossEndpoint: "oss-cn-beijing.aliyuncs.com",
@@ -57,6 +64,7 @@ Auth _authGetter() {
 **`customize the dio`**
 
 you can pass the dio in `init` method to use your own Dio.
+
 ```dart
 Client.init(
     stsUrl: "server url get sts token",
@@ -67,6 +75,7 @@ Client.init(
 ```
 
 ## 🎨&nbsp;Usage
+
 - [put the object to oss with progress callback](#put-the-object-to-oss-with-progress-callback)
 - [append object](#append-object)
 - [copy object](#copy-object)
@@ -90,7 +99,8 @@ Client.init(
 - [bucket policy](#bucket-policy)
 
 ### **put the object to oss with progress callback**
-callback reference: https://help.aliyun.com/document_detail/31989.htm?spm=a2c4g.11186623.0.0.73a830ffn45LMY#reference-zkm-311-hgb
+
+callback reference: <https://help.aliyun.com/document_detail/31989.htm?spm=a2c4g.11186623.0.0.73a830ffn45LMY#reference-zkm-311-hgb>
 
 ```dart
 final bytes = "file bytes".codeUnits;
@@ -123,9 +133,11 @@ await Client().putObject(
 | Filed       | Default value | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | override    | true          | true: Allow override the same name Object<br>false: Not allow override the same name Object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| aclModel    | inherited     | 1. publicWrite: Anyone (including anonymous visitors) can read and write about the Object<br>2. publicRead: Only the owner of the Object can write to the Object, and anyone (including anonymous visitors) can read the Object<br>3. private: Only the owner of the Object can read and write to the Object, and no one else can access the Object<br>4. inherited: This Object follows the read and write permission of Bucket, which is what is Bucket and Object is what permission <br>reference: https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb |
-| storageType | Standard      | reference: https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| aclModel    | inherited     | 1. publicWrite: Anyone (including anonymous visitors) can read and write about the Object<br>2. publicRead: Only the owner of the Object can write to the Object, and anyone (including anonymous visitors) can read the Object<br>3. private: Only the owner of the Object can read and write to the Object, and no one else can access the Object<br>4. inherited: This Object follows the read and write permission of Bucket, which is what is Bucket and Object is what permission <br>reference: <https://help.aliyun.com/document_detail/100676.htm?spm=a2c4g.11186623.0.0.56637952SnxOWV#concept-blw-yqm-2gb> |
+| storageType | Standard      | reference: <https://help.aliyun.com/document_detail/51374.htm?spm=a2c4g.11186623.0.0.56632b55htpEQX#concept-fcn-3xt-tdb>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+
 ### <span id="append-object">**append object**</span>
+
 ```dart
 final Response<dynamic> resp = await Client().appendObject(
   Uint8List.fromList(utf8.encode("Hello World")),
@@ -140,6 +152,7 @@ final Response<dynamic> resp2 = await Client().appendObject(
 ```
 
 ### <span id="copy-object">**copy object**</span>
+
 ```dart
 final Response<dynamic> resp = await Client().copyObject(
   const CopyRequestOption(
@@ -151,6 +164,7 @@ final Response<dynamic> resp = await Client().copyObject(
 ```
 
 ### <span id="cancel-put-object">**cancel file upload**</span>
+
 ```dart
 final CancelToken cancelToken = CancelToken();
 final bytes = ("long long bytes" * 1000).codeUnits;
@@ -182,6 +196,7 @@ Client().putObject(
 ```
 
 ### **batch put the object to oss**
+
 ```dart
 await Client().putObjects([
   AssetEntity(
@@ -215,6 +230,13 @@ final Response<dynamic> resp = await Client().putObjectFile(
       print("receive: count = $count, and total = $total");
     },
     aclModel: AclMode.private,
+    callback: Callback(
+      callbackUrl: callbackUrl,
+      callbackBody:
+          "{\"mimeType\":\${mimeType}, \"filepath\":\${object},\"size\":\${size},\"bucket\":\${bucket},\"phone\":\${x:phone}}",
+      callbackVar: {"x:phone": "android"},
+      calbackBodyType: CalbackBodyType.json,
+    ),
   ),
 );
 ```
@@ -255,6 +277,7 @@ final List<Response<dynamic>> resp = await Client().putObjectFiles(
 ```
 
 ### **get the object from oss with progress callback**
+
 ```dart
 await Client().getObject(
   "test.txt",
@@ -265,6 +288,7 @@ await Client().getObject(
 ```
 
 ### **download the object from oss with progress callback**
+
 ```dart
 await Client().downloadObject(
   "test.txt", 
@@ -276,16 +300,19 @@ await Client().downloadObject(
 ```
 
 ### **delete the object from oss**
+
 ```dart
 await Client().deleteObject("test.txt");
 ```
 
 ### **batch delete the object from oss**
+
 ```dart
 await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 ```
 
 ### **get signed url that can be accessed in browser directly**
+
 This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
 
 ```dart
@@ -293,6 +320,7 @@ final String url = await Client().getSignedUrl("filename1.txt");
 ```
 
 ### **get multiple signed urls**
+
 This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
 
 ```dart
@@ -300,28 +328,32 @@ final Map<String, String> result = await Client().getSignedUrls(["test.txt", "fi
 ```
 
 ### **list buckets**
-list all owned buckets, refer to: https://help.aliyun.com/document_detail/31957.html
+
+list all owned buckets, refer to: <https://help.aliyun.com/document_detail/31957.html>
 
 ```dart
 final Response<dynamic> resp = await Client().listBuckets({"max-keys": 2});
 ```
 
 ### **list objects**
-List the information of all files (Object) in the storage space (Bucket). The parameters and response, refer to: https://help.aliyun.com/document_detail/187544.html
+
+List the information of all files (Object) in the storage space (Bucket). The parameters and response, refer to: <https://help.aliyun.com/document_detail/187544.html>
 
 ```dart
 final Response<dynamic> resp = await Client().listFiles({});
 ```
 
 ### **get bucket info**
-View bucket information, The response refer to: https://help.aliyun.com/document_detail/31968.html
+
+View bucket information, The response refer to: <https://help.aliyun.com/document_detail/31968.html>
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketInfo();
 ```
 
 ### **get objects counts and bucket details**
-Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to: https://help.aliyun.com/document_detail/426056.html
+
+Gets the storage capacity of the specified storage space (Bucket) and the number of files (Object), The response refer to: <https://help.aliyun.com/document_detail/426056.html>
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketStat();
@@ -334,20 +366,22 @@ final Response<dynamic> resp = await Client().getObjectMeta("huhx.csv");
 ```
 
 ### **query regions**
-* find all
+
+- find all
 
 ```dart
 final Response<dynamic> resp = await Client().getAllRegions();
 ```
 
-* find by name
+- find by name
 
 ```dart
 final Response<dynamic> resp = await Client().getRegion("oss-ap-northeast-1");
 ```
 
 ### **bucket acl**
-* query
+
+- query
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketAcl(
@@ -355,7 +389,7 @@ final Response<dynamic> resp = await Client().getBucketAcl(
 );
 ```
 
-* add or update
+- add or update
 
 ```dart
 final Response<dynamic> resp = await Client().putBucketAcl(
@@ -365,7 +399,8 @@ final Response<dynamic> resp = await Client().putBucketAcl(
 ```
 
 ### **bucket policy**
-* query
+
+- query
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketPolicy(
@@ -373,7 +408,7 @@ final Response<dynamic> resp = await Client().getBucketPolicy(
 );
 ```
 
-* update
+- update
 
 ```dart
 final Response<dynamic> resp = await Client().putBucketPolicy(
@@ -382,11 +417,12 @@ final Response<dynamic> resp = await Client().putBucketPolicy(
 );
 ```
 
-* delete
+- delete
+
 ```dart
 final Response<dynamic> resp = await Client().deleteBucketPolicy(
   bucketName: "bucket-name",
 );
 ```
 
-## Drop a ⭐ if it is help to you.
+## Drop a ⭐ if it is help to you
