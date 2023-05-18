@@ -3,17 +3,17 @@ import 'package:flutter_oss_aliyun/src/model/request.dart';
 import 'package:flutter_oss_aliyun/src/util/encrypt.dart';
 
 class Auth {
-  final String accessKey;
-  final String accessSecret;
-  final String secureToken;
-  final String expire;
-
-  Auth({
+  const Auth({
     required this.accessKey,
     required this.accessSecret,
     required this.secureToken,
     required this.expire,
   });
+
+  final String accessKey;
+  final String accessSecret;
+  final String secureToken;
+  final String expire;
 
   factory Auth.fromJson(Map<String, dynamic> json) {
     return Auth(
@@ -44,13 +44,7 @@ class Auth {
   /// [bucket] is the name of bucket used in aliyun oss
   /// [key] is the object name in aliyun oss, alias the 'filepath/filename'
   String getSignature(int expires, String bucket, String key) {
-    final String stringToSign = [
-      "GET",
-      "",
-      "",
-      expires,
-      "${_getResourceString(bucket, key)}?security-token=$secureToken"
-    ].join("\n");
+    final String stringToSign = ["GET", "", "", expires, "${_getResourceString(bucket, key)}?security-token=$secureToken"].join("\n");
     final String signed = EncryptUtil.hmacSign(accessSecret, stringToSign);
 
     return Uri.encodeFull(signed).replaceAll("+", "%2B");
@@ -63,23 +57,14 @@ class Auth {
     final String date = req.headers['x-oss-date'] ?? '';
     final String headerString = _getHeaderString(req);
     final String resourceString = _getResourceString(bucket, key);
-    final String stringToSign = [
-      req.method,
-      contentMd5,
-      contentType,
-      date,
-      headerString,
-      resourceString
-    ].join("\n");
+    final String stringToSign = [req.method, contentMd5, contentType, date, headerString, resourceString].join("\n");
 
     return EncryptUtil.hmacSign(accessSecret, stringToSign);
   }
 
   /// sign the header information
   String _getHeaderString(HttpRequest req) {
-    final List<String> ossHeaders = req.headers.keys
-        .where((key) => key.toLowerCase().startsWith('x-oss-'))
-        .toList();
+    final List<String> ossHeaders = req.headers.keys.where((key) => key.toLowerCase().startsWith('x-oss-')).toList();
     if (ossHeaders.isEmpty) return '';
     ossHeaders.sort((s1, s2) => s1.compareTo(s2));
 

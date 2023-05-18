@@ -4,15 +4,6 @@ import 'callback.dart';
 import 'enums.dart';
 
 class PutRequestOption {
-  final String? bucketName;
-  final ProgressCallback? onSendProgress;
-  final ProgressCallback? onReceiveProgress;
-  final AclMode? aclModel;
-  final bool? override;
-  final StorageType? storageType;
-  final Map<String, dynamic>? headers;
-  final Callback? callback;
-
   const PutRequestOption({
     this.bucketName,
     this.onSendProgress,
@@ -23,20 +14,18 @@ class PutRequestOption {
     this.headers,
     this.callback,
   });
-}
 
-class CopyRequestOption {
-  final String? sourceBucketName;
-  final String sourceFileKey;
-  final String? targetBucketName;
-  final String? targetFileKey;
+  final String? bucketName;
   final ProgressCallback? onSendProgress;
   final ProgressCallback? onReceiveProgress;
   final AclMode? aclModel;
   final bool? override;
   final StorageType? storageType;
   final Map<String, dynamic>? headers;
+  final Callback? callback;
+}
 
+class CopyRequestOption {
   const CopyRequestOption({
     this.sourceBucketName,
     required this.sourceFileKey,
@@ -49,4 +38,15 @@ class CopyRequestOption {
     this.storageType,
     this.headers,
   });
+
+  final String? sourceBucketName;
+  final String sourceFileKey;
+  final String? targetBucketName;
+  final String? targetFileKey;
+  final ProgressCallback? onSendProgress;
+  final ProgressCallback? onReceiveProgress;
+  final AclMode? aclModel;
+  final bool? override;
+  final StorageType? storageType;
+  final Map<String, dynamic>? headers;
 }

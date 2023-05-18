@@ -3,19 +3,19 @@ import 'dart:convert';
 import 'enums.dart';
 
 class Callback {
-  final String callbackUrl;
-  final String? callbackHost;
-  final String callbackBody;
-  final CalbackBodyType? calbackBodyType;
-  final Map<String, String>? callbackVar;
-
-  Callback({
+  const Callback({
     required this.callbackUrl,
     this.callbackHost,
     required this.callbackBody,
     this.calbackBodyType = CalbackBodyType.url,
     this.callbackVar,
   });
+
+  final String callbackUrl;
+  final String? callbackHost;
+  final String callbackBody;
+  final CalbackBodyType? calbackBodyType;
+  final Map<String, String>? callbackVar;
 
   Map<String, String> toHeaders() {
     return {

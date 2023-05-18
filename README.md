@@ -366,7 +366,7 @@ final Response<dynamic> resp = await Client().getObjectMeta("huhx.csv");
 
 ### <span id="regions-query">**regions的查询**</span>
 
-* 查询所有
+- 查询所有
 
 ```dart
 final Response<dynamic> resp = await Client().getAllRegions();
@@ -380,7 +380,7 @@ final Response<dynamic> resp = await Client().getRegion("oss-ap-northeast-1");
 
 ### <span id="bucket-acl">**bucket acl的操作**</span>
 
-* 查询
+- 查询
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketAcl(
@@ -399,7 +399,7 @@ final Response<dynamic> resp = await Client().putBucketAcl(
 
 ### <span id="bucket-policy">**bucket policy的操作**</span>
 
-* 查询
+- 查询
 
 ```dart
 final Response<dynamic> resp = await Client().getBucketPolicy(
