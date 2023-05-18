@@ -12,7 +12,8 @@ class HttpRequest {
   final Map<String, dynamic> headers;
 
   String get url {
-    final String queryString = param.entries.map((entry) => "${entry.key}=${entry.value}").join("&");
+    final String queryString =
+        param.entries.map((entry) => "${entry.key}=${entry.value}").join("&");
     return queryString.isEmpty ? _url : "$_url?$queryString";
   }
 }

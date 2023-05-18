@@ -1,5 +1,6 @@
 import 'package:flutter_oss_aliyun/src/extension/date_extension.dart';
 import 'package:flutter_oss_aliyun/src/model/request.dart';
+import 'package:flutter_oss_aliyun/src/model/signed_parameters.dart';
 import 'package:flutter_oss_aliyun/src/util/encrypt.dart';
 
 class Auth {
@@ -44,7 +45,13 @@ class Auth {
   /// [bucket] is the name of bucket used in aliyun oss
   /// [key] is the object name in aliyun oss, alias the 'filepath/filename'
   String getSignature(int expires, String bucket, String key) {
-    final String stringToSign = ["GET", "", "", expires, "${_getResourceString(bucket, key)}?security-token=$secureToken"].join("\n");
+    final String stringToSign = [
+      "GET",
+      "",
+      "",
+      expires,
+      "${_getResourceString(bucket, key, {})}?security-token=$secureToken"
+    ].join("\n");
     final String signed = EncryptUtil.hmacSign(accessSecret, stringToSign);
 
     return Uri.encodeFull(signed).replaceAll("+", "%2B");
@@ -56,15 +63,24 @@ class Auth {
     final String contentType = req.headers['content-type'] ?? '';
     final String date = req.headers['x-oss-date'] ?? '';
     final String headerString = _getHeaderString(req);
-    final String resourceString = _getResourceString(bucket, key);
-    final String stringToSign = [req.method, contentMd5, contentType, date, headerString, resourceString].join("\n");
+    final String resourceString = _getResourceString(bucket, key, req.param);
+    final String stringToSign = [
+      req.method,
+      contentMd5,
+      contentType,
+      date,
+      headerString,
+      resourceString
+    ].join("\n");
 
     return EncryptUtil.hmacSign(accessSecret, stringToSign);
   }
 
   /// sign the header information
   String _getHeaderString(HttpRequest req) {
-    final List<String> ossHeaders = req.headers.keys.where((key) => key.toLowerCase().startsWith('x-oss-')).toList();
+    final List<String> ossHeaders = req.headers.keys
+        .where((key) => key.toLowerCase().startsWith('x-oss-'))
+        .toList();
     if (ossHeaders.isEmpty) return '';
     ossHeaders.sort((s1, s2) => s1.compareTo(s2));
 
@@ -72,10 +88,21 @@ class Auth {
   }
 
   /// sign the resource part information
-  String _getResourceString(String bucket, String fileKey) {
+  String _getResourceString(
+    String bucket,
+    String fileKey,
+    Map<String, dynamic> param,
+  ) {
     String path = "/";
     if (bucket.isNotEmpty) path += "$bucket/";
     if (fileKey.isNotEmpty) path += fileKey;
+    final String signedParamString = param.keys
+        .where((key) => SignParameters.signedParams.contains(key))
+        .map((item) => "$item=${param[item]}")
+        .join("&");
+    if (signedParamString.isNotEmpty) {
+      path += "?$signedParamString";
+    }
 
     return path;
   }

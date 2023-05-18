@@ -249,7 +249,11 @@ void main() {
   });
 
   test("test the list objects in Client", () async {
-    final Response<dynamic> resp = await Client().listObjects({"max-keys": 12});
+    final Response<dynamic> resp = await Client().listObjects({
+      "max-keys": 12,
+      "continuation-token": "ChgyMDIxMTIyMDExMzYyMTAzNDIxNS5qcGcQAA--",
+      "prefix": "aaa"
+    });
 
     print(resp);
     expect(resp.statusCode, 200);
