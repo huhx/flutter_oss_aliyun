@@ -1,3 +1,8 @@
+## 6.2.5 - 2023-05-18
+
+* add screenshots in pub
+
+
 ## 6.2.4 - 2023-05-18
 
 `Feature`
