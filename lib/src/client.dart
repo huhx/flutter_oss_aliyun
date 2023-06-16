@@ -8,15 +8,15 @@ import 'package:flutter_oss_aliyun/src/extension/file_extension.dart';
 import 'package:flutter_oss_aliyun/src/model/callback.dart';
 import 'package:flutter_oss_aliyun/src/model/request.dart';
 import 'package:flutter_oss_aliyun/src/model/request_option.dart';
-import 'package:mime/mime.dart';
 
 import 'extension/option_extension.dart';
+import 'http_mixin.dart';
 import 'model/asset_entity.dart';
 import 'model/auth.dart';
 import 'model/enums.dart';
 import 'util/dio_client.dart';
 
-class Client with AuthMixin implements ClientApi {
+class Client with AuthMixin, HttpMixin implements ClientApi {
   static Client? _instance;
 
   factory Client() => _instance!;
@@ -671,8 +671,4 @@ class Client with AuthMixin implements ClientApi {
 
     return await Future.wait(deletes);
   }
-}
-
-String contentType(String filename) {
-  return lookupMimeType(filename) ?? "application/octet-stream";
 }

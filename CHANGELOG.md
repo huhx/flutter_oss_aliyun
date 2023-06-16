@@ -1,3 +1,8 @@
+## 6.2.6 - 2023-06-16
+
+* add http mixin
+
+
 ## 6.2.5 - 2023-05-18
 
 * add screenshots in pub

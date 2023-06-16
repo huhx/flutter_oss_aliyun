@@ -9,7 +9,7 @@ mixin AuthMixin {
 
   /// get auth information from sts server
   Future<Auth> getAuth() async {
-    if (_isNotAuthenticated()) {
+    if (isUnAuthenticated) {
       auth = await authGetter();
       return auth!;
     }
@@ -17,7 +17,7 @@ mixin AuthMixin {
   }
 
   /// whether auth is valid or not
-  bool _isNotAuthenticated() {
+  bool get isUnAuthenticated {
     return auth == null || auth!.isExpired;
   }
 }
