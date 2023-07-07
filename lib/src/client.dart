@@ -394,14 +394,14 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     List<AssetFileEntity> assetEntities, {
     CancelToken? cancelToken,
   }) async {
-    final uploads = assetEntities
-        .map((fileEntity) async => await putObjectFile(
-              fileEntity.filepath,
-              fileKey: fileEntity.filename,
-              cancelToken: cancelToken,
-              option: fileEntity.option,
-            ))
-        .toList();
+    final uploads = assetEntities.map((fileEntity) {
+      return putObjectFile(
+        fileEntity.filepath,
+        fileKey: fileEntity.filename,
+        cancelToken: cancelToken,
+        option: fileEntity.option,
+      );
+    }).toList();
     return await Future.wait(uploads);
   }
 
@@ -413,14 +413,14 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     List<AssetEntity> assetEntities, {
     CancelToken? cancelToken,
   }) async {
-    final uploads = assetEntities
-        .map((file) async => await putObject(
-              file.bytes,
-              file.filename,
-              cancelToken: cancelToken,
-              option: file.option,
-            ))
-        .toList();
+    final uploads = assetEntities.map((file) {
+      return putObject(
+        file.bytes,
+        file.filename,
+        cancelToken: cancelToken,
+        option: file.option,
+      );
+    }).toList();
     return await Future.wait(uploads);
   }
 
@@ -662,13 +662,13 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     String? bucketName,
     CancelToken? cancelToken,
   }) async {
-    final deletes = keys
-        .map((fileKey) async => await deleteObject(
-              fileKey,
-              bucketName: bucketName,
-              cancelToken: cancelToken,
-            ))
-        .toList();
+    final deletes = keys.map((fileKey) {
+      return deleteObject(
+        fileKey,
+        bucketName: bucketName,
+        cancelToken: cancelToken,
+      );
+    }).toList();
 
     return await Future.wait(deletes);
   }
