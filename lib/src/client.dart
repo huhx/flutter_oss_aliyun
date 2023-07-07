@@ -30,7 +30,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     required this.bucketName,
   });
 
-  static void init({
+  static Client init({
     String? stsUrl,
     required String ossEndpoint,
     required String bucketName,
@@ -47,6 +47,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
         };
     _instance = Client._(endpoint: ossEndpoint, bucketName: bucketName)
       ..authGetter = authGet;
+    return _instance!;
   }
 
   /// get object(file) from oss server

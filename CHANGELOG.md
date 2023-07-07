@@ -1,3 +1,7 @@
+## 6.2.8 - 2023-07-07
+
+* make init method return Client
+
 ## 6.2.7 - 2023-07-04
 
 * add topics
