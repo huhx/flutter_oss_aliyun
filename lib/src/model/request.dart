@@ -16,4 +16,9 @@ class HttpRequest {
         param.entries.map((entry) => "${entry.key}=${entry.value}").join("&");
     return queryString.isEmpty ? _url : "$_url?$queryString";
   }
+
+  factory HttpRequest.get(String url,
+      {Map<String, dynamic>? parameters, Map<String, dynamic>? headers}) {
+    return HttpRequest(url, 'GET', parameters ?? {}, headers ?? {});
+  }
 }

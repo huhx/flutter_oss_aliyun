@@ -64,7 +64,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/$fileKey";
-    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    final HttpRequest request = HttpRequest.get(url);
     auth.sign(request, bucket, fileKey);
 
     return _dio.get(
@@ -96,7 +96,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
       "Signature": auth.getSignature(expires, bucket, fileKey),
       "security-token": auth.encodedToken
     };
-    final HttpRequest request = HttpRequest(url, 'GET', params, {});
+    final HttpRequest request = HttpRequest.get(url, parameters: params);
 
     return request.url;
   }
@@ -132,7 +132,8 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$endpoint";
-    final HttpRequest request = HttpRequest(url, 'GET', parameters, {});
+    final HttpRequest request = HttpRequest.get(url, parameters: parameters);
+
     auth.sign(request, "", "");
 
     return _dio.get(
@@ -158,7 +159,8 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
 
     final String url = "https://$bucket.$endpoint";
     parameters["list-type"] = 2;
-    final HttpRequest request = HttpRequest(url, 'GET', parameters, {});
+    final HttpRequest request = HttpRequest.get(url, parameters: parameters);
+
     auth.sign(request, bucket, "");
 
     return _dio.get(
@@ -181,7 +183,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint?bucketInfo";
-    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    final HttpRequest request = HttpRequest.get(url);
     auth.sign(request, bucket, "?bucketInfo");
 
     return _dio.get(
@@ -204,7 +206,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint?stat";
-    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    final HttpRequest request = HttpRequest.get(url);
     auth.sign(request, bucket, "?stat");
 
     return _dio.get(
@@ -231,7 +233,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/$fileKey";
-    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    final HttpRequest request = HttpRequest.get(url);
     auth.sign(request, bucket, fileKey);
 
     return await _dio.download(
@@ -493,7 +495,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$endpoint/?regions";
-    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    final HttpRequest request = HttpRequest.get(url);
     auth.sign(request, "", "");
 
     return _dio.get(
@@ -513,7 +515,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?acl";
-    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    final HttpRequest request = HttpRequest.get(url);
     auth.sign(request, bucket, "?acl");
 
     return _dio.get(
@@ -533,7 +535,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?policy";
-    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    final HttpRequest request = HttpRequest.get(url);
     auth.sign(request, bucket, "?policy");
 
     return _dio.get(
@@ -622,7 +624,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$endpoint/?regions=$region";
-    final HttpRequest request = HttpRequest(url, 'GET', {}, {});
+    final HttpRequest request = HttpRequest.get(url);
     auth.sign(request, "", "");
 
     return _dio.get(
