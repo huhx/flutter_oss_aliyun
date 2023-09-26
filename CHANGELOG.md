@@ -1,3 +1,7 @@
+## 6.2.9 - 2023-09-26
+
+* refactor the HttpRequest
+
 ## 6.2.8 - 2023-07-07
 
 * make init method return Client
