@@ -279,7 +279,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     };
 
     final String url = "https://$bucket.$endpoint/$fileKey";
-    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
+    final HttpRequest request = HttpRequest.put(url, headers: headers);
     auth.sign(request, bucket, fileKey);
 
     return _dio.put(
@@ -325,7 +325,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
 
     final String url =
         "https://$bucket.$endpoint/$fileKey?append&position=${position ?? 0}";
-    final HttpRequest request = HttpRequest(url, 'POST', {}, headers);
+    final HttpRequest request = HttpRequest.post(url, headers: headers);
     auth.sign(request, bucket, "$fileKey?append&position=${position ?? 0}");
 
     return _dio.post(
@@ -375,7 +375,8 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     };
 
     final String url = "https://$bucket.$endpoint/$filename";
-    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
+    final HttpRequest request = HttpRequest.put(url, headers: headers);
+
     auth.sign(request, bucket, filename);
 
     return _dio.put(
@@ -477,7 +478,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$targetBucketName.$endpoint/$targetFileKey";
-    final HttpRequest request = HttpRequest(url, 'PUT', {}, headers);
+    final HttpRequest request = HttpRequest.put(url, headers: headers);
     auth.sign(request, targetBucketName, targetFileKey);
 
     return _dio.put(
@@ -555,7 +556,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?policy";
-    final HttpRequest request = HttpRequest(url, 'DELETE', {}, {
+    final HttpRequest request = HttpRequest.delete(url, headers: {
       'content-type': Headers.jsonContentType,
     });
     auth.sign(request, bucket, "?policy");
@@ -578,7 +579,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?policy";
-    final HttpRequest request = HttpRequest(url, 'PUT', {}, {
+    final HttpRequest request = HttpRequest.put(url, headers: {
       'content-type': Headers.jsonContentType,
     });
     auth.sign(request, bucket, "?policy");
@@ -602,7 +603,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/?acl";
-    final HttpRequest request = HttpRequest(url, 'PUT', {}, {
+    final HttpRequest request = HttpRequest.put(url, headers: {
       'content-type': Headers.jsonContentType,
       'x-oss-acl': aciMode.content,
     });
@@ -645,7 +646,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final Auth auth = await getAuth();
 
     final String url = "https://$bucket.$endpoint/$fileKey";
-    final HttpRequest request = HttpRequest(url, 'DELETE', {}, {
+    final HttpRequest request = HttpRequest.delete(url, headers: {
       'content-type': Headers.jsonContentType,
     });
     auth.sign(request, bucket, fileKey);
