@@ -58,6 +58,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     String fileKey, {
     String? bucketName,
     CancelToken? cancelToken,
+    Options? options,
     ProgressCallback? onReceiveProgress,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
@@ -70,7 +71,9 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     return _dio.get(
       request.url,
       cancelToken: cancelToken,
-      options: Options(headers: request.headers),
+      options: options == null
+          ? Options(headers: request.headers)
+          : options.copyWith(headers: request.headers),
       onReceiveProgress: onReceiveProgress,
     );
   }

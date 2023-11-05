@@ -14,7 +14,7 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^6.2.9
+  flutter_oss_aliyun: ^6.3.0
 ```
 
 ### **初始化oss client, 这里我们提供两种方式**

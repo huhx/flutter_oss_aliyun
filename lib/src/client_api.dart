@@ -10,6 +10,7 @@ abstract class ClientApi {
     String fileKey, {
     String? bucketName,
     CancelToken? cancelToken,
+    Options? options,
     ProgressCallback? onReceiveProgress,
   });
 

@@ -1,3 +1,7 @@
+## 6.3.0 - 2023-11-05
+
+* add options for getObject method
+
 ## 6.2.9 - 2023-09-26
 
 * refactor the HttpRequest
