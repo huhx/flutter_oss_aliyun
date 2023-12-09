@@ -315,7 +315,10 @@ await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 需要注意的是: 这个操作并`不安全`，因为url包含security-token信息，即使过期时间比较短. 这个url可以直接在浏览器访问
 
 ```dart
-final String url = await Client().getSignedUrl("filename1.txt");
+final String url = await Client().getSignedUrl(
+  "test.jpg",
+  params: {"x-oss-process": "image/resize,w_10/quality,q_90"},
+);
 ```
 
 ### <span id="batch-get-signed-url">**获取多个已签名的文件url**</span>

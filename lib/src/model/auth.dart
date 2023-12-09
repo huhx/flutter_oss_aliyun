@@ -44,13 +44,26 @@ class Auth {
   /// [expires] expired time (seconds)
   /// [bucket] is the name of bucket used in aliyun oss
   /// [key] is the object name in aliyun oss, alias the 'filepath/filename'
-  String getSignature(int expires, String bucket, String key) {
+  String getSignature(
+    int expires,
+    String bucket,
+    String key, {
+    Map<String, dynamic>? params,
+  }) {
+    final String queryString = params == null
+        ? ""
+        : params.entries
+            .where((entry) => entry.key.toLowerCase().startsWith('x-oss-'))
+            .map((entry) => "${entry.key}=${entry.value}")
+            .join("&");
+    final String paramString = queryString.isEmpty ? "" : "&$queryString";
+
     final String stringToSign = [
       "GET",
       "",
-      "",
+      '',
       expires,
-      "${_getResourceString(bucket, key, {})}?security-token=$secureToken"
+      "${_getResourceString(bucket, key, {})}?security-token=$secureToken$paramString"
     ].join("\n");
     final String signed = EncryptUtil.hmacSign(accessSecret, stringToSign);
 

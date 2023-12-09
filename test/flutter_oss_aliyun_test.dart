@@ -330,7 +330,10 @@ void main() {
   });
 
   test("test the get object url in Client", () async {
-    final String url = await Client().getSignedUrl("test.csv");
+    final String url = await Client().getSignedUrl(
+      "20220106121416393842.jpg",
+      params: {"x-oss-process": "image/resize,w_10/quality,q_90", "aaa": "bb"},
+    );
     print("download url = $url");
 
     expect(url, isNotNull);

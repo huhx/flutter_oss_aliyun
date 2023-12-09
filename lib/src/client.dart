@@ -87,19 +87,21 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     String fileKey, {
     String? bucketName,
     int expireSeconds = 60,
+    Map<String, dynamic>? params,
   }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await getAuth();
     final int expires = DateTime.now().secondsSinceEpoch() + expireSeconds;
 
     final String url = "https://$bucket.$endpoint/$fileKey";
-    final Map<String, dynamic> params = {
+    final Map<String, dynamic> parameters = {
       "OSSAccessKeyId": auth.accessKey,
       "Expires": expires,
-      "Signature": auth.getSignature(expires, bucket, fileKey),
+      "Signature": auth.getSignature(expires, bucket, fileKey, params: params),
       "security-token": auth.encodedToken
     };
-    final HttpRequest request = HttpRequest.get(url, parameters: params);
+    parameters.addAll(params ?? {});
+    final HttpRequest request = HttpRequest.get(url, parameters: parameters);
 
     return request.url;
   }

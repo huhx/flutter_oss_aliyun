@@ -316,7 +316,10 @@ await Client().deleteObjects(["filename1.txt", "filename2.txt"]);
 This is `not safe` due to the url include the security-token information even it will expire in short time. Use it carefully!!!
 
 ```dart
-final String url = await Client().getSignedUrl("filename1.txt");
+final String url = await Client().getSignedUrl(
+  "test.jpg",
+  params: {"x-oss-process": "image/resize,w_10/quality,q_90"},
+);
 ```
 
 ### **get multiple signed urls**
