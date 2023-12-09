@@ -1,3 +1,7 @@
+## 6.4.0 - 2023-12-09
+
+* signed url support customize x-oss params
+
 ## 6.3.0 - 2023-11-05
 
 * add options for getObject method

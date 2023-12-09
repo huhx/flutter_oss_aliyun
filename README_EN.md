@@ -14,7 +14,7 @@ First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^6.3.0
+  flutter_oss_aliyun: ^6.4.0
 ```
 
 Don't forget to `flutter pub get`.
