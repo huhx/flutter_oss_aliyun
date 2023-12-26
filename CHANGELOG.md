@@ -1,3 +1,7 @@
+## 6.4.1 - 2023-12-26
+
+* feature: add the does object exists
+
 ## 6.4.0 - 2023-12-09
 
 * signed url support customize x-oss params

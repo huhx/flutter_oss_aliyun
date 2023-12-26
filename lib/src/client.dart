@@ -78,6 +78,40 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     );
   }
 
+  /// get object(file) from oss server
+  /// [fileKey] is the object name from oss
+  /// [bucketName] is optional, we use the default bucketName as we defined in Client
+  @override
+  Future<bool> doesObjectExist(
+    String fileKey, {
+    String? bucketName,
+    CancelToken? cancelToken,
+    Options? options,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await getAuth();
+
+    final String url = "https://$bucket.$endpoint/$fileKey";
+    final HttpRequest request = HttpRequest.head(url);
+    auth.sign(request, bucket, fileKey);
+
+    try {
+      await _dio.head(
+        request.url,
+        cancelToken: cancelToken,
+        options: options == null
+            ? Options(headers: request.headers)
+            : options.copyWith(headers: request.headers),
+      );
+      return true;
+    } on DioException catch (error, _) {
+      if (error.response?.statusCode == 404) {
+        return false;
+      }
+      rethrow;
+    }
+  }
+
   /// get signed url from oss server
   /// [fileKey] is the object name from oss
   /// [bucketName] is optional, we use the default bucketName as we defined in Client

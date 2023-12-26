@@ -14,6 +14,13 @@ abstract class ClientApi {
     ProgressCallback? onReceiveProgress,
   });
 
+  Future<bool> doesObjectExist(
+    String fileKey, {
+    String? bucketName,
+    CancelToken? cancelToken,
+    Options? options,
+  });
+
   Future<String> getSignedUrl(
     String fileKey, {
     String? bucketName,

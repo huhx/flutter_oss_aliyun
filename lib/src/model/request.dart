@@ -25,6 +25,14 @@ class HttpRequest {
     return HttpRequest(url, 'GET', parameters ?? {}, headers ?? {});
   }
 
+  factory HttpRequest.head(
+    String url, {
+    Map<String, dynamic>? parameters,
+    Map<String, dynamic>? headers,
+  }) {
+    return HttpRequest(url, 'HEAD', parameters ?? {}, headers ?? {});
+  }
+
   factory HttpRequest.post(
     String url, {
     Map<String, dynamic>? parameters,

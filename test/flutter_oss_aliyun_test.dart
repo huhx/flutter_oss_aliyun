@@ -349,4 +349,12 @@ void main() {
 
     expect(result.length, 2);
   });
+
+  test("test the doesObjectExist in Client", () async {
+    final bool isExisted = await Client().doesObjectExist(
+      "20220106121416393842.jpg",
+    );
+
+    expect(isExisted, true);
+  });
 }

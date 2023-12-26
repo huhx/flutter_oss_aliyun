@@ -14,7 +14,7 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^6.4.0
+  flutter_oss_aliyun: ^6.4.1
 ```
 
 ### **初始化oss client, 这里我们提供两种方式**
@@ -82,6 +82,7 @@ Client.init(
 - [本地文件上传](#put-local-object)
 - [批量本地文件上传](#batch-put-local-object)
 - [文件下载](#download-object)
+- [查询文件是否存在](#does-object-exist)
 - [文件下载并保存](#save-object)
 - [文件删除](#delete-object)
 - [批量文件删除](#batch-delete-object)
@@ -283,6 +284,13 @@ await Client().getObject(
   onReceiveProgress: (count, total) {
     debugPrint("received = $count, total = $total");
   },
+);
+```
+
+### <span id="does-object-exist">**查询文件是否存在**</span>
+```dart
+final bool isExisted = await Client().doesObjectExist(
+    "20220106121416393842.jpg",
 );
 ```
 

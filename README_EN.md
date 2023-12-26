@@ -14,7 +14,7 @@ First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^6.4.0
+  flutter_oss_aliyun: ^6.4.1
 ```
 
 Don't forget to `flutter pub get`.
@@ -84,6 +84,7 @@ Client.init(
 - [update object from local file](#update-object-from-local-file)
 - [batch upload local files to oss](#batch-upload-local-files-to-oss)
 - [get the object from oss with progress callback](#get-the-object-from-oss-with-progress-callback)
+- [does the object existed](#does-the-object-existed)
 - [download the object from oss with progress callback](#download-the-object-from-oss-with-progress-callback)
 - [delete the object from oss](#delete-the-object-from-oss)
 - [batch delete the object from oss](#batch-delete-the-object-from-oss)
@@ -284,6 +285,14 @@ await Client().getObject(
   onReceiveProgress: (count, total) {
     debugPrint("received = $count, total = $total");
   },
+);
+```
+
+
+### **does the object existed**
+```dart
+final bool isExisted = await Client().doesObjectExist(
+    "20220106121416393842.jpg",
 );
 ```
 
