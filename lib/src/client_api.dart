@@ -156,4 +156,27 @@ abstract class ClientApi {
     String? bucketName,
     CancelToken? cancelToken,
   });
+
+  Future<Response<dynamic>> initiateMultipartUpload(
+    String fileKey, {
+    String? bucketName,
+    CancelToken? cancelToken,
+  });
+
+  Future<Response<dynamic>> uploadPart(
+    String fileKey,
+    List<int> partData,
+    int partNumber,
+    String uploadId, {
+    String? bucketName,
+    CancelToken? cancelToken,
+  });
+
+  Future<Response<dynamic>> completeMultipartUpload(
+    String fileKey,
+    String uploadId,
+    String data, {
+    String? bucketName,
+    CancelToken? cancelToken,
+  });
 }
