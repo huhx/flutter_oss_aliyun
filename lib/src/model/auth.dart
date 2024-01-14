@@ -76,7 +76,8 @@ class Auth {
     final String contentType = req.headers['content-type'] ?? '';
     final String date = req.headers['x-oss-date'] ?? '';
     final String headerString = _getHeaderString(req);
-    final String resourceString = _getResourceString(bucket, key, req.param);
+    final String resourceString =
+        _getResourceString(bucket, key, req.param, req.oriUrl);
     final String stringToSign = [
       req.method,
       contentMd5,
@@ -104,17 +105,28 @@ class Auth {
   String _getResourceString(
     String bucket,
     String fileKey,
-    Map<String, dynamic> param,
-  ) {
+    Map<String, dynamic> param, [
+    String? url,
+  ]) {
     String path = "/";
     if (bucket.isNotEmpty) path += "$bucket/";
     if (fileKey.isNotEmpty) path += fileKey;
+
+    bool hasSuffix = false;
+
+    if (url != null) {
+      if (url.lastIndexOf("?") != -1) {
+        hasSuffix = true;
+        path += "?${url.split("?").last}";
+      }
+    }
+
     final String signedParamString = param.keys
         .where((key) => SignParameters.signedParams.contains(key))
         .map((item) => "$item=${param[item]}")
         .join("&");
     if (signedParamString.isNotEmpty) {
-      path += "?$signedParamString";
+      path += "${hasSuffix ? '' : '?'}$signedParamString";
     }
 
     return path;

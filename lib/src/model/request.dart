@@ -17,6 +17,10 @@ class HttpRequest {
     return queryString.isEmpty ? _url : "$_url?$queryString";
   }
 
+  String get oriUrl {
+    return _url;
+  }
+
   factory HttpRequest.get(
     String url, {
     Map<String, dynamic>? parameters,
