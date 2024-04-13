@@ -727,7 +727,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
 
     final String url = "https://$bucket.$endpoint/$fileKey?uploads";
     final HttpRequest request = HttpRequest.post(url);
-    auth.sign(request, bucket, fileKey);
+    auth.sign(request, bucket, "$fileKey?uploads");
 
     return _dio.post(
       request.url,
@@ -754,7 +754,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final HttpRequest request = HttpRequest.put(url, headers: {
       'content-type': 'application/octet-stream',
     });
-    auth.sign(request, bucket, fileKey);
+    auth.sign(request, bucket, "$fileKey?partNumber=$partNumber&uploadId=$uploadId");
 
     return _dio.put(
       request.url,
@@ -780,7 +780,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
     final HttpRequest request = HttpRequest.post(url, headers: {
       'content-type': 'application/xml',
     });
-    auth.sign(request, bucket, fileKey);
+    auth.sign(request, bucket, "$fileKey?uploadId=$uploadId");
 
     return _dio.post(
       request.url,
