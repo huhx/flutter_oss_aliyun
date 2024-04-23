@@ -7,6 +7,7 @@ class Callback {
     required this.callbackUrl,
     this.callbackHost,
     required this.callbackBody,
+    this.callbackSNI,
     this.calbackBodyType = CalbackBodyType.url,
     this.callbackVar,
   });
@@ -14,6 +15,7 @@ class Callback {
   final String callbackUrl;
   final String? callbackHost;
   final String callbackBody;
+  final bool? callbackSNI;
   final CalbackBodyType? calbackBodyType;
   final Map<String, String>? callbackVar;
 
@@ -27,10 +29,11 @@ class Callback {
   String _jsonCallback() {
     assert(calbackBodyType != null);
 
-    final Map<String, String> map = {
+    final Map<String, dynamic> map = {
       "callbackUrl": callbackUrl,
       if (_hasCallbackHost) "callbackHost": callbackHost!,
       "callbackBody": callbackBody,
+      if (callbackSNI != null) "callbackSNI": callbackSNI,
       "callbackBodyType": calbackBodyType!.contentType,
     };
     final String encodeString = json.encode(map);
