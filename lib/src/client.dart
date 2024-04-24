@@ -714,4 +714,79 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
 
     return await Future.wait(deletes);
   }
+
+  /// initiateMultipartUpload from oss
+  @override
+  Future<Response<dynamic>> initiateMultipartUpload(
+    String fileKey, {
+    String? bucketName,
+    CancelToken? cancelToken,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await getAuth();
+
+    final String url = "https://$bucket.$endpoint/$fileKey?uploads";
+    final HttpRequest request = HttpRequest.post(url);
+    auth.sign(request, bucket, "$fileKey?uploads");
+
+    return _dio.post(
+      request.url,
+      cancelToken: cancelToken,
+      options: Options(headers: request.headers),
+    );
+  }
+
+  /// uploadPart from oss
+  @override
+  Future<Response<dynamic>> uploadPart(
+    String fileKey,
+    List<int> partData,
+    int partNumber,
+    String uploadId, {
+    String? bucketName,
+    CancelToken? cancelToken,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await getAuth();
+
+    final String url =
+        "https://$bucket.$endpoint/$fileKey?partNumber=$partNumber&uploadId=$uploadId";
+    final HttpRequest request = HttpRequest.put(url, headers: {
+      'content-type': 'application/octet-stream',
+    });
+    auth.sign(request, bucket, "$fileKey?partNumber=$partNumber&uploadId=$uploadId");
+
+    return _dio.put(
+      request.url,
+      data: partData,
+      cancelToken: cancelToken,
+      options: Options(headers: request.headers),
+    );
+  }
+
+  /// completeMultipartUpload from oss
+  @override
+  Future<Response<dynamic>> completeMultipartUpload(
+    String fileKey,
+    String uploadId,
+    String data, {
+    String? bucketName,
+    CancelToken? cancelToken,
+  }) async {
+    final String bucket = bucketName ?? this.bucketName;
+    final Auth auth = await getAuth();
+
+    final String url = "https://$bucket.$endpoint/$fileKey?uploadId=$uploadId";
+    final HttpRequest request = HttpRequest.post(url, headers: {
+      'content-type': 'application/xml',
+    });
+    auth.sign(request, bucket, "$fileKey?uploadId=$uploadId");
+
+    return _dio.post(
+      request.url,
+      data: data,
+      cancelToken: cancelToken,
+      options: Options(headers: request.headers),
+    );
+  }
 }
