@@ -14,7 +14,7 @@ Language: [中文简体](README.md) | [English](README_EN.md)
 
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^6.4.1
+  flutter_oss_aliyun: ^6.4.2
 ```
 
 ### **初始化oss client, 这里我们提供两种方式**
@@ -56,6 +56,23 @@ Auth _authGetter() {
       expire: '2023-02-23T14:02:46Z',
       secureToken: 'token',
   );
+}
+```
+
+### Integrate with get_it
+`injectable`: https://pub.dev/packages/injectable
+
+```dart
+@module
+abstract class OssProvider {
+  @singleton
+  Client client() {
+    return Client.init(
+      stsUrl: Env.stsUrl,
+      ossEndpoint: Env.endpointUrl,
+      bucketName: Env.bucketName,
+    );
+  }
 }
 ```
 
@@ -290,7 +307,7 @@ await Client().getObject(
 ### <span id="does-object-exist">**查询文件是否存在**</span>
 ```dart
 final bool isExisted = await Client().doesObjectExist(
-    "20220106121416393842.jpg",
+    "aaa.jpg",
 );
 ```
 

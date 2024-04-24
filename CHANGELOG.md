@@ -1,3 +1,8 @@
+## 6.4.2 - 2024-04-24
+
+* feature: add callbackSNI in Callback
+* optimize the docs
+
 ## 6.4.1 - 2023-12-26
 
 * feature: add the does object exists

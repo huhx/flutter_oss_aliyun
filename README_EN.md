@@ -14,7 +14,7 @@ First, add `flutter_oss_aliyun` as a dependency in your `pubspec.yaml` file.
 
 ```yaml
 dependencies:
-  flutter_oss_aliyun: ^6.4.1
+  flutter_oss_aliyun: ^6.4.2
 ```
 
 Don't forget to `flutter pub get`.
@@ -58,6 +58,23 @@ Auth _authGetter() {
       expire: '2023-02-23T14:02:46Z',
       secureToken: 'token',
   );
+}
+```
+
+### Integrate with get_it
+`injectable`: https://pub.dev/packages/injectable
+
+```dart
+@module
+abstract class OssProvider {
+  @singleton
+  Client client() {
+    return Client.init(
+      stsUrl: Env.stsUrl,
+      ossEndpoint: Env.endpointUrl,
+      bucketName: Env.bucketName,
+    );
+  }
 }
 ```
 
@@ -292,7 +309,7 @@ await Client().getObject(
 ### **does the object existed**
 ```dart
 final bool isExisted = await Client().doesObjectExist(
-    "20220106121416393842.jpg",
+    "aaa.jpg",
 );
 ```
 
